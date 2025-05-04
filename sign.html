@@ -33,12 +33,18 @@
       </tbody>
     </table>
     <div>
+      <button class="final-button" onclick="openLink('https://drive.google.com/file/d/1XpSCHEKekaVgqAC4RqqcgztYp1UhrKWp/view?usp=sharing')">RQS</button>
+      <button class="final-button" onclick="openLink('https://drive.google.com/file/d/11Bb7LcyQkwt5MBPIxl8aXme7fnGk_jLh/view?usp=sharing')">Règles de sécurité majeurs</button>
+      <button class="final-button" onclick="openLink('https://drive.google.com/file/d/1v2zN1PD2wTF0QWiUZKOl-N2uBGEDnagl/view?usp=sharing')">Consignes d'urgence</button>
+      <button class="final-button" onclick="openLink('https://drive.google.com/file/d/11cWXLJI5WWH70Ns-1TUa1IhunIgTsL1G/view?usp=sharing')">Politique MASE</button>
+      
       <table class="aligned-table">
         <th>Responsable de l'accueil</th>
         <th>Collaborateur accueilli</th>
         <tr>
           <td>
             <div class="sign">
+              <br>
               <br>
               <br>
               <span class="date"> Date et Signature :</span>
@@ -61,12 +67,7 @@
       </table>
     </div>
   </div>
-  <button class="final-button" onclick="openLink('https://drive.google.com/file/d/1XpSCHEKekaVgqAC4RqqcgztYp1UhrKWp/view?usp=sharing')">RQS</button>
-  <button class="final-button" onclick="openLink('https://drive.google.com/file/d/11Bb7LcyQkwt5MBPIxl8aXme7fnGk_jLh/view?usp=sharing')">Règles de sécurité majeurs</button>
-  <button class="final-button" onclick="openLink('https://drive.google.com/file/d/1v2zN1PD2wTF0QWiUZKOl-N2uBGEDnagl/view?usp=sharing')">Consignes d'urgence</button>
-  <button class="final-button" onclick="openLink('https://drive.google.com/file/d/11cWXLJI5WWH70Ns-1TUa1IhunIgTsL1G/view?usp=sharing')">Politique MASE</button>
   <button class="final-button" onclick="printAllPages()">Imprimer</button>
-  <button class="final-button" onclick="newForm()">Nouvelle fiche</button>
   </div>
 
 
@@ -223,10 +224,7 @@
       printWindow.print();
     }, 1000);
   }
-  function newForm() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
+
   window.onload = function () {
     document.getElementById('visite-date-reponsable').valueAsDate = new Date();
     document.getElementById('visite-date-collaborateur').valueAsDate = new Date();

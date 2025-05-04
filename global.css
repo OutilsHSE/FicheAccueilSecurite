@@ -1,6 +1,7 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 0;
+  padding: 0;
   font-size: 12px;
 }
 
@@ -63,11 +64,21 @@ h1 {
 }
 
 .large-row {
-  height: 50px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
+@media (max-width: 800px) {
+  .large-row {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .large-row input {
+    width: 100%; 
+    box-sizing: border-box;
+  }
+}
 
 .signature-canvas {
   flex-grow: 1;
@@ -165,7 +176,6 @@ input[type="text"] {
 .cas {
   border: 2px solid red;
   padding: 20px;
-  width: 400px;
   margin: 20px auto;
 }
 
@@ -284,4 +294,45 @@ input[type="text"] {
 .no-bullet {
   list-style-type: none;
   padding-left: 0;
+}
+
+/* Media query pour les écrans de moins de 450px de large */
+@media (max-width: 450px) {
+  .cas {
+    width: 100%; /* Assurez-vous que le div prend toute la largeur disponible */
+    box-sizing: border-box; /* Inclure le padding et les bordures dans la largeur totale */
+  }
+
+  .cas h2, .cas .icons, .cas .checkboxes {
+    width: 100%; /* Assurez-vous que les éléments internes prennent toute la largeur */
+    text-align: center; /* Centre le texte et les icônes */
+  }
+
+  .cas .checkboxes th, .cas .checkboxes td {
+    display: block; /* Change l'affichage pour revenir à la ligne */
+    width: 100%; /* Assurez-vous que les éléments prennent toute la largeur */
+    text-align: left; /* Alignez le texte à gauche */
+  }
+}
+/* Media query pour les écrans de moins de 600px de large */
+@media (max-width: 600px) {
+  .aligned-table th, .aligned-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .aligned-table tr {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .aligned-table th {
+    background-color: #f0f0f0; /* Exemple de couleur de fond pour les en-têtes */
+    font-weight: bold;
+  }
+
+  .sign {
+    margin-bottom: 20px; /* Ajoutez une marge pour espacer les sections */
+  }
 }
