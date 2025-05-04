@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche d'Accueil Sécurité</title>
+    <link rel="stylesheet" href="global.css">
+</head>
+
+<body>
+    <div id="page1">
+        <div class="container">
+            <img class="logo" src="CDES_Logo.png" alt="">
+            <h1> Fiche d'Accueil Sécurité </h1>
+        </div>
+        <table id="obs-table">
+            <thead>
+                <tr>
+                    <th colspan="3">Informations générales</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="large-row">
+                            Date de l'accueil sécurité:<br>
+                            <input id="visite-date" class="input-bilan" type="date">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            Lieu de l’accueil sécurité:<br>
+                            <input id="lieu" class="input-bilan" type="text">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            Responsable CDES de l’accueil:<br>
+                            <input id="responsable" class="input-bilan" type="text">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="obs-table">
+            <thead>
+                <tr>
+                    <th colspan="3">Nouveau collaborateur accueilli</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="large-row">
+                            Prénom:
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            Nom:
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            Statut:
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="large-row">
+                            <input id="prenom" class="input-bilan" type="text">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            <input id="nom" class="input-bilan" type="text">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            <label>
+                                <input type="checkbox" id="cdd" name="contract_type" value="CDD"> CDD
+                            </label><br>
+                            <label>
+                                <input type="checkbox" id="cdi" name="contract_type" value="CDI"> CDI
+                            </label><br>
+                            <label>
+                                <input type="checkbox" id="apprenti" name="contract_type" value="Apprenti"> Apprenti
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="large-row">
+                            Activités réalisées le collaborateur :
+                            <input id="activites" class="input-bilan" type="text">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="obs-table">
+            <thead>
+                <tr>
+                    <th colspan="3" class="green-background">APTITUDE MEDICALE DU COLLABORATEUR:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="large-row">
+                            Date de la dernière visite médicale :
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            Activité nécessitant une visite médicale renforcée (conduite d’engins…) :
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="large-row">
+                            <input id="date-medicale" class="input-bilan" type="date">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="large-row">
+                            <label>
+                                <input type="checkbox" id="renforce-oui" name="contract_type" value="yes"> Oui
+                            </label><br>
+                            <label>
+                                <input type="checkbox" id="renforce-non" name="contract_type" value="no"> Non
+                            </label><br>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="large-row red-text">
+                            Fournir au Responsable HSE, l’attestation médicale à jour (obligatoire pour la réalisation
+                            de l’autorisation de conduite)
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>
+
+    <script>
+        function savePageContent() {
+            const page = document.querySelector('#page1');
+            const inputs = page.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) {
+                        input.setAttribute('checked', 'checked');
+                    } else {
+                        input.removeAttribute('checked');
+                    }
+                } else {
+                    input.setAttribute('value', input.value);
+                }
+            });
+            localStorage.setItem('page1Content', document.querySelector('#page1').outerHTML);
+        }
+
+        function loadPageContent() {
+            // Restaurer le contenu HTML de la page avec les valeurs des champs
+            const savedContent = localStorage.getItem('page1Content');
+            if (savedContent) {
+                document.querySelector('#page1').outerHTML = savedContent;
+            }
+        }
+        
+        function redirectToAutorisationPage() {
+            savePageContent();
+            window.location.href = 'autorisation.html';
+        }
+
+        window.onload = function () {
+            document.getElementById('visite-date').valueAsDate = new Date();
+            document.getElementById('date-medicale').valueAsDate = new Date();
+            loadPageContent();
+        }
+
+        window.onbeforeunload = function () {
+            savePageContent();
+        }
+    </script>
+
+</body>
+
+</html>

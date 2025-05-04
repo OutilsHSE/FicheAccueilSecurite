@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiche d'Accueil Sécurité</title>
+  <link rel="stylesheet" href="global.css">
+  <style>
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img class="logo" src="CDES_Logo.png" alt="">
+    <h1> Fiche d'Accueil Sécurité </h1>
+  </div>
+  <div id="page4">
+    <table>
+      <thead>
+        <tr>
+          <th>
+            PARCOURS SECURITE SUR L’ERP
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="red-text">
+          <td>
+            Pour tous les nouveaux arrivants CDES, réaliser le parcours sécurité sur l’ERP.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <table class="aligned-table">
+        <th>Responsable de l'accueil</th>
+        <th>Collaborateur accueilli</th>
+        <tr>
+          <td>
+            <div class="sign">
+              <br>
+              <br>
+              <span class="date"> Date et Signature :</span>
+              <input id="visite-date-reponsable" class="input-bilan" type="date"><br>
+              <canvas id="drawingCanvas1" class="signature-canvas"></canvas>
+              <button onclick="clearCanvas('drawingCanvas1')">🧹 Effacer</button>
+            </div>
+          </td>
+          <td>
+            <div class="sign">
+              <span class="red-text"> Je reconnais avoir pris connaissance des consignes de sécurité présentées et les
+                appliquerai dans le cadre de mes activités. </span><br>
+              <span class="date">Date et Signature :</span>
+              <input id="visite-date-collaborateur" class="input-bilan" type="date"><br>
+              <canvas id="drawingCanvas2" class="signature-canvas"></canvas>
+              <button onclick="clearCanvas('drawingCanvas2')">🧹 Effacer</button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button class="final-button" onclick="printAllPages()">Imprimer</button>
+  <button class="final-button" onclick="newForm()">Nouvelle fiche</button>
+  </div>
+
+
+</body>
+<script>
+
+  function setupCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+
+    let painting = false;
+
+    function startPosition(e) {
+      painting = true;
+      draw(e);
+    }
+
+    function endPosition() {
+      painting = false;
+      ctx.beginPath();
+    }
+
+    function draw(e) {
+      if (!painting) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#000';
+
+      let clientX, clientY;
+      if (e.touches && e.touches.length > 0) {
+        // Utiliser les coordonnées du premier touch point
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        // Utiliser les coordonnées de la souris
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      ctx.lineTo(clientX - rect.left, clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(clientX - rect.left, clientY - rect.top);
+    }
+
+    // Ajouter des écouteurs pour les événements de souris
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mouseout', endPosition);
+    canvas.addEventListener('mousemove', draw);
+
+    // Ajouter des écouteurs pour les événements tactiles
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchcancel', endPosition);
+    canvas.addEventListener('touchmove', draw);
+  }
+
+  // Initialisation
+  setupCanvas('drawingCanvas1');
+  setupCanvas('drawingCanvas2');
+
+  // Bouton pour effacer
+  function clearCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  function printAllPages() {
+    // Fonction utilitaire pour convertir les canvases ORIGINAUX en <img> dans le CLONE
+    function replaceCanvasWithImages(originalContainer, clonedContainer) {
+      const originalCanvases = originalContainer.querySelectorAll('canvas');
+
+      originalCanvases.forEach(originalCanvas => {
+        const id = originalCanvas.id;
+        if (!id) return; // Ignorer les canvas sans id
+
+        const clonedCanvas = clonedContainer.querySelector(`#${id}`);
+        if (!clonedCanvas) return; // Sauter s’il n’existe pas dans le clone
+
+        const dataURL = originalCanvas.toDataURL();
+        const img = new Image();
+        img.src = dataURL;
+        img.style.maxWidth = '100%';
+
+        clonedCanvas.replaceWith(img);
+      });
+    }
+
+    const page1Content = localStorage.getItem('page1Content');
+    const page2Content = localStorage.getItem('page2Content');
+    const page3Content = localStorage.getItem('page3Content');
+
+    // Préparation page4
+    const page = document.querySelector('#page4');
+    const inputs = page.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        input.checked ? input.setAttribute('checked', 'checked') : input.removeAttribute('checked');
+      } else {
+        input.setAttribute('value', input.value);
+      }
+
+      if (input.tagName.toLowerCase() === 'textarea') {
+        input.textContent = input.value;
+      }
+
+      if (input.tagName.toLowerCase() === 'select') {
+        const options = input.querySelectorAll('option');
+        options.forEach(option => {
+          option.selected = option.value === input.value;
+        });
+      }
+    });
+
+    // Cloner page4 et remplacer ses canvas avec data des originaux
+    const page4Clone = page.cloneNode(true);
+    replaceCanvasWithImages(page, page4Clone);
+
+    // Idem pour les pages sauvegardées
+    const tempContainer1 = document.createElement('div');
+    const tempContainer2 = document.createElement('div');
+    const tempContainer3 = document.createElement('div');
+
+    if (page1Content) tempContainer1.innerHTML = page1Content;
+    if (page2Content) tempContainer2.innerHTML = page2Content;
+    if (page3Content) tempContainer3.innerHTML = page3Content;
+
+    replaceCanvasWithImages(document.body, tempContainer1);
+    replaceCanvasWithImages(document.body, tempContainer2);
+    replaceCanvasWithImages(document.body, tempContainer3);
+
+    // Créer une nouvelle fenêtre
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write('<html><head>');
+    printWindow.document.write('<link rel="preload" href="global.css" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">');
+    printWindow.document.write('<noscript><link rel="stylesheet" href="global.css"></noscript>');
+    printWindow.document.write('</head><body>');
+
+    // Injecter le contenu à imprimer
+    if (page1Content) printWindow.document.write('<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>');
+    if (page2Content) printWindow.document.write('<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>');
+    if (page3Content) printWindow.document.write('<div class="page-section">' + tempContainer3.innerHTML + '</div>');
+    printWindow.document.write('<div>' + page4Clone.outerHTML + '</div>');
+
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+
+    // Lancer impression
+    setTimeout(() => {
+      printWindow.print();
+    }, 1000);
+  }
+  function newForm() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+  window.onload = function () {
+    document.getElementById('visite-date-reponsable').valueAsDate = new Date();
+    document.getElementById('visite-date-collaborateur').valueAsDate = new Date();
+  }
+</script>
+
+</html>
