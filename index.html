@@ -87,11 +87,12 @@
                                 <input type="checkbox" id="cdi" name="contract_type" value="CDI"> CDI
                             </label><br>
                             <label>
-                                <input type="checkbox" id="apprenti" name="contract_type" value="Apprenti"> Apprenti
+                                <input type="checkbox" id="apprenti" name="contract_type" value="Apprenti"> aaApprenti
                             </label>
                             <label>
-                                <input type="checkbox" id="interimaire" name="contract_type" value="Interimaire"> Intérimaire
-                            </label>                            
+                                <input type="checkbox" id="interimaire" name="contract_type" value="Interimaire">
+                                Intérimaire
+                            </label>
                         </div>
                     </td>
                 </tr>
@@ -152,7 +153,26 @@
             </tbody>
         </table>
     </div>
+    <button class="show-consignes" id="openModalBtn">?</button>
     <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>
+
+    <!-- Structure de la modale -->
+    <div id="imageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h1>Dispositif tutorat & formation au poste</h1>
+            <ul>
+                <li>Fiches remises aux nouveaux sur postes à risque : faucardage, bathy, grue, pousseur, élagage,
+                    soudure, Tereos, travaux forestiers.</li>
+                <li>Présentation des tâches, des risques, des EPI obligatoires et des bons gestes.</li>
+                <li>Formation pratique encadrée par un tuteur expérimenté (≥ 3 ans sur l’activité).</li>
+                <li>Suivi des acquis via une fiche tutorat : traçabilité, points de vigilance, validation avant
+                    autonomie.</li>
+                <li>Objectif : garantir une prise de poste sécurisée, maîtriser les risques et transmettre les bonnes
+                    pratiques.</li>
+            </ul>
+            <span class="close" style="cursor: pointer;">&times;</span>
+        </div>
+    </div>
 
     <script>
         function savePageContent() {
@@ -179,7 +199,7 @@
                 document.querySelector('#page1').outerHTML = savedContent;
             }
         }
-        
+
         function redirectToAutorisationPage() {
             savePageContent();
             window.location.href = 'autorisation.html';
@@ -194,6 +214,25 @@
         window.onbeforeunload = function () {
             savePageContent();
         }
+        function openModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+
+        document.getElementById('openModalBtn').onclick = openModal;
+        document.getElementsByClassName('close')[0].onclick = closeModal;
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
     </script>
 
 </body>
