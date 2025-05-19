@@ -407,4 +407,7 @@ input[type="text"] {
     }
     .modal-content {
   animation: fadeIn 0.3s ease;
-}
+  }
+  .bold {
+    font-weight: bold;
+  }
