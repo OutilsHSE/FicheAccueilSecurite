@@ -150,6 +150,12 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="3">
+                        <input type="file" id="photo-input" accept="image/*" multiple>
+                        <div id="photo-container"></div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -160,17 +166,18 @@
     <div id="imageModal" class="modal" style="display: none;">
         <div class="modal-content">
             <h3>Dispositif tutorat & formation au poste</h1>
-            <ul>
-                <li>Fiches remises aux nouveaux sur postes à risque : faucardage, bathy, grue, pousseur, élagage,
-                    soudure, Tereos, travaux forestiers.</li>
-                <li>Présentation des tâches, des risques, des EPI obligatoires et des bons gestes.</li>
-                <li>Formation pratique encadrée par un tuteur expérimenté (≥ 3 ans sur l’activité).</li>
-                <li>Suivi des acquis via une fiche tutorat : traçabilité, points de vigilance, validation avant
-                    autonomie.</li>
-                <li>Objectif : garantir une prise de poste sécurisée, maîtriser les risques et transmettre les bonnes
-                    pratiques.</li>
-            </ul>
-            <span class="close" style="cursor: pointer;">&times;</span>
+                <ul>
+                    <li>Fiches remises aux nouveaux sur postes à risque : faucardage, bathy, grue, pousseur, élagage,
+                        soudure, Tereos, travaux forestiers.</li>
+                    <li>Présentation des tâches, des risques, des EPI obligatoires et des bons gestes.</li>
+                    <li>Formation pratique encadrée par un tuteur expérimenté (≥ 3 ans sur l’activité).</li>
+                    <li>Suivi des acquis via une fiche tutorat : traçabilité, points de vigilance, validation avant
+                        autonomie.</li>
+                    <li>Objectif : garantir une prise de poste sécurisée, maîtriser les risques et transmettre les
+                        bonnes
+                        pratiques.</li>
+                </ul>
+                <span class="close" style="cursor: pointer;">&times;</span>
         </div>
     </div>
 
@@ -205,6 +212,10 @@
             window.location.href = 'autorisation.html';
         }
 
+        function addPhoto() {
+
+        }
+
         window.onload = function () {
             document.getElementById('visite-date').valueAsDate = new Date();
             document.getElementById('date-medicale').valueAsDate = new Date();
@@ -233,6 +244,30 @@
                 closeModal();
             }
         };
+
+        document.getElementById('photo-input').addEventListener('change', function(event) {
+      const files = event.target.files;
+      const container = document.getElementById('photo-container');
+      
+      // On vide le conteneur si tu veux remettre à zéro à chaque sélection
+      // container.innerHTML = '';
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            container.appendChild(img);
+          };
+
+          reader.readAsDataURL(file);
+        }
+      }
+    });
     </script>
 
 </body>

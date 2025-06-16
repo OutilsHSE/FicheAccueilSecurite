@@ -411,3 +411,7 @@ input[type="text"] {
   .bold {
     font-weight: bold;
   }
+      #photo-container img {
+      max-width: 200px;
+      margin: 10px;
+    }
