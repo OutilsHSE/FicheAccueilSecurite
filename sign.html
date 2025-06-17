@@ -74,7 +74,8 @@
       </table>
     </div>
   </div>
-  <button class="final-button" onclick="printAllPages()">Imprimer/Exporter</button>
+  <button class="final-button" onclick="printAllPages('pdf')">Exporter</button>
+  <button class="final-button" onclick="printAllPages('print')">Imprimer</button>
   </div>
 
 
@@ -149,17 +150,16 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-  function printAllPages() {
-    // Fonction utilitaire pour convertir les canvases ORIGINAUX en <img> dans le CLONE
+  function printAllPages(mode) {
     function replaceCanvasWithImages(originalContainer, clonedContainer) {
       const originalCanvases = originalContainer.querySelectorAll('canvas');
 
       originalCanvases.forEach(originalCanvas => {
         const id = originalCanvas.id;
-        if (!id) return; // Ignorer les canvas sans id
+        if (!id) return;
 
         const clonedCanvas = clonedContainer.querySelector(`#${id}`);
-        if (!clonedCanvas) return; // Sauter s’il n’existe pas dans le clone
+        if (!clonedCanvas) return;
 
         const dataURL = originalCanvas.toDataURL();
         const img = new Image();
@@ -174,7 +174,6 @@
     const page2Content = localStorage.getItem('page2Content');
     const page3Content = localStorage.getItem('page3Content');
 
-    // Préparation page4
     const page = document.querySelector('#page4');
     const inputs = page.querySelectorAll('input, textarea, select');
     inputs.forEach(input => {
@@ -196,11 +195,9 @@
       }
     });
 
-    // Cloner page4 et remplacer ses canvas avec data des originaux
     const page4Clone = page.cloneNode(true);
     replaceCanvasWithImages(page, page4Clone);
 
-    // Idem pour les pages sauvegardées
     const tempContainer1 = document.createElement('div');
     const tempContainer2 = document.createElement('div');
     const tempContainer3 = document.createElement('div');
@@ -213,26 +210,45 @@
     replaceCanvasWithImages(document.body, tempContainer2);
     replaceCanvasWithImages(document.body, tempContainer3);
 
-    // Créer une nouvelle fenêtre
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head>');
-    printWindow.document.write('<link rel="preload" href="global.css" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">');
-    printWindow.document.write('<noscript><link rel="stylesheet" href="global.css"></noscript>');
-    printWindow.document.write('</head><body>');
+    // Assemblage final dans un conteneur temporaire
+    const finalContainer = document.createElement('div');
+    finalContainer.style.padding = '20px'; // Pour une mise en page propre
+    if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
+    if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
+    if (page3Content) finalContainer.innerHTML += '<div class="page-section">' + tempContainer3.innerHTML + '</div>';
+    finalContainer.innerHTML += '<div>' + page4Clone.outerHTML + '</div>';
 
-    // Injecter le contenu à imprimer
-    if (page1Content) printWindow.document.write('<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>');
-    if (page2Content) printWindow.document.write('<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>');
-    if (page3Content) printWindow.document.write('<div class="page-section">' + tempContainer3.innerHTML + '</div>');
-    printWindow.document.write('<div>' + page4Clone.outerHTML + '</div>');
+    document.body.appendChild(finalContainer); // Temporairement dans le DOM
 
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
+    if (mode === 'pdf') {
+      const opt = {
+        margin: 0.5,
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
 
-    // Lancer impression
-    setTimeout(() => {
-      printWindow.print();
-    }, 1000);
+      html2pdf().set(opt).from(finalContainer).save().then(() => {
+        finalContainer.remove(); // Nettoyage
+      });
+
+    } else if (mode === 'print') {
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write('<html><head>');
+      printWindow.document.write('<link rel="stylesheet" href="global.css">');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(finalContainer.innerHTML);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 1000);
+
+      finalContainer.remove();
+    }
   }
 
   window.onload = function () {
