@@ -152,7 +152,7 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <input type="file" id="photo-input" accept="image/*" multiple>
+                        <input type="file" id="photo-input" accept="image/* .png" multiple>
                         <div id="photo-container"></div>
                     </td>
                 </tr>
@@ -245,29 +245,29 @@
             }
         };
 
-        document.getElementById('photo-input').addEventListener('change', function(event) {
-      const files = event.target.files;
-      const container = document.getElementById('photo-container');
-      
-      // On vide le conteneur si tu veux remettre à zéro à chaque sélection
-      // container.innerHTML = '';
+        document.getElementById('photo-input').addEventListener('change', function (event) {
+            const files = event.target.files;
+            const container = document.getElementById('photo-container');
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+            // On vide le conteneur si tu veux remettre à zéro à chaque sélection
+            // container.innerHTML = '';
 
-        if (file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          
-          reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            container.appendChild(img);
-          };
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
 
-          reader.readAsDataURL(file);
-        }
-      }
-    });
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        container.appendChild(img);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
     </script>
 
 </body>
