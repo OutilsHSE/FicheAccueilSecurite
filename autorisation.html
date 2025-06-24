@@ -7,6 +7,17 @@
     <title>Fiche d'Accueil Sécurité</title>
     <link rel="stylesheet" href="global.css">
     <style>
+        
+    table td {
+        text-align: left;
+        vertical-align: top; /* optionnel : aligne le texte en haut */
+        padding: 5px 10px;
+    }
+
+    table td:has(input[type="checkbox"]) {
+        text-align: center;
+        vertical-align: middle;
+    }
     </style>
 </head>
 
@@ -158,13 +169,15 @@
                 </tr>
                 <tr>
                     <td> <span class="bold">Montage et démontage d'ateliers flottants (dragage) / Assemblage de machines
-                        </span> (Formation au poste)/td>
+                    </span> (Formation au poste)
+                             </td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                 </tr>
                 <tr>
                     <td> <span class="bold">Travaux par points chauds (soudure…)</span> Grille Métier Formation au
-                        poste/td>
+                        poste
+                    </td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                 </tr>
@@ -177,6 +190,10 @@
         </div>
         <input type="file" id="photo-input" accept="image/* .png" multiple>
         <div id="photo-container"></div>
+        <div> 
+            <textarea name="formation-prevue" id="formation-prevue" placeholder="Formations prévues"></textarea>
+        </div>
+       
         <div class="cas">
             <h2>Dans tous les cas...</h2>
             <div class="icons">
@@ -249,28 +266,53 @@
         savePageContent();
     }
 
-    document.getElementById('photo-input').addEventListener('change', function (event) {
-        const files = event.target.files;
-        const container = document.getElementById('photo-container');
+ const photoInput = document.getElementById('photo-input');
+    const photoContainer = document.getElementById('photo-container');
 
-        // On vide le conteneur si tu veux remettre à zéro à chaque sélection
-        // container.innerHTML = '';
+    photoInput.addEventListener('change', function () {
+        // Vider l'affichage actuel
+        photoContainer.innerHTML = '';
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
+        Array.from(this.files).forEach((file, index) => {
+            const reader = new FileReader();
 
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
+            reader.onload = function (e) {
+                // Crée un conteneur pour chaque image + bouton
+                const imageWrapper = document.createElement('div');
+                imageWrapper.style.position = 'relative';
+                imageWrapper.style.display = 'inline-block';
 
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    container.appendChild(img);
-                };
+                // Image preview
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '120px';
+                img.style.height = 'auto';
+                img.style.border = '1px solid #ccc';
+                img.style.borderRadius = '8px';
 
-                reader.readAsDataURL(file);
-            }
-        }
+                // Bouton de suppression
+                const btn = document.createElement('button');
+                btn.textContent = '✕';
+                btn.style.position = 'absolute';
+                btn.style.top = '0';
+                btn.style.right = '0';
+                btn.style.background = 'rgba(0,0,0,0.6)';
+                btn.style.color = 'white';
+                btn.style.border = 'none';
+                btn.style.borderRadius = '0 8px 0 8px';
+                btn.style.cursor = 'pointer';
+
+                btn.addEventListener('click', () => {
+                    imageWrapper.remove();
+                });
+
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(btn);
+                photoContainer.appendChild(imageWrapper);
+            };
+
+            reader.readAsDataURL(file);
+        });
     });
 
 </script>
