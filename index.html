@@ -164,7 +164,6 @@
         </table>
     </div>
     <button class="show-consignes open-button" id="openModalBtn">?</button>
-    <button class="open-button" id="openQuizzBtn">Quizz</button>
     <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>
 
     <!-- Structure de la modale -->
@@ -186,11 +185,6 @@
         </div>
     </div>
 
-        <!-- Structure de la modale -->
-    <div id="quizzModal" class="modal" style="display: none;">
-        <div id="modal-content-quizz"></div>
-    </div>
-<script src="quizz.js"></script>
     <script>
         function savePageContent() {
             const page = document.querySelector('#page1');
@@ -241,14 +235,8 @@
             modal.style.display = 'none';
         }
         
-        function openQuizzModal() {
-            const modal = document.getElementById('quizzModal');
-            modal.style.display = 'block';
-        }
-        
         document.getElementById('openModalBtn').onclick = openModal;
         document.getElementsByClassName('close')[0].onclick = closeModal;
-        document.getElementById('openQuizzBtn').onclick = openQuizzModal;
 
 
         window.onclick = function (event) {
@@ -322,17 +310,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Chargement du fichier quizz.html dans la modale
-  fetch('quizz.html')
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById('modal-content-quizz').innerHTML = html;
-      document.querySelectorAll('input[name="rep"]').forEach(input =>
-        input.addEventListener('change', validerAuto)
-      );
-
-      document.getElementById('openQuizzBtn').addEventListener('click', ouvrirQuizz);
-    });
 });
     </script>
 
