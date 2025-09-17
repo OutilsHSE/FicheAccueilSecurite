@@ -128,7 +128,7 @@ input[type="text"] {
 }
 
 
-.next-button-red {
+.open-button {
   bottom: 20px;
   /* Espacement par rapport au bas de la fenêtre */
   right: 20px;

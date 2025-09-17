@@ -7,17 +7,17 @@
     <title>Fiche d'Accueil Sécurité</title>
     <link rel="stylesheet" href="global.css">
     <style>
-        
-    table td {
-        text-align: left;
-        vertical-align: top; /* optionnel : aligne le texte en haut */
-        padding: 5px 10px;
-    }
+        table td {
+            text-align: left;
+            vertical-align: top;
+            /* optionnel : aligne le texte en haut */
+            padding: 5px 10px;
+        }
 
-    table td:has(input[type="checkbox"]) {
-        text-align: center;
-        vertical-align: middle;
-    }
+        table td:has(input[type="checkbox"]) {
+            text-align: center;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
@@ -120,6 +120,11 @@
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                 </tr>
+                <tr>
+                    <td><span class="bold">SST</span></td>
+                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox"></td>
+                </tr>
             </table>
 
             <table>
@@ -169,8 +174,8 @@
                 </tr>
                 <tr>
                     <td> <span class="bold">Montage et démontage d'ateliers flottants (dragage) / Assemblage de machines
-                    </span> (Formation au poste)
-                             </td>
+                        </span> (Formation au poste)
+                    </td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                 </tr>
@@ -190,10 +195,20 @@
         </div>
         <input type="file" id="photo-input" accept="image/* .png" multiple>
         <div id="photo-container"></div>
-        <div> 
+        <div>
             <textarea name="formation-prevue" id="formation-prevue" placeholder="Formations prévues"></textarea>
         </div>
-       
+        <div>
+            <textarea name="formation-prevue" id="formation-prevue" placeholder="Autres formations/habilitations détenues par le collaborateur"></textarea>
+        </div>
+        <div> <input type="checkbox" id="attestation-nage" name="attestation-nage">
+            <label for="attestation-nage">Je suis apte à nager</label>
+        </div>
+        <div>
+            <input type="file" id="photo-input-nage" accept="image/* .png" multiple>
+            <div id="photo-container-nage"></div>
+        </div>
+
         <div class="cas">
             <h2>Dans tous les cas...</h2>
             <div class="icons">
@@ -231,17 +246,19 @@
     function savePageContent() {
         const page = document.querySelector('#page2');
         const inputs = page.querySelectorAll('input, textarea, select');
-        inputs.forEach(input => {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                if (input.checked) {
-                    input.setAttribute('checked', 'checked');
-                } else {
-                    input.removeAttribute('checked');
-                }
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) {
+                input.setAttribute('checked', 'checked');
             } else {
-                input.setAttribute('value', input.value);
+                input.removeAttribute('checked');
             }
-        });
+        } else if (input.tagName.toLowerCase() === 'textarea') {
+            input.textContent = input.value; // ✅ valeur à l'intérieur du textarea
+        } else {
+            input.setAttribute('value', input.value);
+        }
+    });
         localStorage.setItem('page2Content', document.querySelector('#page2').outerHTML);
     }
 
@@ -266,7 +283,7 @@
         savePageContent();
     }
 
- const photoInput = document.getElementById('photo-input');
+    const photoInput = document.getElementById('photo-input');
     const photoContainer = document.getElementById('photo-container');
 
     photoInput.addEventListener('change', function () {
@@ -285,7 +302,7 @@
                 // Image preview
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                img.style.width = '120px';
+                img.style.width = '360px';
                 img.style.height = 'auto';
                 img.style.border = '1px solid #ccc';
                 img.style.borderRadius = '8px';
@@ -309,6 +326,55 @@
                 imageWrapper.appendChild(img);
                 imageWrapper.appendChild(btn);
                 photoContainer.appendChild(imageWrapper);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+    const photoInputNage = document.getElementById('photo-input-nage');
+    const photoContainerNage = document.getElementById('photo-container-nage');
+
+    photoInputNage.addEventListener('change', function () {
+        // Vider l'affichage actuel
+        photoContainerNage.innerHTML = '';
+
+        Array.from(this.files).forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Crée un conteneur pour chaque image + bouton
+                const imageWrapper = document.createElement('div');
+                imageWrapper.style.position = 'relative';
+                imageWrapper.style.display = 'inline-block';
+
+                // Image preview
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '360px';
+                img.style.height = 'auto';
+                img.style.border = '1px solid #ccc';
+                img.style.borderRadius = '8px';
+
+                // Bouton de suppression
+                const btn = document.createElement('button');
+                btn.textContent = '✕';
+                btn.style.position = 'absolute';
+                btn.style.top = '0';
+                btn.style.right = '0';
+                btn.style.background = 'rgba(0,0,0,0.6)';
+                btn.style.color = 'white';
+                btn.style.border = 'none';
+                btn.style.borderRadius = '0 8px 0 8px';
+                btn.style.cursor = 'pointer';
+
+                btn.addEventListener('click', () => {
+                    imageWrapper.remove();
+                });
+
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(btn);
+                photoContainerNage.appendChild(imageWrapper);
             };
 
             reader.readAsDataURL(file);

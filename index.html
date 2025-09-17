@@ -46,7 +46,7 @@
         <table id="obs-table">
             <thead>
                 <tr>
-                    <th colspan="3">Nouveau collaborateur accueilli</th>
+                    <th colspan="4">Nouveau collaborateur accueilli</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +66,7 @@
                             Statut:
                         </div>
                     </td>
+                    <td> Poste</td>
                 </tr>
                 <tr>
                     <td>
@@ -95,9 +96,16 @@
                             </label>
                         </div>
                     </td>
+                    <td>
+                        <select id="choixMetier">
+                            <option value="Atelier">Atelier</option>
+                            <option value="Marinier">Marinier</option>
+                            <option value="Conducteur d'engins/Personnel de chantier / Chauffeur PL">Conducteur d'engins/Personnel de chantier/ Chauffeur PL</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="4">
                         <div class="large-row">
                             Activités réalisées le collaborateur :
                             <input id="activites" class="input-bilan" type="text">
@@ -159,7 +167,8 @@
             </tbody>
         </table>
     </div>
-    <button class="show-consignes next-button-red" id="openModalBtn">?</button>
+    <button class="show-consignes open-button" id="openModalBtn">?</button>
+    <button class="open-button" id="openQuizzBtn">Quizz</button>
     <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>
 
     <!-- Structure de la modale -->
@@ -181,6 +190,11 @@
         </div>
     </div>
 
+        <!-- Structure de la modale -->
+    <div id="quizzModal" class="modal" style="display: none;">
+        <div id="modal-content-quizz"></div>
+    </div>
+<script src="quizz.js"></script>
     <script>
         function savePageContent() {
             const page = document.querySelector('#page1');
@@ -212,10 +226,6 @@
             window.location.href = 'autorisation.html';
         }
 
-        function addPhoto() {
-
-        }
-
         window.onload = function () {
             document.getElementById('visite-date').valueAsDate = new Date();
             document.getElementById('date-medicale').valueAsDate = new Date();
@@ -234,9 +244,16 @@
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
         }
-
+        
+        function openQuizzModal() {
+            const modal = document.getElementById('quizzModal');
+            modal.style.display = 'block';
+        }
+        
         document.getElementById('openModalBtn').onclick = openModal;
         document.getElementsByClassName('close')[0].onclick = closeModal;
+        document.getElementById('openQuizzBtn').onclick = openQuizzModal;
+
 
         window.onclick = function (event) {
             const modal = document.getElementById('imageModal');
@@ -246,53 +263,81 @@
         };
 
         const photoInput = document.getElementById('photo-input');
-    const photoContainer = document.getElementById('photo-container');
+        const photoContainer = document.getElementById('photo-container');
 
-    photoInput.addEventListener('change', function () {
-        // Vider l'affichage actuel
-        photoContainer.innerHTML = '';
+        photoInput.addEventListener('change', function () {
+            // Vider l'affichage actuel
+            photoContainer.innerHTML = '';
 
-        Array.from(this.files).forEach((file, index) => {
-            const reader = new FileReader();
+            Array.from(this.files).forEach((file, index) => {
+                const reader = new FileReader();
 
-            reader.onload = function (e) {
-                // Crée un conteneur pour chaque image + bouton
-                const imageWrapper = document.createElement('div');
-                imageWrapper.style.position = 'relative';
-                imageWrapper.style.display = 'inline-block';
+                reader.onload = function (e) {
+                    // Conteneur image + bouton + commentaire
+                    const imageWrapper = document.createElement('div');
+                    imageWrapper.style.position = 'relative';
+                    imageWrapper.style.display = 'inline-block';
+                    imageWrapper.style.margin = '10px';
+                    imageWrapper.style.textAlign = 'center';
 
-                // Image preview
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = '120px';
-                img.style.height = 'auto';
-                img.style.border = '1px solid #ccc';
-                img.style.borderRadius = '8px';
+                    // Image
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '360px';
+                    img.style.height = 'auto';
+                    img.style.border = '1px solid #ccc';
+                    img.style.borderRadius = '8px';
 
-                // Bouton de suppression
-                const btn = document.createElement('button');
-                btn.textContent = '✕';
-                btn.style.position = 'absolute';
-                btn.style.top = '0';
-                btn.style.right = '0';
-                btn.style.background = 'rgba(0,0,0,0.6)';
-                btn.style.color = 'white';
-                btn.style.border = 'none';
-                btn.style.borderRadius = '0 8px 0 8px';
-                btn.style.cursor = 'pointer';
+                    // Bouton supprimer
+                    const btn = document.createElement('button');
+                    btn.textContent = '✕';
+                    btn.style.position = 'absolute';
+                    btn.style.top = '0';
+                    btn.style.right = '0';
+                    btn.style.background = 'rgba(0,0,0,0.6)';
+                    btn.style.color = 'white';
+                    btn.style.border = 'none';
+                    btn.style.borderRadius = '0 8px 0 8px';
+                    btn.style.cursor = 'pointer';
 
-                btn.addEventListener('click', () => {
-                    imageWrapper.remove();
-                });
+                    btn.addEventListener('click', () => {
+                        imageWrapper.remove();
+                    });
 
-                imageWrapper.appendChild(img);
-                imageWrapper.appendChild(btn);
-                photoContainer.appendChild(imageWrapper);
-            };
+                    // Zone de commentaire
+                    const textarea = document.createElement('textarea');
+                    textarea.placeholder = 'Ajouter un commentaire...';
+                    textarea.style.width = '120px';
+                    textarea.style.marginTop = '5px';
+                    textarea.style.borderRadius = '4px';
+                    textarea.style.resize = 'none';
+                    textarea.rows = 2;
 
-            reader.readAsDataURL(file);
+                    // Ajout au DOM
+                    imageWrapper.appendChild(img);
+                    imageWrapper.appendChild(btn);
+                    imageWrapper.appendChild(textarea);
+                    photoContainer.appendChild(imageWrapper);
+                };
+
+                reader.readAsDataURL(file);
+            });
         });
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Chargement du fichier quizz.html dans la modale
+  fetch('quizz.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('modal-content-quizz').innerHTML = html;
+      document.querySelectorAll('input[name="rep"]').forEach(input =>
+        input.addEventListener('change', validerAuto)
+      );
+
+      document.getElementById('openQuizzBtn').addEventListener('click', ouvrirQuizz);
     });
+});
     </script>
 
 </body>
