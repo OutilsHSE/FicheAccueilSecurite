@@ -67,6 +67,7 @@ h1 {
 .large-row {
   display: flex;
   align-items: flex-start;
+  text-align: center;
 }
 
 @media (max-width: 800px) {
@@ -97,6 +98,7 @@ input[type="text"] {
 
 .input-bilan {
   height: 50px;
+    display: inline-block;
 }
 
 .red-text {
