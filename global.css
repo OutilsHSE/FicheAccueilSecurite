@@ -187,6 +187,34 @@ input[type="text"] {
   .page:last-child {
     page-break-after: avoid;
   }
+  .nage-img {
+  width: 50px;
+  height: 50px;
+}
+  /* Table attestation bien alignée à gauche */
+  table.attestation {
+    width: auto !important;        /* largeur naturelle */
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    text-align: left !important;
+    page-break-inside: avoid;      /* évite les coupures entre pages */
+  }
+
+  table.attestation th,
+  table.attestation td {
+    text-align: left !important;
+    padding-left: 10px !important;
+  }
+
+  /* Les blocs de texte, labels et signature restent bien à gauche */
+  .attestation .texte,
+  .attestation .sign,
+  .attestation .sign span,
+  .attestation .sign canvas {
+    text-align: left !important;
+    margin-left: 0 !important;
+    display: block !important;
+  }
 }
 
 .cas {
@@ -290,17 +318,23 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
-.table-check {
-  th {
+.table-check  th {
     text-align: left;
     padding: 8px;
   }
 
-  td {
-    text-align: left;
-  }
+.table-check {
+  padding: 10px;
+  width: 60%;
+  table-layout: fixed;
 }
 
+.table-check td {
+  text-align: left;
+  max-width: 750px;
+  word-wrap: break-word;
+  white-space: normal;
+}
 .no-bullet {
   list-style-type: none;
   padding-left: 0;
@@ -369,6 +403,21 @@ input[type="text"] {
   color: white;
 }
 
+.other-equipments {
+  padding-left: 250px;
+  padding-top: 10px;
+
+  textarea{
+    height: 200px;
+    width: 500px;
+  }
+}
+
+.other-equipments-hse {
+  font-style: bold;
+  color: red;
+  border: #000 1px;
+}
 
 @keyframes fadeIn {
   from {

@@ -15,7 +15,7 @@
     <img class="logo" src="CDES_Logo.png" alt="">
     <h1> Fiche d'Accueil Sécurité </h1>
   </div>
-  <div id="page4">
+  <div id="page5">
     <table>
       <thead>
         <tr>
@@ -160,8 +160,9 @@
     const page1Content = localStorage.getItem('page1Content');
     const page2Content = localStorage.getItem('page2Content');
     const page3Content = localStorage.getItem('page3Content');
+    const page4Content = localStorage.getItem('page4Content');
 
-    const page = document.querySelector('#page4');
+    const page = document.querySelector('#page5');
     const inputs = page.querySelectorAll('input, textarea, select');
     inputs.forEach(input => {
       if (input.type === 'checkbox' || input.type === 'radio') {
@@ -182,28 +183,32 @@
       }
     });
 
-    const page4Clone = page.cloneNode(true);
-    replaceCanvasWithImages(page, page4Clone);
+    const page5Clone = page.cloneNode(true);
+    replaceCanvasWithImages(page, page5Clone);
 
     const tempContainer1 = document.createElement('div');
     const tempContainer2 = document.createElement('div');
     const tempContainer3 = document.createElement('div');
+    const tempContainer4 = document.createElement('div');
 
     if (page1Content) tempContainer1.innerHTML = page1Content;
     if (page2Content) tempContainer2.innerHTML = page2Content;
     if (page3Content) tempContainer3.innerHTML = page3Content;
+    if (page3Content) tempContainer4.innerHTML = page4Content;
 
     replaceCanvasWithImages(document.body, tempContainer1);
     replaceCanvasWithImages(document.body, tempContainer2);
     replaceCanvasWithImages(document.body, tempContainer3);
+        replaceCanvasWithImages(document.body, tempContainer4);
 
     // Assemblage final dans un conteneur temporaire
     const finalContainer = document.createElement('div');
     finalContainer.style.padding = '20px'; // Pour une mise en page propre
     if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
     if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
-    if (page3Content) finalContainer.innerHTML += '<div class="page-section">' + tempContainer3.innerHTML + '</div>';
-    finalContainer.innerHTML += '<div>' + page4Clone.outerHTML + '</div>';
+    if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
+    if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
+    finalContainer.innerHTML += '<div>' + page5Clone.outerHTML + '</div>';
 
     document.body.appendChild(finalContainer); // Temporairement dans le DOM
 

@@ -1,0 +1,92 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.container-risk {
+  background-color: white;
+  border: 1px solid #999;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+h2 {
+  text-align: center;
+  background-color: #d3d3d3;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+label, select, button {
+  display: inline-block;
+  margin: 10px 0;
+}
+
+select {
+  padding: 5px;
+  width: 60%;
+}
+
+button {
+  background-color: #ddd;
+  border: 1px solid #aaa;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ccc;
+}
+
+.instructions {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.num {
+  color: red;
+  font-size: 1.2em;
+  margin-right: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.signature-zone {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.signature-box {
+  border: 1px solid #888;
+  width: 250px;
+  margin: 10px auto;
+  padding: 20px;
+}
+
+#signature {
+  background-color: #eee;
+  border: 1px solid #aaa;
+  padding: 5px 15px;
+}
+
+@media (max-width: 600px) {
+  select {
+    width: 100%;
+  }
+
+  table {
+    font-size: 0.9em;
+  }
+}
