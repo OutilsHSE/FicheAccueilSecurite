@@ -15,7 +15,21 @@ const postesData = {
       "Risques de chute de plain-pied",
       "Produits chimiques"
     ],
-    formations: ["/"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1qLUXU6CCyFPBT8XaOwsO7c4PyYODJOZX/view?usp=sharing",
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1GYqgxv6KBUklmYz_1yFvjY_bJ-Y0A5JS/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
 
   equipements_fluviaux: {
@@ -34,7 +48,21 @@ const postesData = {
       "Risques de chute de plain-pied",
       "Produits chimiques"
     ],
-    formations: ["Formation Pousseurs"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1GYqgxv6KBUklmYz_1yFvjY_bJ-Y0A5JS/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
 
   marinier: {
@@ -53,7 +81,21 @@ const postesData = {
       "Risques de chute de hauteur / échelle",
       "Produits chimiques"
     ],
-    formations: ["/"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1GYqgxv6KBUklmYz_1yFvjY_bJ-Y0A5JS/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1VE5L7Gvyn78Vemqmk1u9BmwGxbA1GY45/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
 
   chauffeur_pl: {
@@ -72,9 +114,20 @@ const postesData = {
       "Risques de chute de hauteur",
       "Produits chimiques"
     ],
-    formations: [
-      "Évaluation des risques Chauffeurs PL",
-      "Formation Grue auxiliaire"
+    liens_risques: [
+        "https://drive.google.com/file/d/1qLUXU6CCyFPBT8XaOwsO7c4PyYODJOZX/view?usp=sharing",
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+         "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/file/d/1VE5L7Gvyn78Vemqmk1u9BmwGxbA1GY45/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
     ]
   },
   mecanicien: {
@@ -94,7 +147,22 @@ const postesData = {
       "Risque de chute de hauteur",
       "Produits chimiques",
     ],
-    formations: ["Évaluation des risques Atelier"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1uZZinRZaQm3OeaIgJ8Fvsv9l5eIeZ7ZK/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1GYqgxv6KBUklmYz_1yFvjY_bJ-Y0A5JS/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/drive/u/0/folders/1R12LmzuZ4eiM49GgU-CM3Jz-gfEWel_O",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
   soudeur: {
     risques: [
@@ -113,7 +181,22 @@ const postesData = {
       "Risque de chute de hauteur",
       "Produits chimiques",
     ],
-    formations: ["Formation Soudeur","Évaluation des risques Atelier"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1uZZinRZaQm3OeaIgJ8Fvsv9l5eIeZ7ZK/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1GYqgxv6KBUklmYz_1yFvjY_bJ-Y0A5JS/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/file/d/1VE5L7Gvyn78Vemqmk1u9BmwGxbA1GY45/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
   travaux_forestiers: {
     risques: [
@@ -129,7 +212,19 @@ const postesData = {
       "Risque de chute de hauteur",
       "Produits chimiques",
     ],
-    formations: ["Formation travaux_forestiers"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+         "https://drive.google.com/file/d/1VE5L7Gvyn78Vemqmk1u9BmwGxbA1GY45/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
     operateurs_polyvalents: {
     risques: [
@@ -145,8 +240,21 @@ const postesData = {
       "Risque routier",
       "Risques de chute de plain-pied",
       "Produits chimiques"
-    ],
-    formations: ["/"]
+    ], 
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },  
   intervenant_bathy_topo: {
     risques: [
@@ -160,7 +268,17 @@ const postesData = {
       "Ordre et propreté sur le chantier",
       "Risque routier"
     ],
-    formations: ["Formation Bathy/Topo"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1JKU6LBprdTohn6skSbjIZmzzrz7EvT_r/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+     ]
   },
     intervenant_tereos: {
     risques: [
@@ -179,34 +297,24 @@ const postesData = {
       "Risque de chute de hauteur",
       "Produits chimiques",
     ],
-    formations: ["Formation TEREOS"]
+    liens_risques: [
+        "https://drive.google.com/file/d/1qLUXU6CCyFPBT8XaOwsO7c4PyYODJOZX/view?usp=sharing",
+        "https://drive.google.com/file/d/1DBPO7mfxCmkvZawg7sNMEWgXJy4PncR4/view?usp=sharing",
+        "https://drive.google.com/file/d/1hu1PNgKcqQ1NAxUHwcWxN110TDRUI0KZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1cI-rlmi2i_2FmWz86reCvQaTHtePzVey/view?usp=sharing",
+        "https://drive.google.com/file/d/1ebwKR8j60VtknFrSdI4DEBL8px6j4OVg/view?usp=sharing",
+        "https://drive.google.com/file/d/11wL2sls-LP16aoPUNBUez4XetiGoXId6/view?usp=sharing",
+        "https://drive.google.com/file/d/1EeGMIMXifFvLo_hdQJWGtHAsclSHt1L7/view?usp=sharing",
+        "https://drive.google.com/file/d/1UCVoKFOCAWaA06i3PAL_Cj5MaWSN7Oap/view?usp=sharing",
+        "https://drive.google.com/file/d/1Y-FnuDuhVnpzgkeZkMEuR3xotL98J1Js/view?usp=sharing",
+        "https://drive.google.com/file/d/1GYqgxv6KBUklmYz_1yFvjY_bJ-Y0A5JS/view?usp=sharing",
+        "https://drive.google.com/file/d/1iOf0cTWyqP5RO0V1cgqeZYsO3EXHQnlp/view?usp=sharing",
+        "https://drive.google.com/file/d/1uMsPMhV8T8zeBCRE2KOx1L_T9G3WPUv6/view?usp=sharing",
+        "https://drive.google.com/file/d/1VE5L7Gvyn78Vemqmk1u9BmwGxbA1GY45/view?usp=sharing",
+        "https://drive.google.com/file/d/1GrUQKpcUnmbt7W5xtJx5GzdQ_dKn4ypZ/view?usp=sharing"
+    ]
   },
 };
-
-const postesContainer = document.getElementById("postes-container");
-const addBtn = document.getElementById("add-poste");
-let posteCount = 1;
-
-// Fonction qui crée le tableau
-function createTable(posteKey, container) {
-  const data = postesData[posteKey];
-  if (!data) return;
-
-  container.innerHTML = `
-    <table>
-      <tr>
-        <th>Poste de travail</th>
-        <th>Fiches de risques</th>
-        <th>Fiches de formations</th>
-      </tr>
-      <tr>
-        <td>${getPosteName(posteKey)}</td>
-        <td>${data.risques.map(r => `<label><input type="checkbox"> ${r}</label><br>`).join("")}</td>
-        <td>${data.formations.map(f => `<label><input type="checkbox"> ${f}</label><br>`).join("")}</td>
-      </tr>
-    </table>
-  `;
-}
 
 // Renvoie le nom complet du poste
 function getPosteName(key) {
@@ -225,55 +333,103 @@ function getPosteName(key) {
   return map[key] || key;
 }
 
-// Gestion du premier select
-document.querySelector(".poste-select").addEventListener("change", function () {
-  const tableContainer = this.parentElement.querySelector(".table-container");
-  tableContainer.innerHTML = "";
-  if (this.value) createTable(this.value, tableContainer);
-});
+function createTable(posteKey, container) {
+const posteNom = getPosteName(posteKey);
+  const poste = postesData[posteKey];
+  if (!poste) return;
 
-// Ajouter un nouveau sélecteur
-addBtn.addEventListener("click", () => {
-  if (posteCount >= 3) {
-    alert("Vous pouvez ajouter jusqu’à 3 postes maximum.");
-    return;
+  const table = document.createElement("table");
+  table.classList.add("risques-table");
+
+  // En-têtes
+  const header = table.createTHead();
+  const headerRow = header.insertRow();
+  ["Poste de travail", "Fiche de risque"].forEach(text => {
+    const th = document.createElement("th");
+    th.textContent = text;
+    headerRow.appendChild(th);
+  });
+
+  // Corps du tableau
+  const tbody = table.createTBody();
+
+  for (let i = 0; i < poste.risques.length; i++) {
+    const row = tbody.insertRow();
+
+    // Première ligne → cellule "Poste" avec rowSpan
+    if (i === 0) {
+      const cellPoste = row.insertCell(0);
+      cellPoste.textContent = posteNom;
+      cellPoste.rowSpan = poste.risques.length; // fusion sur toutes les lignes
+    }
+
+    // Colonne "Fiches de postes" (liens Drive)
+    const cellFiche = row.insertCell(-1);
+    const lien = document.createElement("a");
+    lien.href = poste.liens_risques[i];
+    lien.textContent = poste.risques[i];
+    lien.target = "_blank";
+    lien.style.textDecoration = "none"; // pas de soulignement
+    lien.style.color = "black"; // texte noir
+    cellFiche.appendChild(lien);
   }
 
-  const newBlock = document.createElement("div");
-  newBlock.classList.add("poste-block");
-  newBlock.innerHTML = `
-    <label><b>Poste de Travail :</b></label>
-    <select class="poste-select">
-      <option value="">-- Sélectionner un poste --</option>
-      <option value="conducteurs_tp">Conducteurs d’engins TP</option>
-      <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
-      <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
-      <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
-      <option value="mecanicien">Mécanicien</option>
-      <option value="soudeur">Soudeur</option>
-      <option value="travaux_forestiers">Travaux forestiers</option>
-      <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
-      <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
-      <option value="intervenant_tereos">Intervenant TEREOS</option>
-    </select>
-    <div class="table-container"></div>
-  `;
+  container.appendChild(table);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const postesContainer = document.getElementById("postes-container");
+  const addBtn = document.getElementById("add-poste");
+  let posteCount = 1;
 
-  // Sélectionne le dernier bloc de poste existant
-  const lastBlock = postesContainer.querySelector(".poste-block:last-of-type");
-
-  // Insère le nouveau sélecteur juste après le précédent sélecteur, avant le tableau
-  lastBlock.parentNode.insertBefore(newBlock, lastBlock.nextSibling);
-
-  // Événement pour afficher le tableau dès qu’un poste est choisi
-  newBlock.querySelector(".poste-select").addEventListener("change", function () {
+  // Gestion du premier select
+  document.querySelector(".poste-select").addEventListener("change", function () {
     const tableContainer = this.parentElement.querySelector(".table-container");
     tableContainer.innerHTML = "";
     if (this.value) createTable(this.value, tableContainer);
   });
 
-  posteCount++;
+  // Bouton "ajouter un poste"
+  addBtn.addEventListener("click", () => {
+    if (posteCount >= 3) {
+      alert("Vous pouvez ajouter jusqu’à 3 postes maximum.");
+      return;
+    }
+
+    const newBlock = document.createElement("div");
+    newBlock.classList.add("poste-block");
+    newBlock.innerHTML = `
+      <label><b>Poste de Travail :</b></label>
+      <select class="poste-select">
+        <option value="">-- Sélectionner un poste --</option>
+        <option value="conducteurs_tp">Conducteurs d’engins TP</option>
+        <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
+        <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
+        <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
+        <option value="mecanicien">Mécanicien</option>
+        <option value="soudeur">Soudeur</option>
+        <option value="travaux_forestiers">Travaux forestiers</option>
+        <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
+        <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
+        <option value="intervenant_tereos">Intervenant TEREOS</option>
+      </select>
+      <div class="table-container"></div>
+    `;
+
+    // 👉 Insère juste après le précédent select, pas après le tableau
+    const lastSelect = postesContainer.querySelector(".poste-block:last-of-type .poste-select");
+    lastSelect.parentNode.insertAdjacentElement("afterend", newBlock);
+
+    // Active l’événement sur le nouveau select
+    newBlock.querySelector(".poste-select").addEventListener("change", function () {
+      const tableContainer = this.parentElement.querySelector(".table-container");
+      tableContainer.innerHTML = "";
+      if (this.value) createTable(this.value, tableContainer);
+    });
+
+    posteCount++;
+  });
 });
+
 
 function setupCanvas(canvasId) {
     const canvas = document.getElementById(canvasId);
