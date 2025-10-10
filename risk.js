@@ -353,27 +353,36 @@ const posteNom = getPosteName(posteKey);
   // Corps du tableau
   const tbody = table.createTBody();
 
-  for (let i = 0; i < poste.risques.length; i++) {
-    const row = tbody.insertRow();
+for (let i = 0; i < poste.risques.length; i++) {
+  const row = tbody.insertRow();
 
-    // Première ligne → cellule "Poste" avec rowSpan
-    if (i === 0) {
-      const cellPoste = row.insertCell(0);
-      cellPoste.textContent = posteNom;
-      cellPoste.rowSpan = poste.risques.length; // fusion sur toutes les lignes
-    }
-
-    // Colonne "Fiches de postes" (liens Drive)
-    const cellFiche = row.insertCell(-1);
-    const lien = document.createElement("a");
-    lien.href = poste.liens_risques[i];
-    lien.textContent = poste.risques[i];
-    lien.target = "_blank";
-    lien.style.textDecoration = "none"; // pas de soulignement
-    lien.style.color = "black"; // texte noir
-    cellFiche.appendChild(lien);
+  // Première ligne → cellule "Poste" avec rowSpan
+  if (i === 0) {
+    const cellPoste = row.insertCell(0);
+    cellPoste.textContent = posteNom;
+    cellPoste.rowSpan = poste.risques.length; // fusion sur toutes les lignes
   }
 
+  // Colonne "Fiches de postes" (checkbox + lien Drive)
+  const cellFiche = row.insertCell(-1);
+
+  // Crée la checkbox
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.style.marginRight = "8px";
+
+  // Crée le lien
+  const lien = document.createElement("a");
+  lien.href = poste.liens_risques[i];
+  lien.textContent = poste.risques[i];
+  lien.target = "_blank";
+  lien.style.textDecoration = "none"; // pas de soulignement
+  lien.style.color = "black"; // texte noir
+
+  // Ajoute les deux dans la cellule
+  cellFiche.appendChild(checkbox);
+  cellFiche.appendChild(lien);
+}
   container.appendChild(table);
 }
 document.addEventListener("DOMContentLoaded", () => {
