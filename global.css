@@ -175,6 +175,13 @@ input[type="text"] {
 }
 
 @media print {
+  .signature-canvas {
+    max-width: 400px !important;
+    height: 300px !important;
+  }
+  .no-print {
+    display: none !important;
+  }
   body {
     font-size: 11pt;
   }
@@ -205,6 +212,7 @@ input[type="text"] {
     text-align: left !important;
     padding-left: 10px !important;
   }
+  
 
   /* Les blocs de texte, labels et signature restent bien à gauche */
   .attestation .texte,

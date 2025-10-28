@@ -315,8 +315,6 @@ const postesData = {
     ]
   },
 };
-
-// Renvoie le nom complet du poste
 function getPosteName(key) {
   const map = {
     conducteurs_tp: "Conducteurs d’engins TP",
@@ -324,17 +322,18 @@ function getPosteName(key) {
     marinier: "Marinier / Conducteur de Bateaux Freycinet",
     chauffeur_pl: "Chauffeur PL / Utilisateur de grue auxiliaire",
     mecanicien: "Mécanicien",
-    soudeur:"Soudeur",
+    soudeur: "Soudeur",
     travaux_forestiers: "Travaux forestiers",
-    operateurs_polyvalents:"Opérateurs polyvalents",
-    intervenant_bathy_topo:"Intervenant Cellule Bathy / Topo",
-    intervenant_tereos:"Intervenant TEREOS"
+    operateurs_polyvalents: "Opérateurs polyvalents",
+    intervenant_bathy_topo: "Intervenant Cellule Bathy / Topo",
+    intervenant_tereos: "Intervenant TEREOS",
   };
   return map[key] || key;
 }
 
+// 🔹 Crée la table dynamique des risques
 function createTable(posteKey, container) {
-const posteNom = getPosteName(posteKey);
+  const posteNom = getPosteName(posteKey);
   const poste = postesData[posteKey];
   if (!poste) return;
 
@@ -344,60 +343,189 @@ const posteNom = getPosteName(posteKey);
   // En-têtes
   const header = table.createTHead();
   const headerRow = header.insertRow();
-  ["Poste de travail", "Fiche de risque"].forEach(text => {
+  ["Poste de travail", "Fiche de risque"].forEach((text) => {
     const th = document.createElement("th");
     th.textContent = text;
     headerRow.appendChild(th);
   });
 
-  // Corps du tableau
+  // Corps
   const tbody = table.createTBody();
 
-for (let i = 0; i < poste.risques.length; i++) {
-  const row = tbody.insertRow();
+  for (let i = 0; i < poste.risques.length; i++) {
+    const row = tbody.insertRow();
 
-  // Première ligne → cellule "Poste" avec rowSpan
-  if (i === 0) {
-    const cellPoste = row.insertCell(0);
-    cellPoste.textContent = posteNom;
-    cellPoste.rowSpan = poste.risques.length; // fusion sur toutes les lignes
+    // Première cellule fusionnée sur toutes les lignes
+    if (i === 0) {
+      const cellPoste = row.insertCell(0);
+      cellPoste.textContent = posteNom;
+      cellPoste.rowSpan = poste.risques.length;
+    }
+
+    const cellFiche = row.insertCell(-1);
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.style.marginRight = "8px";
+
+    const lien = document.createElement("a");
+    lien.href = poste.liens_risques[i];
+    lien.textContent = poste.risques[i];
+    lien.target = "_blank";
+    lien.style.textDecoration = "none";
+    lien.style.color = "black";
+
+    cellFiche.appendChild(checkbox);
+    cellFiche.appendChild(lien);
   }
 
-  // Colonne "Fiches de postes" (checkbox + lien Drive)
-  const cellFiche = row.insertCell(-1);
-
-  // Crée la checkbox
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.style.marginRight = "8px";
-
-  // Crée le lien
-  const lien = document.createElement("a");
-  lien.href = poste.liens_risques[i];
-  lien.textContent = poste.risques[i];
-  lien.target = "_blank";
-  lien.style.textDecoration = "none"; // pas de soulignement
-  lien.style.color = "black"; // texte noir
-
-  // Ajoute les deux dans la cellule
-  cellFiche.appendChild(checkbox);
-  cellFiche.appendChild(lien);
-}
   container.appendChild(table);
 }
+
+// 🔹 Canvas signature
+function setupCanvas(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  canvas.width = canvas.parentElement.clientWidth;
+  canvas.height = canvas.parentElement.clientHeight;
+
+  let painting = false;
+
+  function startPosition(e) {
+    painting = true;
+    draw(e);
+    e.preventDefault();
+  }
+
+  function endPosition(e) {
+    painting = false;
+    ctx.beginPath();
+    e.preventDefault();
+  }
+
+  function draw(e) {
+    if (!painting) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#000";
+
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    ctx.lineTo(clientX - rect.left, clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(clientX - rect.left, clientY - rect.top);
+    e.preventDefault();
+  }
+
+  // Souris
+  canvas.addEventListener("mousedown", startPosition);
+  canvas.addEventListener("mouseup", endPosition);
+  canvas.addEventListener("mouseout", endPosition);
+  canvas.addEventListener("mousemove", draw);
+
+  // Tactile
+  canvas.addEventListener("touchstart", startPosition);
+  canvas.addEventListener("touchend", endPosition);
+  canvas.addEventListener("touchcancel", endPosition);
+  canvas.addEventListener("touchmove", draw);
+}
+
+function clearCanvas(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// 🔹 Sauvegarde et restauration du contenu
+function savePageContent() {
+  const page = document.querySelector("#page4");
+  if (!page) return;
+
+  const inputs = page.querySelectorAll('input, textarea, select, canvas');
+
+  inputs.forEach(input => {
+    if (input.type === 'checkbox' || input.type === 'radio') {
+      if (input.checked) {
+        input.setAttribute('checked', 'checked');
+      } else {
+        input.removeAttribute('checked');
+      }
+    } else if (input.tagName.toLowerCase() === 'textarea') {
+      input.textContent = input.value; // ✅ conserve la valeur interne
+    } else if (input.tagName.toLowerCase() === 'canvas') {
+      // ✅ Sauvegarde la signature sous forme d'image base64
+      const dataURL = input.toDataURL();
+      input.setAttribute('data-image', dataURL);
+    } else {
+      input.setAttribute('value', input.value);
+    }
+  });
+
+  localStorage.setItem("page4Content", page.outerHTML);
+}
+
+function loadPageContent() {
+const savedContent = localStorage.getItem("page4Content");
+  if (!savedContent) return;
+
+  const page = document.querySelector("#page4");
+  if (!page) return;
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(savedContent, "text/html");
+  const savedPage = doc.querySelector("#page4");
+
+  if (savedPage) {
+    page.innerHTML = savedPage.innerHTML;
+
+    // 🔄 Réinitialise les canvases sauvegardés
+    page.querySelectorAll("canvas[data-image]").forEach(canvas => {
+      const img = new Image();
+      img.onload = () => {
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = canvas.getAttribute("data-image");
+    });
+  }
+}
+
+function redirectToInstructionPage() {
+  savePageContent();
+  window.location.href = "instruction.html";
+}
+
+// 🔹 Initialisation
 document.addEventListener("DOMContentLoaded", () => {
+  // Chargement localStorage
+  loadPageContent();
+
+  // Initialisation du canvas
+  setupCanvas("drawingCanvasRisk1");
+
+  // Sélecteur principal
   const postesContainer = document.getElementById("postes-container");
   const addBtn = document.getElementById("add-poste");
   let posteCount = 1;
 
-  // Gestion du premier select
   document.querySelector(".poste-select").addEventListener("change", function () {
     const tableContainer = this.parentElement.querySelector(".table-container");
     tableContainer.innerHTML = "";
     if (this.value) createTable(this.value, tableContainer);
   });
 
-  // Bouton "ajouter un poste"
+  // Ajouter un poste
   addBtn.addEventListener("click", () => {
     if (posteCount >= 3) {
       alert("Vous pouvez ajouter jusqu’à 3 postes maximum.");
@@ -424,11 +552,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="table-container"></div>
     `;
 
-    // 👉 Insère juste après le précédent select, pas après le tableau
-    const lastSelect = postesContainer.querySelector(".poste-block:last-of-type .poste-select");
-    lastSelect.parentNode.insertAdjacentElement("afterend", newBlock);
+    postesContainer.appendChild(newBlock);
 
-    // Active l’événement sur le nouveau select
     newBlock.querySelector(".poste-select").addEventListener("change", function () {
       const tableContainer = this.parentElement.querySelector(".table-container");
       tableContainer.innerHTML = "";
@@ -439,109 +564,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
-function setupCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
-
-    let painting = false;
-
-    function startPosition(e) {
-      painting = true;
-      draw(e);
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    function endPosition(e) {
-      painting = false;
-      ctx.beginPath();
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    function draw(e) {
-      if (!painting) return;
-      const rect = canvas.getBoundingClientRect();
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#000';
-
-      let clientX, clientY;
-      if (e.touches && e.touches.length > 0) {
-        // Utiliser les coordonnées du premier touch point
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        // Utiliser les coordonnées de la souris
-        clientX = e.clientX;
-        clientY = e.clientY;
-      }
-
-      ctx.lineTo(clientX - rect.left, clientY - rect.top);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(clientX - rect.left, clientY - rect.top);
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    // Ajouter des écouteurs pour les événements de souris
-    canvas.addEventListener('mousedown', startPosition);
-    canvas.addEventListener('mouseup', endPosition);
-    canvas.addEventListener('mouseout', endPosition);
-    canvas.addEventListener('mousemove', draw);
-
-    // Ajouter des écouteurs pour les événements tactiles
-    canvas.addEventListener('touchstart', startPosition);
-    canvas.addEventListener('touchend', endPosition);
-    canvas.addEventListener('touchcancel', endPosition);
-    canvas.addEventListener('touchmove', draw);
-  }
-
-  // Initialisation
-  setupCanvas('drawingCanvasPageRisk1');
-
-  // Bouton pour effacer
-  function clearCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-  
-   function savePageContent() {
-        const page = document.querySelector('#page4');
-        const inputs = page.querySelectorAll('input, textarea, select');
-        inputs.forEach(input => {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                if (input.checked) {
-                    input.setAttribute('checked', 'checked');
-                } else {
-                    input.removeAttribute('checked');
-                }
-            } else {
-                input.setAttribute('value', input.value);
-            }
-        });
-        localStorage.setItem('page4Content', document.querySelector('#page4').outerHTML);
-    }
-
-    function loadPageContent() {
-        // Restaurer le contenu HTML de la page avec les valeurs des champs
-        const savedContent = localStorage.getItem('page4Content');
-        if (savedContent) {
-            document.querySelector('#page4').outerHTML = savedContent;
-        }
-    }
-
-    function redirectToInstructionPage() {
-        savePageContent();
-        window.location.href = 'instruction.html';
-    }
-
-    window.onload = function () {
-        loadPageContent();
-    }
-
-    window.onbeforeunload = function () {
-        savePageContent();
-    }
+// Sauvegarde avant fermeture
+window.onbeforeunload = savePageContent;

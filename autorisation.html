@@ -18,78 +18,91 @@
             text-align: center;
             vertical-align: middle;
         }
-/* Met l’image et le bloc texte côte à côte */
-.attestation td {
-  display: flex;
-  align-items: flex-start; /* aligne en haut */
-  gap: 10px;              /* espace entre image et texte */
-}
 
-/* Image */
-.attestation td img {
-  max-width: 120px;
-  height: auto;
-}
+        /* Met l’image et le bloc texte côte à côte */
+        .attestation td {
+            display: flex;
+            align-items: flex-start;
+            /* aligne en haut */
+            gap: 10px;
+            /* espace entre image et texte */
+        }
 
-/* Bloc texte */
-.attestation .texte {
-  display: flex;
-  flex-direction: column; /* tout sous l’autre */
-  text-align: left;       /* force l’alignement à gauche */
-  gap: 5px;               /* petit espace entre lignes */
-}
+        /* Image */
+        .attestation td img {
+            max-width: 120px;
+            height: auto;
+        }
 
-/* Chaque sous-div prend toute la largeur */
-.attestation .texte div {
-  display: flex;
-  align-items: flex-start; /* case + label alignés en haut */
-  gap: 5px;
-}
-/* met les deux blocs sur la même ligne */
-.form-et-cadre {
-  padding: 15px;  
-  display: flex;
-  gap: 5px;              /* espace entre textarea et cadre */
-  align-items: flex-start; /* alignement en haut */
-}
+        /* Bloc texte */
+        .attestation .texte {
+            display: flex;
+            flex-direction: column;
+            /* tout sous l’autre */
+            text-align: left;
+            /* force l’alignement à gauche */
+            gap: 5px;
+            /* petit espace entre lignes */
+        }
 
-/* que la textarea prenne toute la largeur possible */
-.form-et-cadre .bloc-textarea {
-  display: flex;
-  flex-direction: column;
-}
-.form-et-cadre .bloc-textarea textarea {
-  width: 500px;     /* prend toute la largeur du bloc */
-  height: 375px;   /* fixe la hauteur si tu veux aussi */
-}
+        /* Chaque sous-div prend toute la largeur */
+        .attestation .texte div {
+            display: flex;
+            align-items: flex-start;
+            /* case + label alignés en haut */
+            gap: 5px;
+        }
 
+        /* met les deux blocs sur la même ligne */
+        .form-et-cadre {
+            padding: 15px;
+            display: flex;
+            gap: 5px;
+            /* espace entre textarea et cadre */
+            align-items: flex-start;
+            /* alignement en haut */
+        }
 
+        /* que la textarea prenne toute la largeur possible */
+        .form-et-cadre .bloc-textarea {
+            display: flex;
+            flex-direction: column;
+        }
 
-/* responsive : en dessous de 768px, on repasse en colonne */
-@media (max-width: 768px) {
-  .form-et-cadre {
-    flex-direction: column;
-  }
-}
-.taches .tables-wrapper {
-  display: flex;
-  gap: 40px; /* espace entre les deux tableaux */
-  align-items: flex-start; /* aligne en haut */
-}
-
-.taches table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-@media (min-width: 1370px) {
-.sign {
-    margin-left: 350px;
-}
-}
+        .form-et-cadre .bloc-textarea textarea {
+            width: 500px;
+            /* prend toute la largeur du bloc */
+            height: 375px;
+            /* fixe la hauteur si tu veux aussi */
+        }
 
 
 
+        /* responsive : en dessous de 768px, on repasse en colonne */
+        @media (max-width: 768px) {
+            .form-et-cadre {
+                flex-direction: column;
+            }
+        }
+
+        .taches .tables-wrapper {
+            display: flex;
+            gap: 40px;
+            /* espace entre les deux tableaux */
+            align-items: flex-start;
+            /* aligne en haut */
+        }
+
+        .taches table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        @media (min-width: 1370px) {
+            .sign {
+                margin-left: 350px;
+            }
+        }
     </style>
 </head>
 
@@ -121,197 +134,213 @@
             </tbody>
         </table>
         <div class="taches page-break">
-             <div class="tables-wrapper">
-            <table class="table-left">
-                <thead>
-                <tr>
-                    <th>Conduite d'équipements de manutention</th>
-                    <th>Tâche autorisée par CDES</th>
-                    <th>Preuve de formation validé</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold"> Engins compacts de moins de
-                            6t (CACES A) </span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold">Pelles mécaniques > 6t
-                            (CACES B1) </span> </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold"> Chargeuses > 6t (CACES
-                            C1)</span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold">Engins de transport
-                            (dumper…) > 6t (CACES E)</span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold"> Manitou (CACES F) <span
-                                class="bold"></span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold"> Conduite Pelles Mécaniques sur pneumatiques </span> (Formation R482 B1 +
-                        Expérience demandée)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td> <span class="bold">Conduite Pelles sur équipements flottants / Pelles amphibies </span>
-                        (Formation R482 B1 + Expérience demandée)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Engins de Logistique / Formation CACES R 489 => <span class="bold">Chariot Elévateur (CACES
-                            3)</span> </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>Equipements de Levage / Formation CACES R 490 => <span class="bold">Grue Auxiliaire </span>
-                    </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold">Conduite de pousseurs fluviaux </span> (Permis PC + Grille Métier Formation
-                        au poste)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold">Conduite de véhicule de la société </span> (Permis B)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="tables-wrapper">
+                <table class="table-left">
+                    <thead>
+                        <tr>
+                            <th>Conduite d'équipements de manutention</th>
+                            <th>Tâche autorisée par CDES</th>
+                            <th>Preuve de formation validé</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold"> Engins compacts de
+                                    moins de
+                                    6t (CACES A) </span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold">Pelles mécaniques >
+                                    6t
+                                    (CACES B1) </span> </td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold"> Chargeuses > 6t
+                                    (CACES
+                                    C1)</span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold">Engins de transport
+                                    (dumper…) > 6t (CACES E)</span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Engins de chantier TP / Formation CACES R 482 => <span class="bold"> Manitou (CACES F)
+                                    <span class="bold"></span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold"> Conduite Pelles Mécaniques sur pneumatiques </span> (Formation R482
+                                B1 +
+                                Expérience demandée)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td> <span class="bold">Conduite Pelles sur équipements flottants / Pelles amphibies </span>
+                                (Formation R482 B1 + Expérience demandée)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Engins de Logistique / Formation CACES R 489 => <span class="bold">Chariot Elévateur
+                                    (CACES
+                                    3)</span> </td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td>Equipements de Levage / Formation CACES R 490 => <span class="bold">Grue Auxiliaire
+                                </span>
+                            </td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold">Conduite de pousseurs fluviaux </span> (Permis PC + Grille Métier
+                                Formation
+                                au poste)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold">Conduite de véhicule de la société </span> (Permis B)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <table class="table-right">
+                <table class="table-right">
 
-                <thead>
-                <tr>
-                    <th>Autres tâches</th>
-                    <th>Tâche autorisée par CDES</th>
-                    <th>Attestation de formation validé</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td> <span class="bold"> Machine / Outils portatifs dangereux Travaux Divers </span> => Formation au
-                        poste + Vérification des EPI</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold">Outils portatifs dangereux Travaux Forestiers </span> => Formation + EPI
-                        Forestier</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold"> Travaux soumis à Formation AIPR </span> (réseaux…)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold">Travaux soumis à Habilitations Electriques </span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold">Travaux en espace confiné </span> (CATEC)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td> <span class="bold">Opération de levage / élingage </span> (Formation Elingage)</td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td> <span class="bold">Travaux nécessitant la formation Travail en Hauteur et Port du Harnais
-                        </span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td> <span class="bold">Montage et démontage d'ateliers flottants (dragage) / Assemblage de machines
-                        </span> (Formation au poste)
-                    </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td> <span class="bold">Travaux par points chauds (soudure…)</span> Grille Métier Formation au
-                        poste
-                    </td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold"> Autres tâches soumis aux grilles de formation métier (Faucardage)</span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td><span class="bold">Sauveteur Secouriste du Travail</span></td>
-                    <td><input type="checkbox"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                </tbody>
-            </table>
+                    <thead>
+                        <tr>
+                            <th>Autres tâches</th>
+                            <th>Tâche autorisée par CDES</th>
+                            <th>Attestation de formation validé</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> <span class="bold"> Machine / Outils portatifs dangereux Travaux Divers </span> =>
+                                Formation au
+                                poste + Vérification des EPI</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold">Outils portatifs dangereux Travaux Forestiers </span> => Formation +
+                                EPI
+                                Forestier</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold"> Travaux soumis à Formation AIPR </span> (réseaux…)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold">Travaux soumis à Habilitations Electriques </span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold">Travaux en espace confiné </span> (CATEC)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td> <span class="bold">Opération de levage / élingage </span> (Formation Elingage)</td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td> <span class="bold">Travaux nécessitant la formation Travail en Hauteur et Port du
+                                    Harnais
+                                </span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td> <span class="bold">Montage et démontage d'ateliers flottants (dragage) / Assemblage de
+                                    machines
+                                </span> (Formation au poste)
+                            </td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td> <span class="bold">Travaux par points chauds (soudure…)</span> Grille Métier Formation
+                                au
+                                poste
+                            </td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold"> Autres tâches soumis aux grilles de formation métier
+                                    (Faucardage)</span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td><span class="bold">Sauveteur Secouriste du Travail</span></td>
+                            <td><input type="checkbox"></td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <input type="file" id="photo-input" accept="image/* .png" multiple>
         <div id="photo-container"></div>
 
-<div class="form-et-cadre">
-  <div class="bloc-textarea">
-    <label>Autres formations/habilitations détenues par le collaborateur</label>
-    <textarea name="formation-autres"></textarea>
-  </div>
-        <div class="cas">
-            <h2>Dans tous les cas...</h2>
-            <div class="icons">
-                <img src="stop-icon.png" alt="Stop">
-                <img src="check-icon.png" alt="Check">
+        <div class="form-et-cadre">
+            <div class="bloc-textarea">
+                <label>Autres formations/habilitations détenues par le collaborateur</label>
+                <textarea name="formation-autres"></textarea>
             </div>
-            <table class="checkboxes">
-                <th></th>
-                <th>Collaborateur informé</th>
-                <tr>
-                    <td>1. Il est strictement interdit d'effectuer les tâches de travail ci-dessous sans formation en
-                        cours de validité (voir habilitation ou accréditation) et sans Autorisation + Aptitude médicale
-                    </td>
-                    <td> <input type="checkbox"> </td>
-                </tr>
-                <tr>
-                    <td>2. Si des travaux interdits vous sont demandés, vous avez l'obligation d'en informer
-                        immédiatement votre n+1 et de ne pas y prendre part. </td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <tr>
-                    <td>3. Dans le cas où vous en prendriez l'initiative, ce serait sous votre entière responsabilité.
-                    </td>
-                    <td><input type="checkbox"></td>
-                </tr>
-            </table>
+            <div class="cas">
+                <h2>Dans tous les cas...</h2>
+                <div class="icons">
+                    <img src="stop-icon.png" alt="Stop">
+                    <img src="check-icon.png" alt="Check">
+                </div>
+                <table class="checkboxes">
+                    <th></th>
+                    <th>Collaborateur informé</th>
+                    <tr>
+                        <td>1. Il est strictement interdit d'effectuer les tâches de travail ci-dessous sans formation
+                            en
+                            cours de validité (voir habilitation ou accréditation) et sans Autorisation + Aptitude
+                            médicale
+                        </td>
+                        <td> <input type="checkbox"> </td>
+                    </tr>
+                    <tr>
+                        <td>2. Si des travaux interdits vous sont demandés, vous avez l'obligation d'en informer
+                            immédiatement votre n+1 et de ne pas y prendre part. </td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td>3. Dans le cas où vous en prendriez l'initiative, ce serait sous votre entière
+                            responsabilité.
+                        </td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
-</div>        
-            <table>
+        <table>
             <thead>
                 <tr>
                     <th>
@@ -323,11 +352,11 @@
                 <tr>
                     <td>
                         <div>
-            <h4>Formations à prévoir dans le cadre de l'activité du nouvel arrivant : </h4>
-            <textarea name="formation-prevue" id="formation-prevue" placeholder=""></textarea>
-        </div>
-        </td>
-        </tr>
+                            <h4>Formations à prévoir dans le cadre de l'activité du nouvel arrivant : </h4>
+                            <textarea name="formation-prevue" id="formation-prevue" placeholder=""></textarea>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <table class="attestation">
@@ -339,26 +368,29 @@
                 </tr>
             </thead>
             <tbody>
-                    <tr>
+                <tr>
                     <td>
-                <img class="nage-img" src="savoir-nager.png" alt="savoir nager">
-                <div class="texte">
-                    <span>J'atteste sur l'honneur :</span>
-                    <div>                    
-                        <input type="checkbox">
-                        <label>Savoir Nager</label>
-                    </div>
-                      <div>  
-                    <input type="checkbox">
-                    <label>Ne pas savoir nager mais souhaite bénéficier d'une formation complémentaire de natation</label>
-                      </div>
-                </div>
-                            <div class="sign">
-              <span class="date">Signature du collaborateur :</span>
-              <canvas id="drawingCanvasPageAutorisation1" class="signature-canvas"></canvas>
-              <button onclick="clearCanvas('drawingCanvasPageAutorisation1')">🧹 Effacer</button>
-            </div>
-                </td>
+                        <img class="nage-img" src="savoir-nager.png" alt="savoir nager">
+                        <div class="texte">
+                            <span>J'atteste sur l'honneur :</span>
+                            <div>
+                                <input type="checkbox">
+                                <label>Savoir Nager</label>
+                            </div>
+                            <div>
+                                <input type="checkbox">
+                                <label>Ne pas savoir nager mais souhaite bénéficier d'une formation complémentaire de
+                                    natation</label>
+                            </div>
+                        </div>
+                        <div class="sign">
+                            <span class="date">Signature du collaborateur :</span>
+                            <canvas id="drawingCanvasPageAutorisation1" class="signature-canvas"
+                                style="max-width: 400px;"></canvas>
+                            <button onclick="clearCanvas('drawingCanvasPageAutorisation1')" class="no-print">🧹
+                                Effacer</button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -370,42 +402,47 @@
 <script>
 
     document.addEventListener("DOMContentLoaded", () => {
-  const rowsLeft = document.querySelectorAll(".table-left tbody tr");
-  const rowsRight = document.querySelectorAll(".table-right tbody tr");
-  
-  const nbRows = Math.min(rowsLeft.length, rowsRight.length);
-  
-  for (let i = 0; i < nbRows; i++) {
-    // reset height first
-    rowsLeft[i].style.height = "";
-    rowsRight[i].style.height = "";
+        const rowsLeft = document.querySelectorAll(".table-left tbody tr");
+        const rowsRight = document.querySelectorAll(".table-right tbody tr");
 
-    const hLeft = rowsLeft[i].offsetHeight;
-    const hRight = rowsRight[i].offsetHeight;
-    const maxH = Math.max(hLeft, hRight);
-    
-    rowsLeft[i].style.height = maxH + "px";
-    rowsRight[i].style.height = maxH + "px";
-  }
-    setupCanvas('drawingCanvasPageAutorisation1');
-});
+        const nbRows = Math.min(rowsLeft.length, rowsRight.length);
+
+        for (let i = 0; i < nbRows; i++) {
+            // reset height first
+            rowsLeft[i].style.height = "";
+            rowsRight[i].style.height = "";
+
+            const hLeft = rowsLeft[i].offsetHeight;
+            const hRight = rowsRight[i].offsetHeight;
+            const maxH = Math.max(hLeft, hRight);
+
+            rowsLeft[i].style.height = maxH + "px";
+            rowsRight[i].style.height = maxH + "px";
+        }
+        setupCanvas('drawingCanvasPageAutorisation1');
+    });
 
     function savePageContent() {
         const page = document.querySelector('#page2');
-        const inputs = page.querySelectorAll('input, textarea, select');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            if (input.checked) {
-                input.setAttribute('checked', 'checked');
+        const inputs = page.querySelectorAll('input, textarea, select, canvas');
+        inputs.forEach(input => {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                if (input.checked) {
+                    input.setAttribute('checked', 'checked');
+                } else {
+                    input.removeAttribute('checked');
+                }
+            } else if (input.tagName.toLowerCase() === 'textarea') {
+                input.textContent = input.value; // ✅ valeur à l'intérieur du textarea
+
+            } else if (input.tagName.toLowerCase() === 'canvas') {
+                // ✅ Sauvegarde la signature sous forme d'image base64
+                const dataURL = input.toDataURL();
+                input.setAttribute('data-image', dataURL);
             } else {
-                input.removeAttribute('checked');
+                input.setAttribute('value', input.value);
             }
-        } else if (input.tagName.toLowerCase() === 'textarea') {
-            input.textContent = input.value; // ✅ valeur à l'intérieur du textarea
-        } else {
-            input.setAttribute('value', input.value);
-        }
-    });
+        });
         localStorage.setItem('page2Content', document.querySelector('#page2').outerHTML);
     }
 
@@ -434,9 +471,7 @@
     const photoContainer = document.getElementById('photo-container');
 
     photoInput.addEventListener('change', function () {
-        // Vider l'affichage actuel
-        photoContainer.innerHTML = '';
-
+        
         Array.from(this.files).forEach((file, index) => {
             const reader = new FileReader();
 
@@ -479,69 +514,69 @@
         });
     });
 
-      function setupCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
+    function setupCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
 
-    let painting = false;
+        let painting = false;
 
-    function startPosition(e) {
-      painting = true;
-      draw(e);
-      e.preventDefault(); // Empêche le comportement par défaut
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+            e.preventDefault(); // Empêche le comportement par défaut
+        }
+
+        function endPosition(e) {
+            painting = false;
+            ctx.beginPath();
+            e.preventDefault(); // Empêche le comportement par défaut
+        }
+
+        function draw(e) {
+            if (!painting) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                // Utiliser les coordonnées du premier touch point
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                // Utiliser les coordonnées de la souris
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            ctx.lineTo(clientX - rect.left, clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(clientX - rect.left, clientY - rect.top);
+            e.preventDefault(); // Empêche le comportement par défaut
+        }
+
+        // Ajouter des écouteurs pour les événements de souris
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mouseout', endPosition);
+        canvas.addEventListener('mousemove', draw);
+
+        // Ajouter des écouteurs pour les événements tactiles
+        canvas.addEventListener('touchstart', startPosition);
+        canvas.addEventListener('touchend', endPosition);
+        canvas.addEventListener('touchcancel', endPosition);
+        canvas.addEventListener('touchmove', draw);
     }
 
-    function endPosition(e) {
-      painting = false;
-      ctx.beginPath();
-      e.preventDefault(); // Empêche le comportement par défaut
+    function clearCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-    function draw(e) {
-      if (!painting) return;
-      const rect = canvas.getBoundingClientRect();
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#000';
-
-      let clientX, clientY;
-      if (e.touches && e.touches.length > 0) {
-        // Utiliser les coordonnées du premier touch point
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        // Utiliser les coordonnées de la souris
-        clientX = e.clientX;
-        clientY = e.clientY;
-      }
-
-      ctx.lineTo(clientX - rect.left, clientY - rect.top);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(clientX - rect.left, clientY - rect.top);
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    // Ajouter des écouteurs pour les événements de souris
-    canvas.addEventListener('mousedown', startPosition);
-    canvas.addEventListener('mouseup', endPosition);
-    canvas.addEventListener('mouseout', endPosition);
-    canvas.addEventListener('mousemove', draw);
-
-    // Ajouter des écouteurs pour les événements tactiles
-    canvas.addEventListener('touchstart', startPosition);
-    canvas.addEventListener('touchend', endPosition);
-    canvas.addEventListener('touchcancel', endPosition);
-    canvas.addEventListener('touchmove', draw);
-  }
-
-  function clearCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
 </script>
 
 </html>

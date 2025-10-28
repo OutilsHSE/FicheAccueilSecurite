@@ -94,6 +94,10 @@
                                 <input type="checkbox" id="interimaire" name="contract_type" value="Interimaire">
                                 Intérimaire
                             </label>
+                            <label>
+                                <input type="checkbox" id="collaborateur_ext" name="contract_type" value="Collaborateur externe">
+                                Collaborateur externe
+                            </label>                            
                         </div>
                     </td>
                 </tr>
@@ -247,8 +251,7 @@
         const photoContainer = document.getElementById('photo-container');
 
         photoInput.addEventListener('change', function () {
-            // Vider l'affichage actuel
-            photoContainer.innerHTML = '';
+
 
             Array.from(this.files).forEach((file, index) => {
                 const reader = new FileReader();

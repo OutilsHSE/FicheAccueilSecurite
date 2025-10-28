@@ -45,7 +45,7 @@
               <span class="date"> Date et Signature :</span>
               <input id="visite-date-reponsable" class="input-bilan" type="date"><br>
               <canvas id="drawingCanvasPageSign1" class="signature-canvas"></canvas>
-              <button onclick="clearCanvas('drawingCanvasPageSign1')">🧹 Effacer</button>
+              <button onclick="clearCanvas('drawingCanvasPageSign1')" class="no-print">🧹 Effacer</button>
             </div>
           </td>
           <td>
@@ -55,7 +55,7 @@
               <span class="date">Date et Signature :</span>
               <input id="visite-date-collaborateur" class="input-bilan" type="date"><br>
               <canvas id="drawingCanvasPageSign2" class="signature-canvas"></canvas>
-              <button onclick="clearCanvas('drawingCanvasPageSign2')">🧹 Effacer</button>
+              <button onclick="clearCanvas('drawingCanvasPageSign2')" class="no-print">🧹 Effacer</button>
             </div>
           </td>
         </tr>
@@ -138,24 +138,23 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   function printAllPages(mode) {
-    function replaceCanvasWithImages(originalContainer, clonedContainer) {
-      const originalCanvases = originalContainer.querySelectorAll('canvas');
+function replaceCanvasWithImages(source, targetContainer) {
+  const canvases = source.querySelectorAll('canvas');
+  canvases.forEach((canvas) => {
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png'); // capture le dessin
+    img.style.border = '1px solid #000';
+    img.style.width = canvas.style.width || '100%';
+    img.style.height = canvas.style.height || 'auto';
+    img.className = canvas.className; // garde la classe si besoin
 
-      originalCanvases.forEach(originalCanvas => {
-        const id = originalCanvas.id;
-        if (!id) return;
-
-        const clonedCanvas = clonedContainer.querySelector(`#${id}`);
-        if (!clonedCanvas) return;
-
-        const dataURL = originalCanvas.toDataURL();
-        const img = new Image();
-        img.src = dataURL;
-        img.style.maxWidth = '100%';
-
-        clonedCanvas.replaceWith(img);
-      });
+    // Trouve le canvas correspondant dans le container cible
+    const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
+    if (targetCanvas) {
+      targetCanvas.replaceWith(img);
     }
+  });
+}
 
     const page1Content = localStorage.getItem('page1Content');
     const page2Content = localStorage.getItem('page2Content');
@@ -184,8 +183,8 @@
       }
     });
 
+    replaceCanvasWithImages(document.body, document.body);
     const page6Clone = page.cloneNode(true);
-    replaceCanvasWithImages(page, page6Clone);
 
     const tempContainer1 = document.createElement('div');
     const tempContainer2 = document.createElement('div');
