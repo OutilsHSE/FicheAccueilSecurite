@@ -499,7 +499,7 @@ function setupCanvas(canvasId) {
   }
 
   // Initialisation
-  setupCanvas('drawingCanvas1');
+  setupCanvas('drawingCanvasPageRisk1');
 
   // Bouton pour effacer
   function clearCanvas(canvasId) {
@@ -533,9 +533,9 @@ function setupCanvas(canvasId) {
         }
     }
 
-    function redirectToSignPage() {
+    function redirectToInstructionPage() {
         savePageContent();
-        window.location.href = 'sign.html';
+        window.location.href = 'instruction.html';
     }
 
     window.onload = function () {

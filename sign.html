@@ -15,7 +15,7 @@
     <img class="logo" src="CDES_Logo.png" alt="">
     <h1> Fiche d'Accueil Sécurité </h1>
   </div>
-  <div id="page5">
+  <div id="page6">
     <table>
       <thead>
         <tr>
@@ -44,8 +44,8 @@
               <br>
               <span class="date"> Date et Signature :</span>
               <input id="visite-date-reponsable" class="input-bilan" type="date"><br>
-              <canvas id="drawingCanvas1" class="signature-canvas"></canvas>
-              <button onclick="clearCanvas('drawingCanvas1')">🧹 Effacer</button>
+              <canvas id="drawingCanvasPageSign1" class="signature-canvas"></canvas>
+              <button onclick="clearCanvas('drawingCanvasPageSign1')">🧹 Effacer</button>
             </div>
           </td>
           <td>
@@ -54,8 +54,8 @@
                 appliquerai dans le cadre de mes activités. </span><br>
               <span class="date">Date et Signature :</span>
               <input id="visite-date-collaborateur" class="input-bilan" type="date"><br>
-              <canvas id="drawingCanvas2" class="signature-canvas"></canvas>
-              <button onclick="clearCanvas('drawingCanvas2')">🧹 Effacer</button>
+              <canvas id="drawingCanvasPageSign2" class="signature-canvas"></canvas>
+              <button onclick="clearCanvas('drawingCanvasPageSign2')">🧹 Effacer</button>
             </div>
           </td>
         </tr>
@@ -128,8 +128,8 @@
   }
 
   // Initialisation
-  setupCanvas('drawingCanvas1');
-  setupCanvas('drawingCanvas2');
+  setupCanvas('drawingCanvasPageSign1');
+  setupCanvas('drawingCanvasPageSign2');
 
   // Bouton pour effacer
   function clearCanvas(canvasId) {
@@ -161,8 +161,9 @@
     const page2Content = localStorage.getItem('page2Content');
     const page3Content = localStorage.getItem('page3Content');
     const page4Content = localStorage.getItem('page4Content');
+    const page5Content = localStorage.getItem('page5Content');
 
-    const page = document.querySelector('#page5');
+    const page = document.querySelector('#page6');
     const inputs = page.querySelectorAll('input, textarea, select');
     inputs.forEach(input => {
       if (input.type === 'checkbox' || input.type === 'radio') {
@@ -183,23 +184,26 @@
       }
     });
 
-    const page5Clone = page.cloneNode(true);
-    replaceCanvasWithImages(page, page5Clone);
+    const page6Clone = page.cloneNode(true);
+    replaceCanvasWithImages(page, page6Clone);
 
     const tempContainer1 = document.createElement('div');
     const tempContainer2 = document.createElement('div');
     const tempContainer3 = document.createElement('div');
     const tempContainer4 = document.createElement('div');
+    const tempContainer5 = document.createElement('div');
 
     if (page1Content) tempContainer1.innerHTML = page1Content;
     if (page2Content) tempContainer2.innerHTML = page2Content;
     if (page3Content) tempContainer3.innerHTML = page3Content;
-    if (page3Content) tempContainer4.innerHTML = page4Content;
+    if (page4Content) tempContainer4.innerHTML = page4Content;
+    if (page5Content) tempContainer5.innerHTML = page5Content;
 
     replaceCanvasWithImages(document.body, tempContainer1);
     replaceCanvasWithImages(document.body, tempContainer2);
     replaceCanvasWithImages(document.body, tempContainer3);
-        replaceCanvasWithImages(document.body, tempContainer4);
+    replaceCanvasWithImages(document.body, tempContainer4);
+    replaceCanvasWithImages(document.body, tempContainer5);
 
     // Assemblage final dans un conteneur temporaire
     const finalContainer = document.createElement('div');
@@ -208,7 +212,8 @@
     if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
     if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
     if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
-    finalContainer.innerHTML += '<div>' + page5Clone.outerHTML + '</div>';
+    if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
+    finalContainer.innerHTML += '<div>' + page6Clone.outerHTML + '</div>';
 
     document.body.appendChild(finalContainer); // Temporairement dans le DOM
 
