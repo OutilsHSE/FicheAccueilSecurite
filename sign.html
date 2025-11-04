@@ -216,20 +216,7 @@ function replaceCanvasWithImages(source, targetContainer) {
 
     document.body.appendChild(finalContainer); // Temporairement dans le DOM
 
-    if (mode === 'pdf') {
-      const opt = {
-        margin: 0.5,
-        filename: 'document.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(finalContainer).save().then(() => {
-        finalContainer.remove(); // Nettoyage
-      });
-
-    } else if (mode === 'print') {
+  
     const originalBody = document.body.innerHTML;
     document.body.innerHTML = '';
     document.body.appendChild(finalContainer);
@@ -242,7 +229,7 @@ function replaceCanvasWithImages(source, targetContainer) {
       // Restauration après impression
       document.body.innerHTML = originalBody;
     }, 500);
-    }
+    
   }
 
   window.onload = function () {
