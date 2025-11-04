@@ -154,17 +154,19 @@ function printAllPages(mode) {
     });
   }
 
-  // Récupération du contenu des pages
-  const page1Content = localStorage.getItem('page1Content');
-  const page2Content = localStorage.getItem('page2Content');
-  const page3Content = localStorage.getItem('page3Content');
-  const page4Content = localStorage.getItem('page4Content');
-  const page5Content = localStorage.getItem('page5Content');
+  // Charger les pages stockées
+  const pageContents = [
+    localStorage.getItem('page1Content'),
+    localStorage.getItem('page2Content'),
+    localStorage.getItem('page3Content'),
+    localStorage.getItem('page4Content'),
+    localStorage.getItem('page5Content')
+  ];
 
-  const page = document.querySelector('#page6');
+  const page6 = document.querySelector('#page6');
 
-  // Synchronisation des champs de page6
-  const inputs = page.querySelectorAll('input, textarea, select');
+  // Synchroniser les champs
+  const inputs = page6.querySelectorAll('input, textarea, select');
   inputs.forEach(input => {
     if (input.type === 'checkbox' || input.type === 'radio') {
       input.checked ? input.setAttribute('checked', 'checked') : input.removeAttribute('checked');
@@ -177,53 +179,61 @@ function printAllPages(mode) {
     }
 
     if (input.tagName.toLowerCase() === 'select') {
-      const options = input.querySelectorAll('option');
-      options.forEach(option => {
-        option.selected = option.value === input.value;
+      input.querySelectorAll('option').forEach(opt => {
+        opt.selected = opt.value === input.value;
       });
     }
   });
 
   replaceCanvasWithImages(document.body, document.body);
-  const page6Clone = page.cloneNode(true);
+  const page6Clone = page6.cloneNode(true);
 
-  // Préparer les conteneurs temporaires
-  const temps = [page1Content, page2Content, page3Content, page4Content, page5Content].map(content => {
-    const div = document.createElement('div');
-    if (content) div.innerHTML = content;
-    replaceCanvasWithImages(document.body, div);
-    return div;
-  });
-
-  // Créer le conteneur final
+  // ⚙️ Créer le conteneur final proprement
   const finalContainer = document.createElement('div');
   finalContainer.style.padding = '20px';
 
-  temps.forEach(temp => {
-    if (temp.innerHTML.trim() !== '') {
-      finalContainer.innerHTML += `<div class="page-section page-break">${temp.innerHTML}</div>`;
+  // Ajouter toutes les pages 1 à 5
+  pageContents.forEach(content => {
+    if (content && content.trim() !== '') {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = content;
+      replaceCanvasWithImages(document.body, tempDiv);
+      finalContainer.innerHTML += `<div class="page-section page-break">${tempDiv.innerHTML}</div>`;
     }
   });
 
   // Ajouter la dernière page
   finalContainer.innerHTML += `<div class="page-section">${page6Clone.outerHTML}</div>`;
 
-  // Sauvegarder le contenu original AVANT d'ajouter le finalContainer
-  const originalBody = document.body.innerHTML;
+  // Sauvegarder le contenu avant de remplacer
+  const originalHTML = document.body.innerHTML;
 
-  // Effacer puis injecter le conteneur unique
+  // Remplacer le body par le contenu à imprimer
   document.body.innerHTML = '';
   document.body.appendChild(finalContainer);
 
-  // Forcer le rendu avant impression
+  // Ajouter styles d'impression
+  const printStyles = document.createElement('style');
+  printStyles.textContent = `
+    @media print {
+      @page { size: A4 portrait; margin: 10mm; }
+      .page-section { page-break-after: always; break-after: page; }
+      .page-section:last-child { page-break-after: auto; }
+    }
+  `;
+  document.head.appendChild(printStyles);
+
   window.scrollTo(0, 0);
 
+  // Délai pour laisser le temps au DOM de se peindre
   setTimeout(() => {
     window.print();
-    // Restaurer le contenu après impression
-    document.body.innerHTML = originalBody;
-  }, 600);
+    // Restaure le contenu initial
+    document.body.innerHTML = originalHTML;
+    printStyles.remove();
+  }, 800);
 }
+
 
   window.onload = function () {
     document.getElementById('visite-date-reponsable').valueAsDate = new Date();
