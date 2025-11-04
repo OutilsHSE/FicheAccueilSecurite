@@ -213,10 +213,7 @@ function replaceCanvasWithImages(source, targetContainer) {
     if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
     if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
     finalContainer.innerHTML += '<div>' + page6Clone.outerHTML + '</div>';
-
-    document.body.appendChild(finalContainer); // Temporairement dans le DOM
-
-  
+    
     const originalBody = document.body.innerHTML;
     document.body.innerHTML = '';
     document.body.appendChild(finalContainer);
