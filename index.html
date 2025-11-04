@@ -9,34 +9,35 @@
 </head>
 
 <body>
-    <div id="page1">
-        <div class="container">
-            <img class="logo" src="CDES_Logo.png" alt="">
-            <h1> Fiche d'Accueil Sécurité </h1>
-        </div>
+        <div id="page1">
+        
+    <div class="container">
+        <img class="logo" src="CDES_Logo.png" alt="">
+        <h1> Fiche d'Accueil Sécurité </h1>
+    </div>    
         <table id="obs-table">
             <thead>
                 <tr>
-                    <th colspan="3">Informations générales</th>
+                    <th colspan="3">INFORMATIONS GENERALES</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
                         <div class="large-row">
-                            Date de l'accueil sécurité:<br>
+                           <span style="padding-top: 20px;"> Date de l'accueil sécurité: </span><br>
                             <input id="visite-date" class="input-bilan" type="date">
                         </div>
                     </td>
                     <td>
                         <div class="large-row">
-                            Lieu de l’accueil sécurité:<br>
+                            <span style="padding-top: 15px;"> Lieu de l’accueil sécurité: </span> <br>
                             <input id="lieu" class="input-bilan" type="text">
                         </div>
                     </td>
                     <td>
                         <div class="large-row">
-                            Responsable CDES de l’accueil:<br>
+                            <span style="padding-top: 15px;"> Responsable CDES de l’accueil:</span> <br>
                             <input id="responsable" class="input-bilan" type="text">
                         </div>
                     </td>
@@ -46,7 +47,7 @@
         <table id="obs-table">
             <thead>
                 <tr>
-                    <th colspan="4">Nouveau collaborateur accueilli</th>
+                    <th colspan="4">NOUVEAU COLLABORATEUR ACCUEILLI</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,7 +67,6 @@
                             Statut:
                         </div>
                     </td>
-                    <td> Poste</td>
                 </tr>
                 <tr>
                     <td>
@@ -94,14 +94,11 @@
                                 <input type="checkbox" id="interimaire" name="contract_type" value="Interimaire">
                                 Intérimaire
                             </label>
+                            <label>
+                                <input type="checkbox" id="collaborateur_ext" name="contract_type" value="Collaborateur externe">
+                                Collaborateur externe
+                            </label>                            
                         </div>
-                    </td>
-                    <td>
-                        <select id="choixMetier">
-                            <option value="Atelier">Atelier</option>
-                            <option value="Marinier">Marinier</option>
-                            <option value="Conducteur d'engins/Personnel de chantier / Chauffeur PL">Conducteur d'engins/Personnel de chantier/ Chauffeur PL</option>
-                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -117,7 +114,7 @@
         <table id="obs-table">
             <thead>
                 <tr>
-                    <th colspan="3" class="green-background">APTITUDE MEDICALE DU COLLABORATEUR:</th>
+                    <th colspan="3" class="green-background">APTITUDE MEDICALE DU COLLABORATEUR</th>
                 </tr>
             </thead>
             <tbody>
@@ -168,7 +165,6 @@
         </table>
     </div>
     <button class="show-consignes open-button" id="openModalBtn">?</button>
-    <button class="open-button" id="openQuizzBtn">Quizz</button>
     <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>
 
     <!-- Structure de la modale -->
@@ -190,11 +186,6 @@
         </div>
     </div>
 
-        <!-- Structure de la modale -->
-    <div id="quizzModal" class="modal" style="display: none;">
-        <div id="modal-content-quizz"></div>
-    </div>
-<script src="quizz.js"></script>
     <script>
         function savePageContent() {
             const page = document.querySelector('#page1');
@@ -245,14 +236,8 @@
             modal.style.display = 'none';
         }
         
-        function openQuizzModal() {
-            const modal = document.getElementById('quizzModal');
-            modal.style.display = 'block';
-        }
-        
         document.getElementById('openModalBtn').onclick = openModal;
         document.getElementsByClassName('close')[0].onclick = closeModal;
-        document.getElementById('openQuizzBtn').onclick = openQuizzModal;
 
 
         window.onclick = function (event) {
@@ -266,8 +251,7 @@
         const photoContainer = document.getElementById('photo-container');
 
         photoInput.addEventListener('change', function () {
-            // Vider l'affichage actuel
-            photoContainer.innerHTML = '';
+
 
             Array.from(this.files).forEach((file, index) => {
                 const reader = new FileReader();
@@ -283,7 +267,7 @@
                     // Image
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.width = '360px';
+                    img.style.width = '1000px';
                     img.style.height = 'auto';
                     img.style.border = '1px solid #ccc';
                     img.style.borderRadius = '8px';
@@ -326,17 +310,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // Chargement du fichier quizz.html dans la modale
-  fetch('quizz.html')
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById('modal-content-quizz').innerHTML = html;
-      document.querySelectorAll('input[name="rep"]').forEach(input =>
-        input.addEventListener('change', validerAuto)
-      );
-
-      document.getElementById('openQuizzBtn').addEventListener('click', ouvrirQuizz);
-    });
 });
     </script>
 
