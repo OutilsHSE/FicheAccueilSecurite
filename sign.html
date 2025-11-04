@@ -230,20 +230,18 @@ function replaceCanvasWithImages(source, targetContainer) {
       });
 
     } else if (mode === 'print') {
-      const printWindow = window.open('', '_blank');
-      printWindow.document.write('<html><head>');
-      printWindow.document.write('<link rel="stylesheet" href="global.css">');
-      printWindow.document.write('</head><body>');
-      printWindow.document.write(finalContainer.innerHTML);
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
+    const originalBody = document.body.innerHTML;
+    document.body.innerHTML = '';
+    document.body.appendChild(finalContainer);
 
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 1000);
+    window.scrollTo(0, 0); // Évite les bugs d’affichage
 
-      finalContainer.remove();
+    setTimeout(() => {
+      window.print();
+
+      // Restauration après impression
+      document.body.innerHTML = originalBody;
+    }, 500);
     }
   }
 
