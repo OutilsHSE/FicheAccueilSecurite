@@ -102,8 +102,13 @@ input[type="text"] {
 }
 
 .red-text {
-  color: red;
+  color: red !important;
 }
+
+.red-text a {
+    color: red !important;
+}
+
 
 .italic {
   font-style: italic;
