@@ -553,11 +553,6 @@ input[type="text"] {
         height: auto !important;
     }
 
-    textarea {
-        white-space: pre-wrap !important;
-        overflow: visible !important;
-    }
-
         /* Spécial UNIQUEMENT pour la page trop large */
     .large-print-page {
         transform: scale(0.60);          /* Ajuste ici selon besoin */
@@ -587,4 +582,32 @@ input[type="text"] {
     .force-break:first-child {
         page-break-before: auto !important;
     }
+
+  /* On enlève les marges/paddings pour que le textarea puisse vraiment prendre toute la largeur */
+  #page3.other-equipments,
+  #page3 .other-equipments {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Le bloc "autres équipements" ne doit jamais être coupé */
+  #page3 .other-equipments,
+  #page3 .no-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* TEXTAREA : pleine largeur + très grand */
+  #page3 .other-equipments-textarea,
+  #page3 .other-equipments textarea {
+    width: 100% !important;         /* toute la largeur disponible */
+    height: 120mm !important;       /* quasi toute la hauteur A4 */
+    min-height: 120mm !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    box-sizing: border-box;
+    display: block;
+  }
 }

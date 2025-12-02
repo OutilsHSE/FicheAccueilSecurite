@@ -5,14 +5,24 @@
         page-break-before: avoid !important;
         page-break-after: avoid !important;
     }
+    
+       .other-equipments {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
 
-    .other-equipments textarea {
-        width: 90% !important;
-        min-height: 300mm !important; /* taille très grande pour impression */
-        height: 300mm !important;
-        margin: 0 auto !important;
-        display: block;
+        padding-left: 0 !important;     /* pleine largeur */
+        padding-right: 0 !important;
     }
+
+    .other-equipments-textarea {
+        width: 100% !important;          /* pleine largeur */
+        height: 250mm !important;        /* très grande hauteur */
+        min-height: 250mm !important;
+        margin: 0 !important;
+        padding: 10px !important;
+        box-sizing: border-box;
+    }
+
      .no-break {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
@@ -29,12 +39,14 @@
 .other-equipments {
   padding-left: 250px;
   padding-top: 10px;
-  height: 200px;
-  width: 500px;
+
+
 }
 
-
-
+.other-equipments-textarea {
+  height: 200px;
+  width: 500px;
+  }
 
 .other-equipments-hse {
   font-style: bold;
