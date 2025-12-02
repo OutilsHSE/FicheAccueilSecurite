@@ -1,176 +1,300 @@
-// === Données du quiz ===
-const quizzData = [
-  {
-    theme: "Sécurité sur chantier",
-    questions: [
-      {
-        numero: 1,
-        type: "qcm",
-        enonce: `Je participe à une opération de plantation sur un chantier de génie écologique en bordure de
-        canal. Il s’agit exclusivement de travaux manuels. En tenant compte du type de tâche, de
-        l’environnement et des risques présents, quels EPI dois-je porter dans cette situation ?`,
-        image: "images/casque.png",
-        propositions: [
-          { texte: "Chaussures ou bottes de sécurité", correct: true },
-          { texte: "Vêtements haute visibilité", correct: true },
-          { texte: "Lunettes de protection", correct: true },
-          { texte: "Casque de protection", correct: true },
-          { texte: "Gants de protection étanches", correct: true },
-          { texte: "Harnais antichute", correct: true },
-          { texte: "Gilet de sauvetage", correct: true },
-        ],
-        explication: {
-          texte: `Je suis exposé à tous les risques. Je dois porter mes chaussures de sécurité, vêtements
-            haute visibilité et gants étanches par défaut sur tous les chantiers (travail au contact de
-            l’eau)
-
-            J’ajoute le gilet de sauvetage si je travaille à proximité immédiate d’un plan d’eau.
-
-            Le casque de protection est requis dès lors qu’il y a de la coactivité avec des engins et lors
-            des opérations de levage.
-
-            J’adapte et je rajoute des EPI complémentaires en fonction de l’activité et des risques :
-            Protection auditive si je suis exposé au bruit / Montre PTI si je travail seul / Harnais si je
-            travail en talus pentus / Visière s’il y a un risque de projection de particules ou fluides`,
-          image: "images/explication_casque.png"
-        },
-        points: 4
-      },
-      {
-        numero: 2,
-        type: "vraiFaux",
-        enonce: "Si j’évolue sur un équipement flottant type ponton, je porte mon gilet de sauvetage et ma ceinture de sécurité dans les engins sur l’eau.",
-        image: "images/casque.png",
-        propositions: [
-          { texte: "Vrai", correct: false },
-          { texte: "Faux", correct: true }
-        ],
-        explication: {
-          texte: "Lorsque la pelle est sur l’eau ou à proximité, la ceinture de sécurité n'est pas portée - En cas de basculement de l'engin dans l'eau, il faut que le collaborateur puisse s'extraire ou être extrait rapidement. Pour toutes les autres situations, le port de la ceinture reste obligatoire.Le port du gilet de sauvetage y compris dans les engins est obligatoire. -En cas de malaise et de chute à l'eau, le gilet se déclenche automatiquement au contact de l'eau et m'évite la noyade",
-          image: "images/explication_casque.png"
-        },
-        points: 1
-      }
-    ]
-  }
-];
-
-// === Variables globales ===
-let currentThemeIndex = 0;
 let currentQuestionIndex = 0;
 let score = 0;
 
-// === Sélection des éléments DOM ===
+const themeEl = document.getElementById("theme");
+const enonceEl = document.getElementById("enonce");
+const imageEl = document.getElementById("image-question");
+const propositionsEl = document.getElementById("propositions");
+const explicationEl = document.getElementById("explication");
+const btnValider = document.getElementById("valider");
+const btnSuivant = document.getElementById("suivant");
 const quizContainer = document.getElementById("quiz-container");
-const themeTitle = document.getElementById("theme-title");
-const questionTitle = document.getElementById("question-title");
-const questionImage = document.getElementById("question-image");
-const propositionsContainer = document.getElementById("propositions");
-const validateBtn = document.getElementById("validate-btn");
-const nextBtn = document.getElementById("next-btn");
-const explicationContainer = document.getElementById("explication");
-const scoreContainer = document.getElementById("score");
 
-// === Affichage de la question ===
-function loadQuestion() {
-  const theme = quizzData[currentThemeIndex];
-  const question = theme.questions[currentQuestionIndex];
+// === Charger une question ===
+function chargerQuestion() {
+  const question = quizzData[0].questions[currentQuestionIndex];
+  // --- Nettoyage des anciens marqueurs / zones / états ---
+const imageDroite = document.getElementById("image-question-droite");
+const imageGrande = document.getElementById("image-question-grande");
+const imageClickContainer = document.getElementById("image-click-container");
 
-  themeTitle.textContent = theme.theme;
-  questionTitle.textContent = `Q${question.numero}. ${question.enonce}`;
-  explicationContainer.innerHTML = "";
-  validateBtn.disabled = false;
-  nextBtn.style.display = "none";
+// Supprime tous les anciens marqueurs et zones correctes
+document.querySelectorAll(".click-marker, .zone-correcte").forEach(el => el.remove());
 
-  // Image de la question
-  if (question.image) {
-    questionImage.src = question.image;
-    questionImage.style.display = "block";
-  } else {
-    questionImage.style.display = "none";
+// Réinitialise les attributs dataset pour les clics
+if (imageGrande) {
+  imageGrande.dataset.clicks = 0;
+  imageGrande.onclick = null;
+}
+  propositionsEl.innerHTML = "";
+  explicationEl.innerHTML = "";
+  btnValider.disabled = false;
+  btnSuivant.style.display = "none";
+
+  themeEl.textContent = `Thème : ${question.theme}`;
+  enonceEl.textContent = `${question.numero}. ${question.enonce}`;
+
+  // Réinitialisation
+  imageDroite.style.display = "none";
+  imageGrande.style.display = "none";
+  imageClickContainer.style.display = "none";
+
+  // --- Type imageClick ---
+  if (question.type === "imageClick") {
+    propositionsEl.innerHTML = ""; // pas de réponses texte
+    imageClickContainer.style.display = "block";
+    imageGrande.src = question.image;
+    imageGrande.style.display = "block";
+    imageGrande.style.cursor = "crosshair";
+    imageGrande.onclick = function (event) {
+      handleImageClick(event, question);
+    };
   }
+  // --- Type classique ---
+  else {
+    imageDroite.style.display = question.image ? "block" : "none";
+    if (question.image) {
+      imageDroite.src = question.image;
+    }
 
-  // Génération des propositions
-  propositionsContainer.innerHTML = "";
-  question.propositions.forEach((prop, index) => {
-    const inputType = question.type === "qcm" ? "checkbox" : "radio";
-    const input = document.createElement("input");
-    input.type = inputType;
-    input.name = "reponse";
-    input.id = `rep-${index}`;
-    input.value = index;
+    question.propositions?.forEach((prop, i) => {
+      const input = document.createElement("input");
+      input.type = question.type === "qcm" ? "checkbox" : "radio";
+      input.name = "reponse";
+      input.id = `rep-${i}`;
+      input.value = i;
 
-    const label = document.createElement("label");
-    label.htmlFor = input.id;
-    label.textContent = prop.texte;
+      const label = document.createElement("label");
+      label.htmlFor = input.id;
+      label.textContent = prop.texte;
 
-    const div = document.createElement("div");
-    div.classList.add("proposition");
-    div.appendChild(input);
-    div.appendChild(label);
-
-    propositionsContainer.appendChild(div);
-  });
+      const div = document.createElement("div");
+      div.classList.add("proposition");
+      div.appendChild(input);
+      div.appendChild(label);
+      propositionsEl.appendChild(div);
+    });
+  }
 }
 
-// === Validation de la réponse ===
-function validateAnswer() {
-  const theme = quizzData[currentThemeIndex];
-  const question = theme.questions[currentQuestionIndex];
-  const inputs = propositionsContainer.querySelectorAll("input");
-
+// === Validation classique (vrai/faux ou qcm) ===
+function validerReponse() {
+  const question = quizzData[0].questions[currentQuestionIndex];
+  const inputs = propositionsEl.querySelectorAll("input");
   let correct = true;
 
-  inputs.forEach((input, index) => {
+  inputs.forEach((input, i) => {
     const isChecked = input.checked;
-    const isCorrect = question.propositions[index].correct;
+    const isCorrect = question.propositions[i].correct;
 
-    // coloration visuelle
-    if (isChecked && isCorrect) input.parentElement.style.background = "#c8f7c5";
-    else if (isChecked && !isCorrect) input.parentElement.style.background = "#f7c5c5";
-
-    // Vérification du score
-    if (isChecked !== isCorrect) correct = false;
+    if (isChecked && isCorrect) {
+      input.parentElement.style.background = "#c8f7c5";
+    } else if (isChecked && !isCorrect) {
+      input.parentElement.style.background = "#f7c5c5";
+      correct = false;
+    } else if (!isChecked && isCorrect && question.type === "qcm") {
+      correct = false;
+    }
   });
 
   if (correct) score += question.points;
 
-  showExplication(question);
-  validateBtn.disabled = true;
-  nextBtn.style.display = "inline-block";
+  afficherExplication(question);
+  btnValider.disabled = true;
+  btnSuivant.style.display = "inline-block";
 }
 
-// === Affichage de l'explication ===
-function showExplication(question) {
-  explicationContainer.innerHTML = `<p>${question.explication.texte}</p>`;
+// === Gestion des questions à clic sur image ===
+function handleImageClick(event, question) {
+  const img = event.target;
+  const rect = img.getBoundingClientRect();
+
+  // Clic converti en % de l’image AFFICHÉE
+  const xPercent = ((event.clientX - rect.left) / rect.width) * 100;
+  const yPercent = ((event.clientY - rect.top) / rect.height) * 100;
+
+  // Vérification dans les zones
+  const isCorrect = question.bonnesZones.some(zone => {
+    const dx = xPercent - zone.x;
+    const dy = yPercent - zone.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    return distance <= zone.rayon;
+  });
+
+  // Marqueur
+  const marker = document.createElement("div");
+  marker.classList.add("click-marker");
+  marker.style.left = `${xPercent}%`;
+  marker.style.top = `${yPercent}%`;
+  img.parentElement.appendChild(marker);
+
+  // Fin
+  img.dataset.clicks = (parseInt(img.dataset.clicks) || 0) + 1;
+
+  if (img.dataset.clicks >= question.bonnesZones.length) {
+    img.onclick = null;
+    img.style.cursor = "default";
+    afficherZonesCorrectes(img, question.bonnesZones);
+    afficherExplication(question);
+    btnValider.disabled = true;
+    btnSuivant.style.display = "inline-block";
+  }
+}
+
+
+function afficherZonesCorrectes(img, zones) {
+  const rect = img.getBoundingClientRect();
+
+  zones.forEach(zone => {
+    const circle = document.createElement("div");
+    circle.classList.add("zone-correcte");
+
+    const centerX = (zone.x / 100) * rect.width;
+    const centerY = (zone.y / 100) * rect.height;
+
+    // Rayon exprimé en % de la LARGEUR uniquement (donc cohérent)
+    const radiusPx = (zone.rayon / 100) * rect.width;
+
+    circle.style.width = `${radiusPx * 2}px`;
+    circle.style.height = `${radiusPx * 2}px`;
+
+    circle.style.left = `${centerX - radiusPx}px`;
+    circle.style.top  = `${centerY - radiusPx}px`;
+
+    img.parentElement.appendChild(circle);
+  });
+}
+
+// === Affichage explication (liste + image à droite) ===
+function afficherExplication(question) {
+  const explicationTexte = question.explication.texte
+    .split(/\n+/)
+    .map(ligne => ligne.trim())
+    .filter(ligne => ligne.length > 0);
+
+  const explicationContainer = document.createElement("div");
+  explicationContainer.classList.add("explication-flex");
+
+  let explicationHTML = "<h3>Explications :</h3><ul>";
+  explicationTexte.forEach(point => {
+    explicationHTML += `<li>${point}</li>`;
+  });
+  explicationHTML += "</ul>";
+
+  const explicationTexteEl = document.createElement("div");
+  explicationTexteEl.classList.add("explication-texte");
+  explicationTexteEl.innerHTML = explicationHTML;
+  explicationContainer.appendChild(explicationTexteEl);
+
+
   if (question.explication.image) {
     const img = document.createElement("img");
     img.src = question.explication.image;
+    img.classList.add("explication-image");
     explicationContainer.appendChild(img);
   }
+
+  explicationEl.innerHTML = "";
+  explicationEl.appendChild(explicationContainer);
 }
 
 // === Question suivante ===
-function nextQuestion() {
-  const theme = quizzData[currentThemeIndex];
+function questionSuivante() {
   currentQuestionIndex++;
-
-  if (currentQuestionIndex < theme.questions.length) {
-    loadQuestion();
+  if (currentQuestionIndex < quizzData[0].questions.length) {
+    chargerQuestion();
   } else {
-    showScore();
+    afficherPageFinale();
   }
 }
 
-// === Score final ===
-function showScore() {
-  quizContainer.innerHTML = `<h2>Quiz terminé 🎉</h2>
-  <p>Score final : <strong>${score}</strong></p>`;
+// === Page finale ===
+// === Page finale ===
+// === Page finale ===
+function afficherPageFinale() {
+
+  // 1. Récupération du nom
+  let username = localStorage.getItem("quizName");
+  if (!username) username = "Participant";
+
+  // 2. Calcul du score
+  const totalPoints = quizzData[0].questions.reduce((a, q) => a + q.points, 0);
+  const pourcentage = Math.round((score / totalPoints) * 100);
+
+  // 3. Affichage final
+  quizContainer.innerHTML = `
+    <div class="result-container">
+      <img src="images/laurier.png" alt="couronne de laurier" class="laurier-img">
+
+      <h2 class="result-name">${username}</h2>
+
+      <div class="score-circle">
+        <span>${pourcentage}%</span>
+      </div>
+
+      <button id="quitter">Quitter</button>
+    </div>
+  `;
+
+  // 4. Bouton quitter
+  document.getElementById("quitter").addEventListener("click", () => {
+    // Choisis ce que tu veux :
+    // location.href = "index.html";         // Retour page d’accueil
+    // window.close();                       // Fermer l’onglet (ne marche pas partout)
+    // location.reload();                    // Recharge la page (reset)
+    
+    location.href = "index.html"; // Version par défaut
+  });
+}
+// === Page finale ===
+function afficherPageFinale() {
+
+  // 1. Récupération du nom
+  let username = localStorage.getItem("Nom");
+  if (!username) username = "Participant";
+
+  // 2. Calcul du score
+  const totalPoints = quizzData[0].questions.reduce((a, q) => a + q.points, 0);
+  const pourcentage = Math.round((score / totalPoints) * 100);
+
+  // 3. Affichage final
+  quizContainer.innerHTML = `
+    <div class="result-container">
+      <img src="img/laurier.png" alt="couronne de laurier" class="laurier-img">
+
+      <h2 class="result-name">${username}</h2>
+
+      <div class="score-circle">
+        <span>${pourcentage}%</span>
+      </div>
+
+      <button id="quitter">Quitter</button>
+    </div>
+  `;
+
+  // 4. Bouton quitter
+  document.getElementById("quitter").addEventListener("click", () => {
+    location.href = "sign.html"; // Version par défaut
+  });
 }
 
 // === Événements ===
-validateBtn.addEventListener("click", validateAnswer);
-nextBtn.addEventListener("click", nextQuestion);
+btnValider.addEventListener("click", validerReponse);
+btnSuivant.addEventListener("click", questionSuivante);
+
+//Pour les tests
+function allerAQuestion(numero) {
+  const total = quizzData[0].questions.length;
+  if (numero < 1 || numero > total) {
+    console.warn(`Numéro de question invalide : ${numero}. Il y a ${total} questions.`);
+    return;
+  }
+
+  currentQuestionIndex = numero - 1;
+  chargerQuestion();
+  console.log(`🔎 Passage direct à la question ${numero}`);
+}
+///
 
 // === Démarrage ===
-loadQuestion();
+chargerQuestion();

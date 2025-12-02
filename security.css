@@ -1,0 +1,39 @@
+@media print {
+       .print-block {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    .other-equipments textarea {
+        width: 90% !important;
+        min-height: 300mm !important; /* taille très grande pour impression */
+        height: 300mm !important;
+        margin: 0 auto !important;
+        display: block;
+    }
+     .no-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    /* Protéger les tableaux également */
+    table {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}        
+.other-equipments {
+  padding-left: 250px;
+  padding-top: 10px;
+}
+
+
+.other-equipments-hse {
+  font-style: bold;
+  color: red;
+  border: #000 1px;
+}

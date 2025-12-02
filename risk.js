@@ -465,7 +465,7 @@ function savePageContent() {
       input.textContent = input.value; // ✅ conserve la valeur interne
     } else if (input.tagName.toLowerCase() === 'canvas') {
       // ✅ Sauvegarde la signature sous forme d'image base64
-      const dataURL = input.toDataURL();
+      const dataURL = input.toDataURL("image/png");
       input.setAttribute('data-image', dataURL);
     } else {
       input.setAttribute('value', input.value);

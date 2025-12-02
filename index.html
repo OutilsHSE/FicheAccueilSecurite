@@ -9,12 +9,12 @@
 </head>
 
 <body>
-        <div id="page1">
-        
-    <div class="container">
-        <img class="logo" src="img/CDES_Logo.png" alt="">
-        <h1> Fiche d'Accueil Sécurité </h1>
-    </div>    
+    <div id="page1">
+
+        <div class="container">
+            <img class="logo" src="img/CDES_Logo.png" alt="">
+            <h1> Fiche d'Accueil Sécurité </h1>
+        </div>
         <table id="obs-table">
             <thead>
                 <tr>
@@ -25,7 +25,7 @@
                 <tr>
                     <td>
                         <div class="large-row">
-                           <span style="padding-top: 20px;"> Date de l'accueil sécurité: </span><br>
+                            <span style="padding-top: 20px;"> Date de l'accueil sécurité: </span><br>
                             <input id="visite-date" class="input-bilan" type="date">
                         </div>
                     </td>
@@ -95,9 +95,10 @@
                                 Intérimaire
                             </label>
                             <label>
-                                <input type="checkbox" id="collaborateur_ext" name="contract_type" value="Collaborateur externe">
+                                <input type="checkbox" id="collaborateur_ext" name="contract_type"
+                                    value="Collaborateur externe">
                                 Collaborateur externe
-                            </label>                            
+                            </label>
                         </div>
                     </td>
                 </tr>
@@ -188,6 +189,8 @@
 
     <script>
         function savePageContent() {
+            localStorage.setItem("Nom", document.querySelector("#prenom").value + ' ' + document.querySelector("#nom").value);
+
             const page = document.querySelector('#page1');
             const inputs = page.querySelectorAll('input, textarea, select');
             inputs.forEach(input => {
@@ -205,11 +208,13 @@
         }
 
         function loadPageContent() {
-            // Restaurer le contenu HTML de la page avec les valeurs des champs
-            const savedContent = localStorage.getItem('page1Content');
-            if (savedContent) {
-                document.querySelector('#page1').outerHTML = savedContent;
-            }
+            // Efface tout le localStorage
+            localStorage.clear();
+
+            // Efface tout le sessionStorage
+            sessionStorage.clear();
+            loadPage("page1")
+
         }
 
         function redirectToAutorisationPage() {
@@ -218,6 +223,18 @@
         }
 
         window.onload = function () {
+            localStorage.clear();
+
+            // Efface tout le sessionStorage
+            sessionStorage.clear();
+
+            window.addEventListener("load", () => {
+
+                // Si tu veux aussi vider tous les inputs et textarea
+                document.querySelectorAll("input, textarea").forEach(el => {
+                el.value = "";
+                });
+            });
             document.getElementById('visite-date').valueAsDate = new Date();
             document.getElementById('date-medicale').valueAsDate = new Date();
             loadPageContent();
@@ -235,7 +252,7 @@
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
         }
-        
+
         document.getElementById('openModalBtn').onclick = openModal;
         document.getElementsByClassName('close')[0].onclick = closeModal;
 
@@ -308,9 +325,9 @@
             });
         });
 
-document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
 
-});
+        });
     </script>
 
 </body>

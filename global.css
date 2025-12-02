@@ -98,7 +98,7 @@ input[type="text"] {
 
 .input-bilan {
   height: 50px;
-    display: inline-block;
+  display: inline-block;
 }
 
 .red-text {
@@ -179,9 +179,11 @@ input[type="text"] {
     max-width: 400px !important;
     height: 300px !important;
   }
+
   .no-print {
     display: none !important;
   }
+
   body {
     font-size: 11pt;
   }
@@ -194,17 +196,21 @@ input[type="text"] {
   .page:last-child {
     page-break-after: avoid;
   }
+
   .nage-img {
-  width: 50px;
-  height: 50px;
-}
+    width: 50px;
+    height: 50px;
+  }
+
   /* Table attestation bien alignée à gauche */
   table.attestation {
-    width: auto !important;        /* largeur naturelle */
+    width: auto !important;
+    /* largeur naturelle */
     margin-left: 0 !important;
     margin-right: auto !important;
     text-align: left !important;
-    page-break-inside: avoid;      /* évite les coupures entre pages */
+    page-break-inside: avoid;
+    /* évite les coupures entre pages */
   }
 
   table.attestation th,
@@ -212,7 +218,7 @@ input[type="text"] {
     text-align: left !important;
     padding-left: 10px !important;
   }
-  
+
 
   /* Les blocs de texte, labels et signature restent bien à gauche */
   .attestation .texte,
@@ -326,10 +332,10 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
-.table-check  th {
-    text-align: left;
-    padding: 8px;
-  }
+.table-check th {
+  text-align: left;
+  padding: 8px;
+}
 
 .table-check {
   padding: 10px;
@@ -343,6 +349,7 @@ input[type="text"] {
   word-wrap: break-word;
   white-space: normal;
 }
+
 .no-bullet {
   list-style-type: none;
   padding-left: 0;
@@ -409,22 +416,6 @@ input[type="text"] {
 .show-consignes {
   background: #f44336;
   color: white;
-}
-
-.other-equipments {
-  padding-left: 250px;
-  padding-top: 10px;
-
-  textarea{
-    height: 200px;
-    width: 500px;
-  }
-}
-
-.other-equipments-hse {
-  font-style: bold;
-  color: red;
-  border: #000 1px;
 }
 
 @keyframes fadeIn {
@@ -494,4 +485,106 @@ input[type="text"] {
   margin: 10px;
   min-height: 100px;
   min-width: 500px;
+}
+
+.attestation td {
+  display: flex;
+  align-items: flex-start;
+  /* aligne en haut */
+  gap: 10px;
+  /* espace entre image et texte */
+}
+
+/* Image */
+.attestation td img {
+  max-width: 120px;
+  height: auto;
+}
+
+/* Bloc texte */
+.attestation .texte {
+  display: flex;
+  flex-direction: column;
+  /* tout sous l’autre */
+  text-align: left;
+  /* force l’alignement à gauche */
+  gap: 5px;
+  /* petit espace entre lignes */
+}
+
+/* Chaque sous-div prend toute la largeur */
+.attestation .texte div {
+  display: flex;
+  align-items: flex-start;
+  /* case + label alignés en haut */
+  gap: 5px;
+}
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 5mm;
+    }
+
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+        height: auto;
+    }
+
+    body {
+        transform: scale(0.80); /* <--- régle ici */
+        transform-origin: top left;
+        width: 120%; /* compensation */
+    }
+
+    .page-section {
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+        break-inside: avoid !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    canvas, img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    textarea {
+        white-space: pre-wrap !important;
+        overflow: visible !important;
+    }
+
+        /* Spécial UNIQUEMENT pour la page trop large */
+    .large-print-page {
+        transform: scale(0.60);          /* Ajuste ici selon besoin */
+        transform-origin: top left;
+        width: 185% !important;          /* Compensation pour garder la largeur */
+        page-break-inside: avoid;
+    }
+
+    /* Empêcher la page de s’étendre sur plusieurs feuilles */
+    .large-print-page {
+        page-break-before: always;
+        page-break-after: always;
+    }
+    
+    /* empêche les sauts intempestifs */
+    .page-section {
+        break-inside: avoid !important;
+    }
+
+    /* FORCE un saut AVANT chaque page */
+    .force-break {
+        page-break-before: always !important;
+        break-before: page !important;
+    }
+
+    /* Sauf pour la toute première */
+    .force-break:first-child {
+        page-break-before: auto !important;
+    }
 }

@@ -137,12 +137,12 @@ function replaceCanvasWithImages(source, targetContainer) {
     // Assemblage final dans un conteneur temporaire
     const finalContainer = document.createElement('div');
     finalContainer.style.padding = '20px'; // Pour une mise en page propre
-    if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
-    if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
-    if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
-    if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
-    if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
-    finalContainer.innerHTML += '<div>' + page6Clone.outerHTML + '</div>';
+    if (page1Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer1.innerHTML + '</div>';
+    if (page2Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer2.innerHTML + '</div>';
+    if (page3Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer3.innerHTML + '</div>';
+    if (page4Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer4.innerHTML + '</div>';
+    if (page5Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer5.innerHTML + '</div>';
+    finalContainer.innerHTML += '<div class="page-section force-break">' + page6Clone.outerHTML + '</div>';
 
     document.body.appendChild(finalContainer); // Temporairement dans le DOM
 
