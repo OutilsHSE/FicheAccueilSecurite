@@ -616,3 +616,10 @@ input[type="text"] {
     display: block;
   }
 }
+
+.doc-icon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  vertical-align: middle;
+}
