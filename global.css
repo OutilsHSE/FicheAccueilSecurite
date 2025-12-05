@@ -63,13 +63,6 @@ h1 {
   box-sizing: border-box;
 }
 
-
-.large-row {
-  display: flex;
-  align-items: flex-start;
-  text-align: center;
-}
-
 @media (max-width: 800px) {
   .large-row {
     display: block;
@@ -82,6 +75,12 @@ h1 {
   }
 }
 
+.large-row label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
 .signature-canvas {
   flex-grow: 1;
   border: 1px solid #000;
@@ -179,62 +178,6 @@ input[type="text"] {
   background-color: rgb(9, 146, 187);
 }
 
-@media print {
-  .signature-canvas {
-    max-width: 400px !important;
-    height: 300px !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  body {
-    font-size: 11pt;
-  }
-
-  th,
-  th {
-    font-size: 10pt;
-  }
-
-  .page:last-child {
-    page-break-after: avoid;
-  }
-
-  .nage-img {
-    width: 50px;
-    height: 50px;
-  }
-
-  /* Table attestation bien alignée à gauche */
-  table.attestation {
-    width: auto !important;
-    /* largeur naturelle */
-    margin-left: 0 !important;
-    margin-right: auto !important;
-    text-align: left !important;
-    page-break-inside: avoid;
-    /* évite les coupures entre pages */
-  }
-
-  table.attestation th,
-  table.attestation td {
-    text-align: left !important;
-    padding-left: 10px !important;
-  }
-
-
-  /* Les blocs de texte, labels et signature restent bien à gauche */
-  .attestation .texte,
-  .attestation .sign,
-  .attestation .sign span,
-  .attestation .sign canvas {
-    text-align: left !important;
-    margin-left: 0 !important;
-    display: block !important;
-  }
-}
 
 .cas {
   border: 2px solid red;
@@ -525,98 +468,6 @@ input[type="text"] {
   gap: 5px;
 }
 
-@media print {
-
-    @page {
-        size: A4 portrait;
-        margin: 5mm;
-    }
-
-    html, body {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100%;
-        height: auto;
-    }
-
-    body {
-        transform: scale(0.80); /* <--- régle ici */
-        transform-origin: top left;
-        width: 120%; /* compensation */
-    }
-
-    .page-section {
-        page-break-before: avoid !important;
-        page-break-after: avoid !important;
-        break-inside: avoid !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    canvas, img {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-
-        /* Spécial UNIQUEMENT pour la page trop large */
-    .large-print-page {
-        transform: scale(0.60);          /* Ajuste ici selon besoin */
-        transform-origin: top left;
-        width: 185% !important;          /* Compensation pour garder la largeur */
-        page-break-inside: avoid;
-    }
-
-    /* Empêcher la page de s’étendre sur plusieurs feuilles */
-    .large-print-page {
-        page-break-before: always;
-        page-break-after: always;
-    }
-    
-    /* empêche les sauts intempestifs */
-    .page-section {
-        break-inside: avoid !important;
-    }
-
-    /* FORCE un saut AVANT chaque page */
-    .force-break {
-        page-break-before: always !important;
-        break-before: page !important;
-    }
-
-    /* Sauf pour la toute première */
-    .force-break:first-child {
-        page-break-before: auto !important;
-    }
-
-  /* On enlève les marges/paddings pour que le textarea puisse vraiment prendre toute la largeur */
-  #page3.other-equipments,
-  #page3 .other-equipments {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  /* Le bloc "autres équipements" ne doit jamais être coupé */
-  #page3 .other-equipments,
-  #page3 .no-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    page-break-before: avoid !important;
-    page-break-after: avoid !important;
-  }
-
-  /* TEXTAREA : pleine largeur + très grand */
-  #page3 .other-equipments-textarea,
-  #page3 .other-equipments textarea {
-    width: 100% !important;         /* toute la largeur disponible */
-    height: 120mm !important;       /* quasi toute la hauteur A4 */
-    min-height: 120mm !important;
-    margin: 0 !important;
-    padding: 10px !important;
-    box-sizing: border-box;
-    display: block;
-  }
-}
-
 .doc-icon {
   width: 22px;
   height: 22px;
@@ -635,4 +486,162 @@ input[type="text"] {
     display: flex;
     align-items: center;
     margin-bottom: 6px;
+}
+
+/* =========================================================
+   MODE IMPRESSION UNIFIÉ — Fonctionne pour toutes les pages
+   ========================================================= */
+@media print {
+
+    /* Format physique A4 portrait */
+    @page {
+        size: A4 portrait;
+        margin: 8mm;
+    }
+
+    /* --- Structure générale --- */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        font-size: 11pt !important;
+    }
+
+    /* Toutes les pages, sections, conteneurs */
+    .page-section,
+    .print-block,
+    .no-break,
+    .container,
+    #page1, #page2, #page3, #page4, #page5, #page6 {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .force-break {
+        page-break-before: always !important;
+    }
+
+    .force-break:first-child {
+        page-break-before: auto !important;
+    }
+
+    .page:last-child {
+        page-break-after: avoid !important;
+    }
+
+    /* --- Images & Canvas --- */
+    img, canvas {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    .signature-canvas {
+        max-width: 400px !important;
+        height: 300px !important;
+    }
+
+    .nage-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    /* --- Textarea pleine largeur --- */
+    textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* --- Tables globales --- */
+    table {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: auto !important; /* évite la compression excessive */
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+    }
+
+    th, td {
+        white-space: normal !important;
+        word-break: break-word !important;
+        padding: 4px !important;
+        font-size: 10pt !important;
+    }
+
+    /* --- Tables attestation (cas particuliers) --- */
+    table.attestation {
+        width: auto !important;
+        margin-left: 0 !important;
+        margin-right: auto !important;
+        text-align: left !important;
+        page-break-inside: avoid !important;
+    }
+
+    table.attestation th,
+    table.attestation td {
+        text-align: left !important;
+        padding-left: 10px !important;
+    }
+
+    /* Alignement des blocs signature attestation */
+    .attestation .texte,
+    .attestation .sign,
+    .attestation .sign span,
+    .attestation .sign canvas {
+        text-align: left !important;
+        margin-left: 0 !important;
+        display: block !important;
+    }
+
+    /* --- Éléments à ne pas imprimer --- */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Suppression des paddings internes gênants */
+    .other-equipments,
+    .other-equipments-hse {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* SÉCURITÉ : désactiver toute ancienne règle scale */
+    .large-print-page {
+        transform: none !important;
+        width: 100% !important;
+    }
+
+    @media print {
+
+  .large-row {
+    display: flex !important;
+    flex-direction: column !important; /* Vertical = jamais de débordement */
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 2px !important;
+  }
+
+  .large-row label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important; /* <- Anti-retour à la ligne */
+  }
+
+  .large-row input[type="checkbox"] {
+    margin: 0 !important;
+  }
+}
+
 }
