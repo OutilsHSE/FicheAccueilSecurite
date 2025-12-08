@@ -2,6 +2,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 
 const themeEl = document.getElementById("theme");
+const situationEl = document.getElementById("situation");
 const enonceEl = document.getElementById("enonce");
 const imageEl = document.getElementById("image-question");
 const propositionsEl = document.getElementById("propositions");
@@ -32,8 +33,8 @@ if (imageGrande) {
   btnSuivant.style.display = "none";
 
   themeEl.textContent = `Thème : ${question.theme}`;
-  enonceEl.textContent = `${question.numero}. ${question.enonce}`;
-
+  situationEl.textContent = `Situation ${question.numero}`;
+  enonceEl.textContent = `${question.enonce}`;
   // Réinitialisation
   imageDroite.style.display = "none";
   imageGrande.style.display = "none";
@@ -75,6 +76,7 @@ if (imageGrande) {
       propositionsEl.appendChild(div);
     });
   }
+   updateProgress(); 
 }
 
 // === Validation classique (vrai/faux ou qcm) ===
@@ -295,6 +297,16 @@ function allerAQuestion(numero) {
   console.log(`🔎 Passage direct à la question ${numero}`);
 }
 ///
+
+function updateProgress() {
+  const total = quizzData[0].questions.length;
+  const current = currentQuestionIndex + 1;
+
+  const percent = (current / total) * 100;
+
+  document.getElementById("progress-bar").style.width = percent + "%";
+  document.getElementById("progress-text").textContent = `Question ${current} / ${total}`;
+}
 
 // === Démarrage ===
 chargerQuestion();

@@ -6,10 +6,8 @@ const quizzData = [
         theme: "Règles qui sauvent",
         numero: 1,
         type: "qcm",
-        enonce: `Je participe à une opération de plantation sur un chantier de génie écologique en bordure de
-        canal. Il s’agit exclusivement de travaux manuels. En tenant compte du type de tâche, de
-        l’environnement et des risques présents, quels EPI dois-je porter dans cette situation ?`,
-        image: "img/quizz/question1.png",
+        enonce: `Dans cette situation quels sont les EPI dois-je porter  ?`,
+        image: "img/quizz/question1.jpg",
         propositions: [
           { texte: "Chaussures ou bottes de sécurité", correct: true },
           { texte: "Vêtements haute visibilité", correct: true },
