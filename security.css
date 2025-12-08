@@ -36,17 +36,33 @@
         break-inside: avoid !important;
     }
 }        
-.other-equipments {
-  padding-left: 250px;
+
+
+@media (max-width: 800px) {
+  .other-equipments {
+  padding-left: 25px;
   padding-top: 10px;
-
-
 }
 
-.other-equipments-textarea {
-  height: 200px;
-  width: 500px;
+  .other-equipments-textarea {
+    height: 400px;
+    width: 300px;
   }
+}
+
+@media (min-width: 800px) {
+  .other-equipments {
+  padding-left: 250px;
+  padding-top: 10px;
+}
+
+  .other-equipments-textarea {
+    height: 200px;
+    width: 500px;
+  }
+}
+
+
 
 .other-equipments-hse {
   font-style: bold;

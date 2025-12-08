@@ -101,7 +101,7 @@ async function printAllPages(mode) {
     });
   }
 
-  // ---- Récupération des pages 1 à 5 depuis le storage ----
+  // ---- Récupération des pages 1 à 5 ----
   const page1Content = localStorage.getItem('page1Content');
   const page2Content = localStorage.getItem('page2Content');
   const page3Content = localStorage.getItem('page3Content');
@@ -132,22 +132,20 @@ async function printAllPages(mode) {
 
   const page6Clone = page6.cloneNode(true);
 
-  // ---- Création des conteneurs temporaires ----
+  // ---- Conteneurs temporaires ----
   const containers = [page1Content, page2Content, page3Content, page4Content, page5Content].map(content => {
     const div = document.createElement('div');
     if (content) div.innerHTML = content;
     return div;
   });
 
-  // ---- Remplacement des canvas sur les pages 1 à 5 ----
+  // ---- Convertir canvas → images ----
   for (const div of containers) {
     await replaceCanvasWithImages(document.body, div);
   }
-
-  // ---- Remplacement canvas page 6 ----
   await replaceCanvasWithImages(document.body, page6Clone);
 
-  // ---- Construction finale ----
+  // ---- Construire la version imprimable ----
   const finalContainer = document.createElement('div');
   finalContainer.id = "print-wrapper";
   finalContainer.style.padding = "20px";
@@ -168,21 +166,44 @@ async function printAllPages(mode) {
   page6wrap.innerHTML = page6Clone.outerHTML;
   finalContainer.appendChild(page6wrap);
 
-  // ---- Sauvegarder le DOM original ----
+  // ---- Sauvegarde du DOM original ----
   const originalHTML = document.body.innerHTML;
 
-  // ---- Remplacer la page par la version imprimable ----
+  // ---- Remplacer le DOM par la version imprimable ----
   document.body.innerHTML = "";
   document.body.appendChild(finalContainer);
 
-  // ---- Forcer un reflow COMPLET (Safari mobile sinon n'imprime pas !) ----
+  // ---- Forcer un premier reflow ----
   await new Promise(r => requestAnimationFrame(r));
-  await new Promise(r => setTimeout(r, 300));
+  await new Promise(r => setTimeout(r, 150));
 
-  // ---- Impression ----
+  // ----------------------------------------------------
+  // 🚀 HACK MOBILE : FORCER LE RENDU DES PAGES AVANT PRINT
+  // ----------------------------------------------------
+  async function forceRender(element) {
+    return new Promise(async resolve => {
+      const totalHeight = element.scrollHeight;
+      let pos = 0;
+
+      while (pos < totalHeight) {
+        window.scrollTo(0, pos);
+        await new Promise(r => setTimeout(r, 60)); // permet à Safari/Chrome de peindre
+        pos += window.innerHeight / 1.5; // avance petit à petit
+      }
+
+      window.scrollTo(0, 0);
+      await new Promise(r => setTimeout(r, 150));
+      resolve();
+    });
+  }
+
+  // ---- Exécuter le hack ----
+  await forceRender(document.body);
+
+  // ---- Imprimer ----
   window.print();
 
-  // ---- Restauration ----
+  // ---- Restaurer la page originale ----
   document.body.innerHTML = originalHTML;
 }
 

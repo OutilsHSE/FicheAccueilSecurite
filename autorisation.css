@@ -1,96 +1,121 @@
   table td {
-            text-align: left;
-            vertical-align: top;
-            /* optionnel : aligne le texte en haut */
-            padding: 5px 10px;
-        }
+      text-align: left;
+      vertical-align: top;
+      /* optionnel : aligne le texte en haut */
+      padding: 5px 10px;
+  }
 
-        table td:has(input[type="checkbox"]) {
-            text-align: center;
-            vertical-align: middle;
-        }
+  table td:has(input[type="checkbox"]) {
+      text-align: center;
+      vertical-align: middle;
+  }
 
-        /* Met l’image et le bloc texte côte à côte */
-        .attestation td {
-            display: flex;
-            align-items: flex-start;
-            /* aligne en haut */
-            gap: 10px;
-            /* espace entre image et texte */
-        }
+  /* Met l’image et le bloc texte côte à côte */
+  .attestation td {
+      display: flex;
+      align-items: flex-start;
+      /* aligne en haut */
+      gap: 10px;
+      /* espace entre image et texte */
+  }
 
-        /* Image */
-        .attestation td img {
-            max-width: 120px;
-            height: auto;
-        }
+  /* Image */
+  .attestation td img {
+      max-width: 120px;
+      height: auto;
+  }
 
-        /* Bloc texte */
-        .attestation .texte {
-            display: flex;
-            flex-direction: column;
-            /* tout sous l’autre */
-            text-align: left;
-            /* force l’alignement à gauche */
-            gap: 5px;
-            /* petit espace entre lignes */
-        }
+  /* Bloc texte */
+  .attestation .texte {
+      display: flex;
+      flex-direction: column;
+      /* tout sous l’autre */
+      text-align: left;
+      /* force l’alignement à gauche */
+      gap: 5px;
+      /* petit espace entre lignes */
+  }
 
-        /* Chaque sous-div prend toute la largeur */
-        .attestation .texte div {
-            display: flex;
-            align-items: flex-start;
-            /* case + label alignés en haut */
-            gap: 5px;
-        }
+  /* Chaque sous-div prend toute la largeur */
+  .attestation .texte div {
+      display: flex;
+      align-items: flex-start;
+      /* case + label alignés en haut */
+      gap: 5px;
+  }
 
-        /* met les deux blocs sur la même ligne */
-        .form-et-cadre {
-            padding: 15px;
-            display: flex;
-            gap: 5px;
-            /* espace entre textarea et cadre */
-            align-items: flex-start;
-            /* alignement en haut */
-        }
+  /* met les deux blocs sur la même ligne */
+  .form-et-cadre {
+      padding: 15px;
+      display: flex;
+      gap: 5px;
+      /* espace entre textarea et cadre */
+      align-items: flex-start;
+      /* alignement en haut */
+  }
 
-        /* que la textarea prenne toute la largeur possible */
-        .form-et-cadre .bloc-textarea {
-            display: flex;
-            flex-direction: column;
-        }
+  /* que la textarea prenne toute la largeur possible */
+  .form-et-cadre .bloc-textarea {
+      display: flex;
+      flex-direction: column;
+  }
 
-        .form-et-cadre .bloc-textarea textarea {
-            width: 500px;
-            /* prend toute la largeur du bloc */
-            height: 375px;
-            /* fixe la hauteur si tu veux aussi */
-        }
+  @media (min-width: 768px) {
+      .form-et-cadre .bloc-textarea textarea {
+          width: 500px;
+          /* prend toute la largeur du bloc */
+          height: 375px;
+          /* fixe la hauteur si tu veux aussi */
+      }
+  }
 
 
+  @media (max-width: 768px) {
+      .form-et-cadre {
+          flex-direction: column;
+      }
 
-        /* responsive : en dessous de 768px, on repasse en colonne */
-        @media (max-width: 768px) {
-            .form-et-cadre {
-                flex-direction: column;
-            }
-        }
+      .tables-wrapper {
+          flex-direction: column;
+          width: 100%;
+      }
 
-        .taches .tables-wrapper {
-            display: flex;
-            gap: 40px;
-            /* espace entre les deux tableaux */
-            align-items: flex-start;
-            /* aligne en haut */
-        }
+      .tables-wrapper table {
+          width: 100%;
 
-        .taches table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+      }
+  }
 
-        @media (min-width: 1370px) {
-            .sign {
-                margin-left: 350px;
-            }
-        }
+  .taches .tables-wrapper {
+      display: flex;
+      gap: 40px;
+      /* espace entre les deux tableaux */
+      align-items: flex-start;
+      /* aligne en haut */
+  }
+
+  .taches table {
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  @media (min-width: 1370px) {
+      #formation-prevue {
+          margin: 10px;
+          min-height: 100px;
+          min-width: 500px;
+      }
+  }
+
+  @media (max-width: 768px) {
+      .formation-autres {
+          max-width: 300px;
+          height: 200px;
+      }
+
+      .formations-prevoir textarea {
+          width: 300px;
+          height: 200px;
+      }
+
+  }
