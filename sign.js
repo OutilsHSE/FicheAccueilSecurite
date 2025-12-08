@@ -67,16 +67,25 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-function printAllPages(mode) {
 
-  // Remplace les canvas (source) par des <img> dans le container cible
+  function printAllPages(mode) {
+
+  // Remplace les canvas du "source" par des <img> dans le conteneur cible
   function replaceCanvasWithImages(source, targetContainer) {
     const canvases = source.querySelectorAll('canvas');
+
     canvases.forEach((canvas) => {
-      // ATTENTION : ceci plante si le canvas contient des images externes
-      // (toDataURL interdit sur canvas "tainted")
+      let dataUrl;
+      try {
+        // Si le canvas contient des images externes → ça peut jeter une SecurityError
+        dataUrl = canvas.toDataURL('image/png');
+      } catch (e) {
+        console.warn('Canvas non exportable (tainted ?) :', canvas.id, e);
+        return; // on saute ce canvas, on ne bloque pas toute l’impression
+      }
+
       const img = document.createElement('img');
-      img.src = canvas.toDataURL('image/png'); // capture le dessin
+      img.src = dataUrl;
       img.style.border = '1px solid #000';
       img.style.width = canvas.style.width || '100%';
       img.style.height = canvas.style.height || 'auto';
@@ -102,28 +111,30 @@ function printAllPages(mode) {
   const inputs = page.querySelectorAll('input, textarea, select');
 
   inputs.forEach(input => {
+    const tag = input.tagName.toLowerCase();
+
     if (input.type === 'checkbox' || input.type === 'radio') {
-      input.checked ? input.setAttribute('checked', 'checked')
-                    : input.removeAttribute('checked');
+      input.checked
+        ? input.setAttribute('checked', 'checked')
+        : input.removeAttribute('checked');
     } else {
       input.setAttribute('value', input.value);
     }
 
-    if (input.tagName.toLowerCase() === 'textarea') {
+    if (tag === 'textarea') {
       input.textContent = input.value;
     }
 
-    if (input.tagName.toLowerCase() === 'select') {
-      const options = input.querySelectorAll('option');
-      options.forEach(option => {
+    if (tag === 'select') {
+      input.querySelectorAll('option').forEach(option => {
         option.selected = (option.value === input.value);
       });
     }
   });
 
-  // IMPORTANT : on ne touche pas aux canvas du DOM réel
-  // On clone la page 6, puis on remplace les canvas uniquement dans le clone
+  // On clone la page 6
   const page6Clone = page.cloneNode(true);
+  // Et on ne remplace les canvas que dans le clone
   replaceCanvasWithImages(page, page6Clone);
 
   // --- Conteneurs temporaires pour les pages 1 à 5 ---
@@ -139,39 +150,71 @@ function printAllPages(mode) {
   if (page4Content) tempContainer4.innerHTML = page4Content;
   if (page5Content) tempContainer5.innerHTML = page5Content;
 
-  // Ici, on utilise les canvas du document (avec les signatures)
-  // pour remplir les canvas correspondants dans chaque container
+  // On remplace les canvas des pages 1 à 5 dans les conteneurs
+  // en utilisant les canvas du document actuel comme source
   replaceCanvasWithImages(document.body, tempContainer1);
   replaceCanvasWithImages(document.body, tempContainer2);
   replaceCanvasWithImages(document.body, tempContainer3);
   replaceCanvasWithImages(document.body, tempContainer4);
   replaceCanvasWithImages(document.body, tempContainer5);
 
-  // --- Assemblage final dans un conteneur ---
+  // --- Assemblage final dans un conteneur hors DOM ---
   const finalContainer = document.createElement('div');
-  finalContainer.id = 'print-wrapper';
-  finalContainer.style.padding = '20px';
+  finalContainer.style.padding = '20px'; // mise en page propre
 
-  if (page1Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer1.innerHTML + '</div>';
-  if (page2Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer2.innerHTML + '</div>';
-  if (page3Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer3.innerHTML + '</div>';
-  if (page4Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer4.innerHTML + '</div>';
-  if (page5Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer5.innerHTML + '</div>';
-  finalContainer.innerHTML += '<div class="page-section force-break">' + page6Clone.outerHTML + '</div>';
+  if (page1Content) {
+    finalContainer.innerHTML +=
+      '<div class="page-section force-break">' + tempContainer1.innerHTML + '</div>';
+  }
+  if (page2Content) {
+    finalContainer.innerHTML +=
+      '<div class="page-section force-break">' + tempContainer2.innerHTML + '</div>';
+  }
+  if (page3Content) {
+    finalContainer.innerHTML +=
+      '<div class="page-section force-break">' + tempContainer3.innerHTML + '</div>';
+  }
+  if (page4Content) {
+    finalContainer.innerHTML +=
+      '<div class="page-section force-break">' + tempContainer4.innerHTML + '</div>';
+  }
+  if (page5Content) {
+    finalContainer.innerHTML +=
+      '<div class="page-section force-break">' + tempContainer5.innerHTML + '</div>';
+  }
 
-  // --- Impression dans la même fenêtre, sans window.open() ---
-  const originalHTML = document.body.innerHTML;
+  finalContainer.innerHTML +=
+    '<div class="page-section force-break">' + page6Clone.outerHTML + '</div>';
 
-  document.body.innerHTML = '';
-  document.body.appendChild(finalContainer);
+  const htmlToPrint = finalContainer.innerHTML;
 
-  // petit délai pour laisser le temps de layout, surtout sur mobile
-  setTimeout(() => {
-    window.print();
-    // on restaure la page après l’impression
-    document.body.innerHTML = originalHTML;
-  }, 200);
+  // --- Ouvrir la fenêtre d'impression ---
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert("Impossible d'ouvrir la fenêtre d'impression (popup bloquée ?).");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write('<html><head>');
+  printWindow.document.write('<title>Impression</title>');
+  printWindow.document.write('<link rel="stylesheet" href="global.css">');
+  printWindow.document.write('</head><body>');
+  printWindow.document.write(htmlToPrint);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+
+  // Quand la nouvelle fenêtre a tout chargé : on imprime
+  printWindow.onload = function () {
+    // petit délai pour laisser le temps au moteur de layout (surtout mobile)
+    setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }, 300);
+  };
 }
+
 
   window.onload = function () {
     document.getElementById('visite-date-reponsable').valueAsDate = new Date();
