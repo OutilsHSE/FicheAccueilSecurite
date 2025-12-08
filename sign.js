@@ -67,146 +67,111 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
-async function printAllPages(mode) {
+function printAllPages(mode) {
 
-  // --- Convertir les canvas en images et attendre la fin du chargement ---
+  // Remplace les canvas (source) par des <img> dans le container cible
   function replaceCanvasWithImages(source, targetContainer) {
-    return new Promise(resolve => {
-      const canvases = source.querySelectorAll('canvas');
+    const canvases = source.querySelectorAll('canvas');
+    canvases.forEach((canvas) => {
+      // ATTENTION : ceci plante si le canvas contient des images externes
+      // (toDataURL interdit sur canvas "tainted")
+      const img = document.createElement('img');
+      img.src = canvas.toDataURL('image/png'); // capture le dessin
+      img.style.border = '1px solid #000';
+      img.style.width = canvas.style.width || '100%';
+      img.style.height = canvas.style.height || 'auto';
+      img.className = canvas.className; // garde la classe si besoin
 
-      if (canvases.length === 0) return resolve();
-
-      let done = 0;
-      canvases.forEach(canvas => {
-        const img = document.createElement('img');
-        img.src = canvas.toDataURL('image/png');
-        img.style.border = '1px solid #000';
-        img.style.width = canvas.style.width || '100%';
-        img.style.height = canvas.style.height || 'auto';
-        img.className = canvas.className;
-
-        const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
-
-        if (targetCanvas) {
-          img.onload = () => {
-            targetCanvas.replaceWith(img);
-            done++;
-            if (done === canvases.length) resolve();
-          };
-        } else {
-          done++;
-          if (done === canvases.length) resolve();
-        }
-      });
+      // Trouve le canvas correspondant dans le container cible
+      const targetCanvas = targetContainer.querySelector('#' + canvas.id);
+      if (targetCanvas) {
+        targetCanvas.replaceWith(img);
+      }
     });
   }
 
-  // ---- Récupération des pages 1 à 5 ----
+  // --- Récupération des pages 1 à 5 depuis le localStorage ---
   const page1Content = localStorage.getItem('page1Content');
   const page2Content = localStorage.getItem('page2Content');
   const page3Content = localStorage.getItem('page3Content');
   const page4Content = localStorage.getItem('page4Content');
   const page5Content = localStorage.getItem('page5Content');
 
-  // ---- Préparation de la page 6 ----
-  const page6 = document.querySelector('#page6');
-  const inputs = page6.querySelectorAll('input, textarea, select');
+  // --- Préparation de la page 6 en lisant les valeurs actuelles ---
+  const page = document.querySelector('#page6');
+  const inputs = page.querySelectorAll('input, textarea, select');
 
   inputs.forEach(input => {
     if (input.type === 'checkbox' || input.type === 'radio') {
-      input.checked ? input.setAttribute('checked', 'checked') : input.removeAttribute('checked');
+      input.checked ? input.setAttribute('checked', 'checked')
+                    : input.removeAttribute('checked');
     } else {
       input.setAttribute('value', input.value);
     }
 
-    if (input.tagName === 'textarea') {
+    if (input.tagName.toLowerCase() === 'textarea') {
       input.textContent = input.value;
     }
 
-    if (input.tagName === 'select') {
-      input.querySelectorAll('option').forEach(opt => {
-        opt.selected = opt.value === input.value;
+    if (input.tagName.toLowerCase() === 'select') {
+      const options = input.querySelectorAll('option');
+      options.forEach(option => {
+        option.selected = (option.value === input.value);
       });
     }
   });
 
-  const page6Clone = page6.cloneNode(true);
+  // IMPORTANT : on ne touche pas aux canvas du DOM réel
+  // On clone la page 6, puis on remplace les canvas uniquement dans le clone
+  const page6Clone = page.cloneNode(true);
+  replaceCanvasWithImages(page, page6Clone);
 
-  // ---- Conteneurs temporaires ----
-  const containers = [page1Content, page2Content, page3Content, page4Content, page5Content].map(content => {
-    const div = document.createElement('div');
-    if (content) div.innerHTML = content;
-    return div;
-  });
+  // --- Conteneurs temporaires pour les pages 1 à 5 ---
+  const tempContainer1 = document.createElement('div');
+  const tempContainer2 = document.createElement('div');
+  const tempContainer3 = document.createElement('div');
+  const tempContainer4 = document.createElement('div');
+  const tempContainer5 = document.createElement('div');
 
-  // ---- Convertir canvas → images ----
-  for (const div of containers) {
-    await replaceCanvasWithImages(document.body, div);
-  }
-  await replaceCanvasWithImages(document.body, page6Clone);
+  if (page1Content) tempContainer1.innerHTML = page1Content;
+  if (page2Content) tempContainer2.innerHTML = page2Content;
+  if (page3Content) tempContainer3.innerHTML = page3Content;
+  if (page4Content) tempContainer4.innerHTML = page4Content;
+  if (page5Content) tempContainer5.innerHTML = page5Content;
 
-  // ---- Construire la version imprimable ----
+  // Ici, on utilise les canvas du document (avec les signatures)
+  // pour remplir les canvas correspondants dans chaque container
+  replaceCanvasWithImages(document.body, tempContainer1);
+  replaceCanvasWithImages(document.body, tempContainer2);
+  replaceCanvasWithImages(document.body, tempContainer3);
+  replaceCanvasWithImages(document.body, tempContainer4);
+  replaceCanvasWithImages(document.body, tempContainer5);
+
+  // --- Assemblage final dans un conteneur ---
   const finalContainer = document.createElement('div');
-  finalContainer.id = "print-wrapper";
-  finalContainer.style.padding = "20px";
+  finalContainer.id = 'print-wrapper';
+  finalContainer.style.padding = '20px';
 
-  function addPage(div) {
-    const wrapper = document.createElement('div');
-    wrapper.className = "page-section force-break";
-    wrapper.innerHTML = div.innerHTML;
-    finalContainer.appendChild(wrapper);
-  }
+  if (page1Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer1.innerHTML + '</div>';
+  if (page2Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer2.innerHTML + '</div>';
+  if (page3Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer3.innerHTML + '</div>';
+  if (page4Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer4.innerHTML + '</div>';
+  if (page5Content) finalContainer.innerHTML += '<div class="page-section force-break">' + tempContainer5.innerHTML + '</div>';
+  finalContainer.innerHTML += '<div class="page-section force-break">' + page6Clone.outerHTML + '</div>';
 
-  containers.forEach(div => {
-    if (div.innerHTML.trim() !== "") addPage(div);
-  });
-
-  const page6wrap = document.createElement('div');
-  page6wrap.className = "page-section force-break";
-  page6wrap.innerHTML = page6Clone.outerHTML;
-  finalContainer.appendChild(page6wrap);
-
-  // ---- Sauvegarde du DOM original ----
+  // --- Impression dans la même fenêtre, sans window.open() ---
   const originalHTML = document.body.innerHTML;
 
-  // ---- Remplacer le DOM par la version imprimable ----
-  document.body.innerHTML = "";
+  document.body.innerHTML = '';
   document.body.appendChild(finalContainer);
 
-  // ---- Forcer un premier reflow ----
-  await new Promise(r => requestAnimationFrame(r));
-  await new Promise(r => setTimeout(r, 150));
-
-  // ----------------------------------------------------
-  // 🚀 HACK MOBILE : FORCER LE RENDU DES PAGES AVANT PRINT
-  // ----------------------------------------------------
-  async function forceRender(element) {
-    return new Promise(async resolve => {
-      const totalHeight = element.scrollHeight;
-      let pos = 0;
-
-      while (pos < totalHeight) {
-        window.scrollTo(0, pos);
-        await new Promise(r => setTimeout(r, 60)); // permet à Safari/Chrome de peindre
-        pos += window.innerHeight / 1.5; // avance petit à petit
-      }
-
-      window.scrollTo(0, 0);
-      await new Promise(r => setTimeout(r, 150));
-      resolve();
-    });
-  }
-
-  // ---- Exécuter le hack ----
-  await forceRender(document.body);
-
-  // ---- Imprimer ----
-  window.print();
-
-  // ---- Restaurer la page originale ----
-  document.body.innerHTML = originalHTML;
+  // petit délai pour laisser le temps de layout, surtout sur mobile
+  setTimeout(() => {
+    window.print();
+    // on restaure la page après l’impression
+    document.body.innerHTML = originalHTML;
+  }, 200);
 }
-
 
   window.onload = function () {
     document.getElementById('visite-date-reponsable').valueAsDate = new Date();
