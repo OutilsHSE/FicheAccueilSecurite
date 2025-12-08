@@ -67,9 +67,9 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
- async function printAllPages(mode) {
+async function printAllPages(mode) {
 
-  // Convertir les canvas → images et attendre le chargement
+  // --- Convertir les canvas en images et attendre la fin du chargement ---
   function replaceCanvasWithImages(source, targetContainer) {
     return new Promise(resolve => {
       const canvases = source.querySelectorAll('canvas');
@@ -86,6 +86,7 @@
         img.className = canvas.className;
 
         const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
+
         if (targetCanvas) {
           img.onload = () => {
             targetCanvas.replaceWith(img);
@@ -100,16 +101,16 @@
     });
   }
 
-  // Récupération des pages stockées
+  // ---- Récupération des pages 1 à 5 depuis le storage ----
   const page1Content = localStorage.getItem('page1Content');
   const page2Content = localStorage.getItem('page2Content');
   const page3Content = localStorage.getItem('page3Content');
   const page4Content = localStorage.getItem('page4Content');
   const page5Content = localStorage.getItem('page5Content');
 
-  // Page 6 : préparer inputs/select/textarea
-  const page = document.querySelector('#page6');
-  const inputs = page.querySelectorAll('input, textarea, select');
+  // ---- Préparation de la page 6 ----
+  const page6 = document.querySelector('#page6');
+  const inputs = page6.querySelectorAll('input, textarea, select');
 
   inputs.forEach(input => {
     if (input.type === 'checkbox' || input.type === 'radio') {
@@ -118,7 +119,10 @@
       input.setAttribute('value', input.value);
     }
 
-    if (input.tagName === 'textarea') input.textContent = input.value;
+    if (input.tagName === 'textarea') {
+      input.textContent = input.value;
+    }
+
     if (input.tagName === 'select') {
       input.querySelectorAll('option').forEach(opt => {
         opt.selected = opt.value === input.value;
@@ -126,47 +130,59 @@
     }
   });
 
-  // Cloner page 6
-  const page6Clone = page.cloneNode(true);
+  const page6Clone = page6.cloneNode(true);
 
-  // Conteneurs temporaires pour les pages
-  const containers = [page1Content, page2Content, page3Content, page4Content, page5Content].map(c => {
+  // ---- Création des conteneurs temporaires ----
+  const containers = [page1Content, page2Content, page3Content, page4Content, page5Content].map(content => {
     const div = document.createElement('div');
-    if (c) div.innerHTML = c;
+    if (content) div.innerHTML = content;
     return div;
   });
 
-  // Remplacer canvas dans toutes les pages
+  // ---- Remplacement des canvas sur les pages 1 à 5 ----
   for (const div of containers) {
     await replaceCanvasWithImages(document.body, div);
   }
+
+  // ---- Remplacement canvas page 6 ----
   await replaceCanvasWithImages(document.body, page6Clone);
 
-  // Construire le contenu imprimable
+  // ---- Construction finale ----
   const finalContainer = document.createElement('div');
   finalContainer.id = "print-wrapper";
   finalContainer.style.padding = "20px";
 
+  function addPage(div) {
+    const wrapper = document.createElement('div');
+    wrapper.className = "page-section force-break";
+    wrapper.innerHTML = div.innerHTML;
+    finalContainer.appendChild(wrapper);
+  }
+
   containers.forEach(div => {
-    if (div.innerHTML.trim() !== "")
-      finalContainer.innerHTML += `<div class="page-section force-break">${div.innerHTML}</div>`;
+    if (div.innerHTML.trim() !== "") addPage(div);
   });
 
-  finalContainer.innerHTML += `<div class="page-section force-break">${page6Clone.outerHTML}</div>`;
+  const page6wrap = document.createElement('div');
+  page6wrap.className = "page-section force-break";
+  page6wrap.innerHTML = page6Clone.outerHTML;
+  finalContainer.appendChild(page6wrap);
 
-  // Sauvegarder la page actuelle
+  // ---- Sauvegarder le DOM original ----
   const originalHTML = document.body.innerHTML;
 
-  // Remplacer par la version imprimable
-  document.body.innerHTML = finalContainer.outerHTML;
+  // ---- Remplacer la page par la version imprimable ----
+  document.body.innerHTML = "";
+  document.body.appendChild(finalContainer);
 
-  // Laisser un petit délai pour le chargement des images
-  await new Promise(res => setTimeout(res, 300));
+  // ---- Forcer un reflow COMPLET (Safari mobile sinon n'imprime pas !) ----
+  await new Promise(r => requestAnimationFrame(r));
+  await new Promise(r => setTimeout(r, 300));
 
-  // Imprimer
+  // ---- Impression ----
   window.print();
 
-  // Restaurer la page
+  // ---- Restauration ----
   document.body.innerHTML = originalHTML;
 }
 
