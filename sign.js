@@ -1,5 +1,4 @@
-
-  function setupCanvas(canvasId) {
+ function setupCanvas(canvasId) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
     canvas.width = canvas.parentElement.clientWidth;
@@ -67,7 +66,95 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
+  function printAllPages(mode) {
+function replaceCanvasWithImages(source, targetContainer) {
+  const canvases = source.querySelectorAll('canvas');
+  canvases.forEach((canvas) => {
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png'); // capture le dessin
+    img.style.border = '1px solid #000';
+    img.style.width = canvas.style.width || '100%';
+    img.style.height = canvas.style.height || 'auto';
+    img.className = canvas.className; // garde la classe si besoin
 
+    // Trouve le canvas correspondant dans le container cible
+    const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
+    if (targetCanvas) {
+      targetCanvas.replaceWith(img);
+    }
+  });
+}
+
+    const page1Content = localStorage.getItem('page1Content');
+    const page2Content = localStorage.getItem('page2Content');
+    const page3Content = localStorage.getItem('page3Content');
+    const page4Content = localStorage.getItem('page4Content');
+    const page5Content = localStorage.getItem('page5Content');
+
+    const page = document.querySelector('#page6');
+    const inputs = page.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        input.checked ? input.setAttribute('checked', 'checked') : input.removeAttribute('checked');
+      } else {
+        input.setAttribute('value', input.value);
+      }
+
+      if (input.tagName.toLowerCase() === 'textarea') {
+        input.textContent = input.value;
+      }
+
+      if (input.tagName.toLowerCase() === 'select') {
+        const options = input.querySelectorAll('option');
+        options.forEach(option => {
+          option.selected = option.value === input.value;
+        });
+      }
+    });
+
+    replaceCanvasWithImages(document.body, document.body);
+    const page6Clone = page.cloneNode(true);
+
+    const tempContainer1 = document.createElement('div');
+    const tempContainer2 = document.createElement('div');
+    const tempContainer3 = document.createElement('div');
+    const tempContainer4 = document.createElement('div');
+    const tempContainer5 = document.createElement('div');
+
+    if (page1Content) tempContainer1.innerHTML = page1Content;
+    if (page2Content) tempContainer2.innerHTML = page2Content;
+    if (page3Content) tempContainer3.innerHTML = page3Content;
+    if (page4Content) tempContainer4.innerHTML = page4Content;
+    if (page5Content) tempContainer5.innerHTML = page5Content;
+
+    replaceCanvasWithImages(document.body, tempContainer1);
+    replaceCanvasWithImages(document.body, tempContainer2);
+    replaceCanvasWithImages(document.body, tempContainer3);
+    replaceCanvasWithImages(document.body, tempContainer4);
+    replaceCanvasWithImages(document.body, tempContainer5);
+
+    // Assemblage final dans un conteneur temporaire
+    const finalContainer = document.createElement('div');
+    finalContainer.style.padding = '20px'; // Pour une mise en page propre
+    if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
+    if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
+    if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
+    if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
+    if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
+
+
+    document.body.insertBefore(finalContainer, document.body.firstChild);
+
+    window.scrollTo(0, 0); // Évite les bugs d’affichage
+
+    setTimeout(() => {
+      window.print();
+
+      // Restauration après impression
+      document.body.innerHTML = originalBody;
+    }, 500);
+    
+  }
 
   window.onload = function () {
     document.getElementById('visite-date-reponsable').valueAsDate = new Date();
@@ -81,117 +168,7 @@
       alert('Veuillez autoriser les pop-ups pour ce site.');
     }
   }
-function printAllPages() {
-  function replaceCanvasWithImages(source, targetContainer) {
-    const canvases = source.querySelectorAll('canvas');
-    canvases.forEach((canvas) => {
-      try {
-        const img = document.createElement('img');
-        img.src = canvas.toDataURL('image/png'); // => marche seulement si canvas NON tainted
-        img.style.border = '1px solid #000';
-        img.style.width = canvas.style.width || '100%';
-        img.style.height = canvas.style.height || 'auto';
-        img.className = canvas.className;
 
-        const targetCanvas = targetContainer.querySelector('#' + canvas.id);
-        if (targetCanvas) {
-          targetCanvas.replaceWith(img);
-        }
-      } catch (e) {
-        console.error('Canvas tainted, impossible de convertir en image :', canvas.id, e);
-      }
-    });
-  }
 
-  const page1Content = localStorage.getItem('page1Content');
-  const page2Content = localStorage.getItem('page2Content');
-  const page3Content = localStorage.getItem('page3Content');
-  const page4Content = localStorage.getItem('page4Content');
-  const page5Content = localStorage.getItem('page5Content');
-
-  // figer la page 6
-  const page6 = document.querySelector('#page6');
-  const inputs = page6.querySelectorAll('input, textarea, select');
-
-  inputs.forEach(input => {
-    const tag = input.tagName.toLowerCase();
-
-    if (input.type === 'checkbox' || input.type === 'radio') {
-      input.checked
-        ? input.setAttribute('checked', 'checked')
-        : input.removeAttribute('checked');
-    } else {
-      input.setAttribute('value', input.value || '');
-    }
-
-    if (tag === 'textarea') input.textContent = input.value || '';
-
-    if (tag === 'select') {
-      const val = input.value;
-      input.querySelectorAll('option').forEach(opt => {
-        opt.selected = (opt.value === val);
-      });
-    }
-  });
-
-  const page6Clone = page6.cloneNode(true);
-
-  // containers des pages 1 à 5
-  const temp1 = document.createElement('div');
-  const temp2 = document.createElement('div');
-  const temp3 = document.createElement('div');
-  const temp4 = document.createElement('div');
-  const temp5 = document.createElement('div');
-
-  if (page1Content) temp1.innerHTML = page1Content;
-  if (page2Content) temp2.innerHTML = page2Content;
-  if (page3Content) temp3.innerHTML = page3Content;
-  if (page4Content) temp4.innerHTML = page4Content;
-  if (page5Content) temp5.innerHTML = page5Content;
-
-  // conversion canvas → img dans les containers
-  replaceCanvasWithImages(document.body, temp1);
-  replaceCanvasWithImages(document.body, temp2);
-  replaceCanvasWithImages(document.body, temp3);
-  replaceCanvasWithImages(document.body, temp4);
-  replaceCanvasWithImages(document.body, temp5);
-  replaceCanvasWithImages(document.body, page6Clone);
-
-  // assemblage pour impression
-  const finalContainer = document.createElement('div');
-  finalContainer.style.padding = '20px';
-
-  if (page1Content) finalContainer.innerHTML += '<div class="page-section force-break">' + temp1.innerHTML + '</div>';
-  if (page2Content) finalContainer.innerHTML += '<div class="page-section force-break">' + temp2.innerHTML + '</div>';
-  if (page3Content) finalContainer.innerHTML += '<div class="page-section force-break">' + temp3.innerHTML + '</div>';
-  if (page4Content) finalContainer.innerHTML += '<div class="page-section force-break">' + temp4.innerHTML + '</div>';
-  if (page5Content) finalContainer.innerHTML += '<div class="page-section force-break">' + temp5.innerHTML + '</div>';
-  finalContainer.innerHTML += '<div class="page-section force-break">' + page6Clone.outerHTML + '</div>';
-
-  const htmlToPrint = finalContainer.innerHTML;
-
-  const printWindow = window.open('', '_blank');
-  if (!printWindow) {
-    alert("Popup d'impression bloquée.");
-    return;
-  }
-
-  printWindow.document.open();
-  printWindow.document.write('<html><head>');
-  printWindow.document.write('<title>Impression</title>');
-  printWindow.document.write('<link rel="stylesheet" href="global.css">');
-  printWindow.document.write('</head><body>');
-  printWindow.document.write(htmlToPrint);
-  printWindow.document.write('</body></html>');
-  printWindow.document.close();
-
-  printWindow.onload = function () {
-    setTimeout(() => {
-      printWindow.focus();
-      printWindow.print();
-      printWindow.close();
-    }, 1000);
-  };
-}
 
 
