@@ -190,7 +190,7 @@ function printAllPages() {
       printWindow.focus();
       printWindow.print();
       printWindow.close();
-    }, 300);
+    }, 1000);
   };
 }
 
