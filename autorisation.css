@@ -99,22 +99,14 @@
       width: 100%;
   }
 
-  @media (min-width: 1370px) {
-      #formation-prevue {
-          margin: 10px;
-          min-height: 100px;
-          min-width: 500px;
+.formations-prevoir textarea {
+          width: 300px;
+          height: 400px;
       }
-  }
 
-  @media (max-width: 768px) {
+  @media screen and (max-width: 768px) {
       .formation-autres {
           max-width: 300px;
-          height: 200px;
-      }
-
-      .formations-prevoir textarea {
-          width: 300px;
           height: 200px;
       }
 

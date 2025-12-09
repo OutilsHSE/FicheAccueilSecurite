@@ -380,6 +380,7 @@ function createTable(posteKey, container) {
     const icon = document.createElement("img");
     icon.src = "img/doc.png";
     icon.classList.add("doc-icon");
+    icon.classList.add("no-print");
     iconLink.appendChild(icon);
     cellFiche.appendChild(checkbox);
     cellFiche.appendChild(texte);

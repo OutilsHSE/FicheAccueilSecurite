@@ -24,7 +24,6 @@
 
             // Efface tout le sessionStorage
             sessionStorage.clear();
-            loadPage("page1")
 
         }
 

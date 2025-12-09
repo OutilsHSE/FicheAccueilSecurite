@@ -149,9 +149,6 @@ function replaceCanvasWithImages(source, targetContainer) {
 
     setTimeout(() => {
       window.print();
-
-      // Restauration après impression
-      document.body.innerHTML = originalBody;
     }, 500);
     
   }
