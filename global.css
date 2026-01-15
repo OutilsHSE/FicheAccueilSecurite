@@ -283,7 +283,7 @@ input[type="text"] {
 .cas {
   border: 2px solid red;
   padding: 20px;
-  width: 400px;
+  width: 600px;
   margin: 20px auto;
 }
 
@@ -349,6 +349,7 @@ input[type="text"] {
 }
 
 .table-check td {
+  font-size: 13px;
   text-align: left;
   max-width: 750px;
   word-wrap: break-word;
@@ -539,6 +540,34 @@ input[type="text"] {
     align-items: center;
     margin-bottom: 6px;
 }
+
+input[type="checkbox"] {
+  margin-top: 0 !important;
+}
+
+ .top-fields {
+   display: flex;
+   flex-wrap: wrap;
+   /* Permettre aux éléments de passer à la ligne si nécessaire */
+   gap: 20px;
+   /* Espace entre les éléments */
+   margin-bottom: 20px;
+   align-items: baseline;
+ }
+
+ .top-fields label {
+   font-weight: bold;
+   font-size: 14px;
+   display: flex;
+   align-items: center;
+ }
+
+ .top-fields input {
+   margin-left: 10px;
+   /* Espace entre le label et l'input */
+   flex: 1;
+   /* Permettre à l'input de prendre l'espace disponible */
+ }
 
 /* =========================================================
    MODE IMPRESSION UNIFIÉ — Fonctionne pour toutes les pages

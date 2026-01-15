@@ -64,7 +64,7 @@
       .form-et-cadre .bloc-textarea textarea {
           width: 500px;
           /* prend toute la largeur du bloc */
-          height: 375px;
+          height: 200px;
           /* fixe la hauteur si tu veux aussi */
       }
   }
@@ -100,14 +100,14 @@
   }
 
 .formations-prevoir textarea {
-          width: 300px;
-          height: 400px;
+          width: 400px;
+          height: 200px;
       }
 
   @media screen and (max-width: 768px) {
       .formation-autres {
           max-width: 300px;
-          height: 200px;
+          height: 100px;
       }
 
   }
