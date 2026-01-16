@@ -591,32 +591,6 @@ input[type="checkbox"] {
         font-size: 11pt !important;
     }
 
-    /* Toutes les pages, sections, conteneurs */
-    .page-section,
-    .print-block,
-    .no-break,
-    .container,
-    #page1, #page2, #page3, #page4, #page5, #page6 {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-sizing: border-box !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-
-    .force-break {
-        page-break-before: always !important;
-    }
-
-    .force-break:first-child {
-        page-break-before: auto !important;
-    }
-
-    .page:last-child {
-        page-break-after: avoid !important;
-    }
 
     /* --- Images & Canvas --- */
     img, canvas {
@@ -639,6 +613,7 @@ input[type="checkbox"] {
     textarea {
         width: 100% !important;
         max-width: 100% !important;
+        min-height: 200px !important;
         box-sizing: border-box !important;
     }
 
