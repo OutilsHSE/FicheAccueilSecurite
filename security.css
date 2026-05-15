@@ -1,0 +1,44 @@
+@media print {
+       .print-block {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+     .no-break {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    /* Protéger les tableaux également */
+    table {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+      /* Autoriser la coupure UNIQUEMENT ici */
+  .other-equipments {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  .other-equipments-textarea {
+    height: auto !important;
+    min-height: 250mm !important;
+    max-height: none !important;
+  }
+}        
+
+  .other-equipments-textarea {
+    height: 200px;
+    width: 500px;
+  }
+
+.other-equipments-hse {
+  font-style: bold;
+  color: red;
+  border: #000 1px;
+}

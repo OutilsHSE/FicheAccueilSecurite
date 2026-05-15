@@ -4,16 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fiche d'Accueil Sécurité</title>
+  <title>ACCUEIL HSE DES NOUVEAUX ARRIVANTS</title>
   <link rel="stylesheet" href="global.css">
   <style>
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <img class="logo" src="CDES_Logo.png" alt="">
-    <h1> Fiche d'Accueil Sécurité </h1>
+  <div class="container no-print">
+    <img class="logo" src="img/CDES_Logo.png" alt="">
+    <h1> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</h1>
   </div>
   <div id="page6">
     <table>
@@ -32,6 +32,57 @@
         </tr>
       </tbody>
     </table>
+    <table class="attestation">
+      <thead>
+        <tr>
+          <th>
+            ATTESTATION DE NAGE
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <img class="nage-img" src="img/savoir-nager.png" alt="savoir nager">
+            <div class="texte">
+              <span>J'atteste sur l'honneur :</span>
+              <div>
+                <input type="checkbox">
+                <label>Savoir Nager</label>
+              </div>
+              <div>
+                <input type="checkbox">
+                <label>Ne pas savoir nager mais souhaite bénéficier d'une formation complémentaire de
+                  natation</label>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="attestation">
+      <thead>
+        <tr>
+          <th>
+            ENGAGEMENTS
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="texte">
+              <span style="font-weight: bold;"> <input type="checkbox"> Je reconnais les risques liés à mon poste ainsi que les fiches de sensibilisation qui m'ont été
+                présentées.</span> <br>
+             <span style="font-weight: bold;"><input type="checkbox"> Je reconnais avoir reçu les équipements de protection individuels,
+              avoir été sensibilisé à leur utilisation et aux consignes de sécurité associées
+              et m'engage à les porter et à appliquer ces consignes dans le cadre de mes activités. </span><br>
+              <span style="font-weight: bold;"> <input type="checkbox"> J'atteste avoir réalisé et validé le parcours sécurité numérique. </span> <br>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div>
       <table class="aligned-table">
         <th>Responsable de l'accueil</th>
@@ -39,9 +90,6 @@
         <tr>
           <td>
             <div class="sign">
-              <br>
-              <br>
-              <br>
               <span class="date"> Date et Signature :</span>
               <input id="visite-date-reponsable" class="input-bilan" type="date"><br>
               <canvas id="drawingCanvasPageSign1" class="signature-canvas"></canvas>
@@ -50,8 +98,6 @@
           </td>
           <td>
             <div class="sign">
-              <span class="red-text"> Je reconnais avoir pris connaissance des consignes de sécurité présentées et les
-                appliquerai dans le cadre de mes activités. </span><br>
               <span class="date">Date et Signature :</span>
               <input id="visite-date-collaborateur" class="input-bilan" type="date"><br>
               <canvas id="drawingCanvasPageSign2" class="signature-canvas"></canvas>
@@ -62,183 +108,14 @@
       </table>
     </div>
   </div>
-  <button class="final-button" onclick="printAllPages('print')">Exporter</button>
+  <button class="final-button no-print" onclick="printAllPages()">Exporter</button>
   </div>
 
 
 </body>
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  function setupCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
-
-    let painting = false;
-
-    function startPosition(e) {
-      painting = true;
-      draw(e);
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    function endPosition(e) {
-      painting = false;
-      ctx.beginPath();
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    function draw(e) {
-      if (!painting) return;
-      const rect = canvas.getBoundingClientRect();
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = '#000';
-
-      let clientX, clientY;
-      if (e.touches && e.touches.length > 0) {
-        // Utiliser les coordonnées du premier touch point
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        // Utiliser les coordonnées de la souris
-        clientX = e.clientX;
-        clientY = e.clientY;
-      }
-
-      ctx.lineTo(clientX - rect.left, clientY - rect.top);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(clientX - rect.left, clientY - rect.top);
-      e.preventDefault(); // Empêche le comportement par défaut
-    }
-
-    // Ajouter des écouteurs pour les événements de souris
-    canvas.addEventListener('mousedown', startPosition);
-    canvas.addEventListener('mouseup', endPosition);
-    canvas.addEventListener('mouseout', endPosition);
-    canvas.addEventListener('mousemove', draw);
-
-    // Ajouter des écouteurs pour les événements tactiles
-    canvas.addEventListener('touchstart', startPosition);
-    canvas.addEventListener('touchend', endPosition);
-    canvas.addEventListener('touchcancel', endPosition);
-    canvas.addEventListener('touchmove', draw);
-  }
-
-  // Initialisation
-  setupCanvas('drawingCanvasPageSign1');
-  setupCanvas('drawingCanvasPageSign2');
-
-  // Bouton pour effacer
-  function clearCanvas(canvasId) {
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-  function printAllPages(mode) {
-function replaceCanvasWithImages(source, targetContainer) {
-  const canvases = source.querySelectorAll('canvas');
-  canvases.forEach((canvas) => {
-    const img = document.createElement('img');
-    img.src = canvas.toDataURL('image/png'); // capture le dessin
-    img.style.border = '1px solid #000';
-    img.style.width = canvas.style.width || '100%';
-    img.style.height = canvas.style.height || 'auto';
-    img.className = canvas.className; // garde la classe si besoin
-
-    // Trouve le canvas correspondant dans le container cible
-    const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
-    if (targetCanvas) {
-      targetCanvas.replaceWith(img);
-    }
-  });
-}
-
-    const page1Content = localStorage.getItem('page1Content');
-    const page2Content = localStorage.getItem('page2Content');
-    const page3Content = localStorage.getItem('page3Content');
-    const page4Content = localStorage.getItem('page4Content');
-    const page5Content = localStorage.getItem('page5Content');
-
-    const page = document.querySelector('#page6');
-    const inputs = page.querySelectorAll('input, textarea, select');
-    inputs.forEach(input => {
-      if (input.type === 'checkbox' || input.type === 'radio') {
-        input.checked ? input.setAttribute('checked', 'checked') : input.removeAttribute('checked');
-      } else {
-        input.setAttribute('value', input.value);
-      }
-
-      if (input.tagName.toLowerCase() === 'textarea') {
-        input.textContent = input.value;
-      }
-
-      if (input.tagName.toLowerCase() === 'select') {
-        const options = input.querySelectorAll('option');
-        options.forEach(option => {
-          option.selected = option.value === input.value;
-        });
-      }
-    });
-
-    replaceCanvasWithImages(document.body, document.body);
-    const page6Clone = page.cloneNode(true);
-
-    const tempContainer1 = document.createElement('div');
-    const tempContainer2 = document.createElement('div');
-    const tempContainer3 = document.createElement('div');
-    const tempContainer4 = document.createElement('div');
-    const tempContainer5 = document.createElement('div');
-
-    if (page1Content) tempContainer1.innerHTML = page1Content;
-    if (page2Content) tempContainer2.innerHTML = page2Content;
-    if (page3Content) tempContainer3.innerHTML = page3Content;
-    if (page4Content) tempContainer4.innerHTML = page4Content;
-    if (page5Content) tempContainer5.innerHTML = page5Content;
-
-    replaceCanvasWithImages(document.body, tempContainer1);
-    replaceCanvasWithImages(document.body, tempContainer2);
-    replaceCanvasWithImages(document.body, tempContainer3);
-    replaceCanvasWithImages(document.body, tempContainer4);
-    replaceCanvasWithImages(document.body, tempContainer5);
-
-    // Assemblage final dans un conteneur temporaire
-    const finalContainer = document.createElement('div');
-    finalContainer.style.padding = '20px'; // Pour une mise en page propre
-    if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
-    if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
-    if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
-    if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
-    if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
-
-
-    document.body.insertBefore(finalContainer, document.body.firstChild);
-
-    window.scrollTo(0, 0); // Évite les bugs d’affichage
-
-    setTimeout(() => {
-      window.print();
-
-      // Restauration après impression
-      document.body.innerHTML = originalBody;
-    }, 500);
-    
-  }
-
-  window.onload = function () {
-    document.getElementById('visite-date-reponsable').valueAsDate = new Date();
-    document.getElementById('visite-date-collaborateur').valueAsDate = new Date();
-  }
-  function openLink(lien) {
-    const newWindow = window.open(lien, '_blank');
-    if (newWindow) {
-      newWindow.focus();
-    } else {
-      alert('Veuillez autoriser les pop-ups pour ce site.');
-    }
-  }
-</script>
+<script src="sign.js"></script>
 
 </html>

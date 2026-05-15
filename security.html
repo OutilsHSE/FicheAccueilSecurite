@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiche d'Accueil Sécurité</title>
+    <title>ACCUEIL HSE DES NOUVEAUX ARRIVANTS</title>
     <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="security.css">
     <style>
     </style>
 </head>
@@ -13,10 +14,11 @@
 <body>
 
     <div class="container">
-        <img class="logo" src="CDES_Logo.png" alt="">
-        <h1> Fiche d'Accueil Sécurité </h1>
+        <img class="logo" src="img/CDES_Logo.png" alt="">
+        <h1> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</h1>
     </div>
     <div id="page3" style="padding-left: 20px;">
+        <div  class="print-block no-break">
         <div>
          <table>
             <thead>
@@ -27,13 +29,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="red-text">
-                <td>
-                    ➔ Equipements de Protection Individuelle : Le collaborateur est-il équipé des EPI requis pour prendre son poste ?
-                    </td>
-                </tr>
             </tbody>
             </table>
+              <h4 class="red-text">  ➔ Equipements de Protection Individuelle : Le collaborateur est-il équipé des EPI requis pour prendre son poste ? </h4>
             <table class="table-check ">
                 <tr>
                     <th>
@@ -50,7 +48,7 @@
                     <td><input type="checkbox"></td>
                 </tr>
                 <tr>
-                    <td>Chaussures de sécurité <span style="font-weight: bold;">Montantes</span></td>
+                    <td>Chaussures de sécurité Montantes</td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
@@ -62,19 +60,19 @@
                     <td><input type="checkbox"></td>
                 </tr>
                 <tr>
-                    <td>Casque de protection</td>
+                    <td>Casque avec visière de protection</td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                 </tr>
                 <tr>
-                    <td>Protection contre le bruit</td>
+                    <td>Protection contre le bruit (casque anti bruit, protections moulées)</td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                 </tr>
                 <tr>
-                    <td>Gants de protection adaptés</td>
+                    <td>Gants de protection étanches (Manutention et utilisation produits chimiques)</td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
                     <td><input type="checkbox"></td>
@@ -138,10 +136,11 @@
                 </tr>
             </table>
         </div>
+        </div>
 
-        <div class="other-equipments">
+        <div class="other-equipments no-break">
         <h4> Autres équipements fournis au collaborateur nécessaires à son activité :</h4>
-        <textarea></textarea>
+        <textarea class="other-equipments-textarea"></textarea>
         </div>
     </div>
     <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>

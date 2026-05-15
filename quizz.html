@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Sécurité</title>
+  <link rel="stylesheet" href="quizz.css" />
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="progress-wrapper">
+    <div id="progress-text">Question 1</div>
+    <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+</div>
+
+  <h1 id="theme"></h1>
+
+  <!-- bloc question -->
+  <div id="question-block">
+    <div id="question-text">
+      <h2 id="situation"></h2>
+      <p id="enonce"></p>
+      <div id="propositions"></div>
+    </div>
+    <img id="image-question-droite" alt="Illustration" />
+  </div>
+
+  <!-- Image pour les questions à clics (grande, en dessous) -->
+  <div id="image-click-container">
+    <img id="image-question-grande" alt="Image cliquable" />
+  </div>
+  
+  <div class="buttons">
+    <button id="valider">Valider</button>
+    <button id="suivant" style="display:none;">Suivant</button>
+    <button onclick="allerAQuestion(18)" style="margin-top:10px;">Aller à la question 18</button>
+
+  </div>
+
+  <!-- bloc explication -->
+  <div id="explication-block">
+    <div id="explication"></div>
+    <img id="image-explication" alt="Explication image" />
+  </div>
+</div>
+
+  <script src="dataquizz.js"></script> 
+  <script src="quizz.js"></script>
+</body>
+</html>

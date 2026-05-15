@@ -368,15 +368,23 @@ function createTable(posteKey, container) {
     checkbox.type = "checkbox";
     checkbox.style.marginRight = "8px";
 
-    const lien = document.createElement("a");
-    lien.href = poste.liens_risques[i];
-    lien.textContent = poste.risques[i];
-    lien.target = "_blank";
-    lien.style.textDecoration = "none";
-    lien.style.color = "black";
+    const texte = document.createElement("span");
+    texte.textContent = poste.risques[i];
+    texte.style.marginRight = "10px";
 
+    // 🔹 L’icône reste un lien cliquable
+    const iconLink = document.createElement("a");
+    iconLink.href = poste.liens_risques[i];
+    iconLink.target = "_blank";
+
+    const icon = document.createElement("img");
+    icon.src = "img/doc.png";
+    icon.classList.add("doc-icon");
+    icon.classList.add("no-print");
+    iconLink.appendChild(icon);
     cellFiche.appendChild(checkbox);
-    cellFiche.appendChild(lien);
+    cellFiche.appendChild(texte);
+    cellFiche.appendChild(iconLink); // icône ici
   }
 
   container.appendChild(table);
@@ -465,7 +473,7 @@ function savePageContent() {
       input.textContent = input.value; // ✅ conserve la valeur interne
     } else if (input.tagName.toLowerCase() === 'canvas') {
       // ✅ Sauvegarde la signature sous forme d'image base64
-      const dataURL = input.toDataURL();
+      const dataURL = input.toDataURL("image/png");
       input.setAttribute('data-image', dataURL);
     } else {
       input.setAttribute('value', input.value);

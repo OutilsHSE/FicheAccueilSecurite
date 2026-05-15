@@ -63,23 +63,77 @@ h1 {
   box-sizing: border-box;
 }
 
+@media screen and (max-width: 800px) {
+    #obs-table td {
+        display: block;         /* Chaque case occupe une ligne */
+        width: 100%;            /* Étire sur toute la largeur */
+        margin-bottom: 15px;    /* Espacement entre les cases */
+    }
+
+    #obs-table tr {
+        display: block;         /* Une ligne devient un bloc vertical */
+        margin-bottom: 10px;
+      
+    }
+
+        #obs-table td .large-row {
+        width: 90%;              /* Pour éviter les écrasements */
+    }
+
+    #obs-table input,
+    #obs-table select,
+    #obs-table textarea {
+        width: 100%;              /* Optimisation mobile */
+        box-sizing: border-box;
+    }
+    #obs-table .large-row label:has(> input[type="checkbox"]) {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+    white-space: nowrap;
+}
+ 
+
+
+
+/* Pour permettre un retour à la ligne propre en cas de petit écran */
+#obs-table .large-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+}
+
+@media (min-width: 800px) {
+    #obs-table .large-row label:has(> input[type="checkbox"]) {
+        margin-top: 15px;
+        display: inline-flex;        /* checkbox + texte sur une seule ligne */
+        align-items: flex-start;     /* aligné à gauche (pas centré) */
+        margin-right: 20px;          /* espace constant entre chaque case */
+        white-space: nowrap;         /* évite que le texte revienne à la ligne */
+    }
+
+    #obs-table .large-row {
+        display: flex;
+        flex-direction: row;         /* tout sur une ligne */
+        align-items: flex-start;     /* aligné à gauche */
+        flex-wrap: wrap;             /* si trop long, retour propre */
+        gap: 10px;                   /* espace uniforme */
+    }
+}
 
 .large-row {
   display: flex;
+    flex-direction: column; 
   align-items: flex-start;
+   gap: 6px;
   text-align: center;
 }
 
-@media (max-width: 800px) {
-  .large-row {
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  .large-row input {
-    width: 100%;
-    box-sizing: border-box;
-  }
+.large-row input {
+  width: 100%;              /* optionnel : input prend toute la largeur */
+  box-sizing: border-box;
 }
 
 .signature-canvas {
@@ -98,12 +152,17 @@ input[type="text"] {
 
 .input-bilan {
   height: 50px;
-    display: inline-block;
+  display: inline-block;
 }
 
 .red-text {
-  color: red;
+  color: red !important;
 }
+
+.red-text a {
+    color: red !important;
+}
+
 
 .italic {
   font-style: italic;
@@ -174,56 +233,6 @@ input[type="text"] {
   background-color: rgb(9, 146, 187);
 }
 
-@media print {
-  .signature-canvas {
-    max-width: 400px !important;
-    height: 300px !important;
-  }
-  .no-print {
-    display: none !important;
-  }
-  body {
-    font-size: 11pt;
-  }
-
-  th,
-  th {
-    font-size: 10pt;
-  }
-
-  .page:last-child {
-    page-break-after: avoid;
-  }
-  .nage-img {
-  width: 50px;
-  height: 50px;
-}
-  /* Table attestation bien alignée à gauche */
-  table.attestation {
-    width: auto !important;        /* largeur naturelle */
-    margin-left: 0 !important;
-    margin-right: auto !important;
-    text-align: left !important;
-    page-break-inside: avoid;      /* évite les coupures entre pages */
-  }
-
-  table.attestation th,
-  table.attestation td {
-    text-align: left !important;
-    padding-left: 10px !important;
-  }
-  
-
-  /* Les blocs de texte, labels et signature restent bien à gauche */
-  .attestation .texte,
-  .attestation .sign,
-  .attestation .sign span,
-  .attestation .sign canvas {
-    text-align: left !important;
-    margin-left: 0 !important;
-    display: block !important;
-  }
-}
 
 .cas {
   border: 2px solid red;
@@ -274,7 +283,7 @@ input[type="text"] {
 .cas {
   border: 2px solid red;
   padding: 20px;
-  width: 400px;
+  width: 600px;
   margin: 20px auto;
 }
 
@@ -326,23 +335,27 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
-.table-check  th {
-    text-align: left;
-    padding: 8px;
-  }
+.table-check th {
+  text-align: left;
+  padding: 8px;
+}
 
+@media (min-width: 800px) {
 .table-check {
   padding: 10px;
   width: 60%;
   table-layout: fixed;
 }
+}
 
 .table-check td {
+  font-size: 13px;
   text-align: left;
   max-width: 750px;
   word-wrap: break-word;
   white-space: normal;
 }
+
 .no-bullet {
   list-style-type: none;
   padding-left: 0;
@@ -411,22 +424,6 @@ input[type="text"] {
   color: white;
 }
 
-.other-equipments {
-  padding-left: 250px;
-  padding-top: 10px;
-
-  textarea{
-    height: 200px;
-    width: 500px;
-  }
-}
-
-.other-equipments-hse {
-  font-style: bold;
-  color: red;
-  border: #000 1px;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -490,8 +487,217 @@ input[type="text"] {
   margin: 10px;
 }
 
-#formation-prevue {
-  margin: 10px;
-  min-height: 100px;
-  min-width: 500px;
+
+.attestation td {
+  display: flex;
+  align-items: flex-start;
+  /* aligne en haut */
+  gap: 10px;
+  /* espace entre image et texte */
+}
+
+/* Image */
+.attestation td img {
+  max-width: 120px;
+  height: auto;
+}
+
+/* Bloc texte */
+.attestation .texte {
+  display: flex;
+  flex-direction: column;
+  /* tout sous l’autre */
+  text-align: left;
+  /* force l’alignement à gauche */
+  gap: 5px;
+  /* petit espace entre lignes */
+}
+
+/* Chaque sous-div prend toute la largeur */
+.attestation .texte div {
+  display: flex;
+  align-items: flex-start;
+  /* case + label alignés en haut */
+  gap: 5px;
+}
+
+.doc-icon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.checkbox-date {
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+}
+
+.checkbox-date label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+input[type="checkbox"] {
+  margin-top: 0 !important;
+}
+
+ .top-fields {
+   display: flex;
+   flex-wrap: wrap;
+   /* Permettre aux éléments de passer à la ligne si nécessaire */
+   gap: 20px;
+   /* Espace entre les éléments */
+   margin-bottom: 20px;
+   align-items: baseline;
+ }
+
+ .top-fields label {
+   font-weight: bold;
+   font-size: 14px;
+   display: flex;
+   align-items: center;
+ }
+
+ .top-fields input {
+   margin-left: 10px;
+   /* Espace entre le label et l'input */
+   flex: 1;
+   /* Permettre à l'input de prendre l'espace disponible */
+ }
+
+/* =========================================================
+   MODE IMPRESSION UNIFIÉ — Fonctionne pour toutes les pages
+   ========================================================= */
+@media print {
+
+    /* Format physique A4 portrait */
+    @page {
+        size: A4 portrait;
+        margin: 8mm;
+    }
+
+    /* --- Structure générale --- */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        font-size: 11pt !important;
+    }
+
+
+    /* --- Images & Canvas --- */
+    img, canvas {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    .signature-canvas {
+        max-width: 400px !important;
+        height: 300px !important;
+    }
+
+    .nage-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    /* --- Textarea pleine largeur --- */
+    textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 200px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* --- Tables globales --- */
+    table {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: auto !important; /* évite la compression excessive */
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+    }
+
+    th, td {
+        white-space: normal !important;
+        word-break: break-word !important;
+        padding: 4px !important;
+        font-size: 10pt !important;
+    }
+
+    /* --- Tables attestation (cas particuliers) --- */
+    table.attestation {
+        width: auto !important;
+        margin-left: 0 !important;
+        margin-right: auto !important;
+        text-align: left !important;
+        page-break-inside: avoid !important;
+    }
+
+    table.attestation th,
+    table.attestation td {
+        text-align: left !important;
+        padding-left: 10px !important;
+    }
+
+    /* Alignement des blocs signature attestation */
+    .attestation .texte,
+    .attestation .sign,
+    .attestation .sign span,
+    .attestation .sign canvas {
+        text-align: left !important;
+        margin-left: 0 !important;
+        display: block !important;
+    }
+
+    /* --- Éléments à ne pas imprimer --- */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Suppression des paddings internes gênants */
+    .other-equipments,
+    .other-equipments-hse {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* SÉCURITÉ : désactiver toute ancienne règle scale */
+    .large-print-page {
+        transform: none !important;
+        width: 100% !important;
+    }
+
+    @media print {
+
+  .large-row {
+    display: flex !important;
+    flex-direction: column !important; /* Vertical = jamais de débordement */
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 2px !important;
+  }
+
+  .large-row label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important; /* <- Anti-retour à la ligne */
+  }
+
+  .large-row input[type="checkbox"] {
+    margin: 0 !important;
+  }
+}
+
 }

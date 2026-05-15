@@ -1,0 +1,171 @@
+ function setupCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+
+    let painting = false;
+
+    function startPosition(e) {
+      painting = true;
+      draw(e);
+      e.preventDefault(); // Empêche le comportement par défaut
+    }
+
+    function endPosition(e) {
+      painting = false;
+      ctx.beginPath();
+      e.preventDefault(); // Empêche le comportement par défaut
+    }
+
+    function draw(e) {
+      if (!painting) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#000';
+
+      let clientX, clientY;
+      if (e.touches && e.touches.length > 0) {
+        // Utiliser les coordonnées du premier touch point
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        // Utiliser les coordonnées de la souris
+        clientX = e.clientX;
+        clientY = e.clientY;
+      }
+
+      ctx.lineTo(clientX - rect.left, clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(clientX - rect.left, clientY - rect.top);
+      e.preventDefault(); // Empêche le comportement par défaut
+    }
+
+    // Ajouter des écouteurs pour les événements de souris
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mouseout', endPosition);
+    canvas.addEventListener('mousemove', draw);
+
+    // Ajouter des écouteurs pour les événements tactiles
+    canvas.addEventListener('touchstart', startPosition);
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchcancel', endPosition);
+    canvas.addEventListener('touchmove', draw);
+  }
+
+  // Initialisation
+  setupCanvas('drawingCanvasPageSign1');
+  setupCanvas('drawingCanvasPageSign2');
+
+  // Bouton pour effacer
+  function clearCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  function printAllPages(mode) {
+function replaceCanvasWithImages(source, targetContainer) {
+  const canvases = source.querySelectorAll('canvas');
+  canvases.forEach((canvas) => {
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png'); // capture le dessin
+    img.style.border = '1px solid #000';
+    img.style.width = canvas.style.width || '100%';
+    img.style.height = canvas.style.height || 'auto';
+    img.className = canvas.className; // garde la classe si besoin
+
+    // Trouve le canvas correspondant dans le container cible
+    const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
+    if (targetCanvas) {
+      targetCanvas.replaceWith(img);
+    }
+  });
+}
+
+    const page1Content = localStorage.getItem('page1Content');
+    const page2Content = localStorage.getItem('page2Content');
+    const page3Content = localStorage.getItem('page3Content');
+    const page4Content = localStorage.getItem('page4Content');
+    const page5Content = localStorage.getItem('page5Content');
+
+    const page = document.querySelector('#page6');
+    const inputs = page.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        input.checked ? input.setAttribute('checked', 'checked') : input.removeAttribute('checked');
+      } else {
+        input.setAttribute('value', input.value);
+      }
+
+      if (input.tagName.toLowerCase() === 'textarea') {
+        input.textContent = input.value;
+      }
+
+      if (input.tagName.toLowerCase() === 'select') {
+        const options = input.querySelectorAll('option');
+        options.forEach(option => {
+          option.selected = option.value === input.value;
+        });
+      }
+    });
+
+    replaceCanvasWithImages(document.body, document.body);
+    const page6Clone = page.cloneNode(true);
+
+    const tempContainer1 = document.createElement('div');
+    const tempContainer2 = document.createElement('div');
+    const tempContainer3 = document.createElement('div');
+    const tempContainer4 = document.createElement('div');
+    const tempContainer5 = document.createElement('div');
+
+    if (page1Content) tempContainer1.innerHTML = page1Content;
+    if (page2Content) tempContainer2.innerHTML = page2Content;
+    if (page3Content) tempContainer3.innerHTML = page3Content;
+    if (page4Content) tempContainer4.innerHTML = page4Content;
+    if (page5Content) tempContainer5.innerHTML = page5Content;
+
+    replaceCanvasWithImages(document.body, tempContainer1);
+    replaceCanvasWithImages(document.body, tempContainer2);
+    replaceCanvasWithImages(document.body, tempContainer3);
+    replaceCanvasWithImages(document.body, tempContainer4);
+    replaceCanvasWithImages(document.body, tempContainer5);
+
+    // Assemblage final dans un conteneur temporaire
+    const finalContainer = document.createElement('div');
+    finalContainer.style.padding = '20px'; // Pour une mise en page propre
+    if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
+    if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
+    if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
+    if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
+    if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
+
+
+    document.body.insertBefore(finalContainer, document.body.firstChild);
+
+    window.scrollTo(0, 0); // Évite les bugs d’affichage
+
+    setTimeout(() => {
+      window.print();
+    }, 500);
+    
+  }
+
+  window.onload = function () {
+    document.getElementById('visite-date-reponsable').valueAsDate = new Date();
+    document.getElementById('visite-date-collaborateur').valueAsDate = new Date();
+  }
+  function openLink(lien) {
+    const newWindow = window.open(lien, '_blank');
+    if (newWindow) {
+      newWindow.focus();
+    } else {
+      alert('Veuillez autoriser les pop-ups pour ce site.');
+    }
+  }
+
+
+
+
