@@ -2,56 +2,115 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACCUEIL HSE DES NOUVEAUX ARRIVANTS</title>
-    <link rel="stylesheet" href="global.css">
-      <link rel="stylesheet" href="risk.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACCUEIL HSE DES NOUVEAUX ARRIVANTS</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="risk.css">
 </head>
 
 <body>
-    <div class="container">
-        <img class="logo" src="img/CDES_Logo.png" alt="">
-        <h1> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</h1>
-    </div>
-  <div id="page4">   
-  <div class="container-risk">
-    <h2>FORMATION ET SENSIBILISATION AUX RISQUES PROFESSIONNELS</h2>
-
-<div id="postes-container">
-  <!-- Premier sélecteur par défaut -->
-  <div class="poste-block">
-    <label><b>Poste de Travail :</b></label>
-    <select class="poste-select">
-      <option value="">-- Sélectionner un poste --</option>
-      <option value="conducteurs_tp">Conducteurs d’engins TP</option>
-      <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
-      <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
-      <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
-      <option value="mecanicien">Mécanicien</option>
-      <option value="soudeur">Soudeur</option>
-      <option value="travaux_forestiers">Travaux forestiers</option>
-      <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
-      <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
-      <option value="intervenant_tereos">Intervenant TEREOS</option>
-    </select>
-        <button id="add-poste">+ Ajouter un poste de travail</button>
-
-     <div class="instructions">
-      <p><span class="num">1️⃣</span> Je coche uniquement les risques qui me concernent et dont j’ai lu les documents associés !</p>
-      <p><span class="num">2️⃣</span> Je prends connaissance de la fiche de formation qui me concerne !</p>
-    </div>
-    <div class="table-container"></div>
+  <div class="container">
+    <img class="logo" src="img/CDES_Logo.png" alt="">
+    <h1> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</h1>
   </div>
-</div>
+  <div id="page4">
+    <div class="container-risk">
+      <h2>FORMATION ET SENSIBILISATION AUX RISQUES PROFESSIONNELS</h2>
 
+      <div id="postes-container">
+        <!-- Premier sélecteur par défaut -->
+        <div class="poste-block">
+          <label><b>Poste de Travail :</b></label>
+          <select class="poste-select">
+            <option value="">-- Sélectionner un poste --</option>
+            <option value="conducteurs_tp">Conducteurs d’engins TP</option>
+            <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
+            <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
+            <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
+            <option value="mecanicien">Mécanicien</option>
+            <option value="soudeur">Soudeur</option>
+            <option value="travaux_forestiers">Travaux forestiers</option>
+            <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
+            <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
+            <option value="intervenant_tereos">Intervenant TEREOS</option>
+          </select>
+          <button id="add-poste">+ Ajouter un poste de travail</button>
 
+          <div class="instructions">
+            <p><span class="num">1️⃣</span> Je coche uniquement les risques qui me concernent et dont j’ai lu les
+              documents associés !</p>
+            <p><span class="num">2️⃣</span> Je prends connaissance de la fiche de formation qui me concerne !</p>
+          </div>
+          <div class="table-container"></div>
 
-    <div id="tables-container"></div>
+      <div id="tables-container"></div>
+          <div class="table-retex">
+            <table>
+              <thead>
+                <tr>
+                  <th>Thématique</th>
+                  <th>Enseignement à retenir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">
+                      Plaie avec un cutter</span><a
+                      href="https://drive.google.com/file/d/1RinR9XTqwOF2RrQHuGz1ycztNpjcQRV5/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                      <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;"> Coupure doigts
+                    </span><a
+                      href="https://drive.google.com/file/d/1Mzmb1Ukm_DR1Aw8LEJ7OrQGTczCgQ7ov/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                         <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Chute à l'eau
+                      </span><a
+                      href="https://drive.google.com/file/d/1TLWGV-Hg636PSc5BFF80hLQvW49rUuGJ/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                         <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Opération de déchargement
+                      </span><a
+                      href="https://drive.google.com/file/d/1V-G8buGGgEuihCKV0KAzn6Uku1I5zMeU/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                         <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;"> Explosion d'une batterie sur un pousseur
+                      </span><a
+                      href="https://drive.google.com/file/d/1RXyAaEekKIjdQEe9Nheuq59JAzjuz__D/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                         <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Entorse de la cheville</span><a
+                      href="https://drive.google.com/file/d/1V09HfB-qnClD3Jvipv_2VOnahhDt76Yi/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                         <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Pollution mineure</span><a
+                      href="https://drive.google.com/file/d/10aPW8v_pvb2__D4rwzgK9PXza56qtoaB/view?usp=sharing"
+                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                         <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div> 
-    <button class="next-button" onclick="redirectToInstructionPage()">Suivant</button>
+  <button class="next-button" onclick="redirectToInstructionPage()">Suivant</button>
   <script src="risk.js"></script>
 
 </body>
+
 </html>

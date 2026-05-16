@@ -211,44 +211,6 @@ function questionSuivante() {
 }
 
 // === Page finale ===
-// === Page finale ===
-// === Page finale ===
-function afficherPageFinale() {
-
-  // 1. Récupération du nom
-  let username = localStorage.getItem("quizName");
-  if (!username) username = "Participant";
-
-  // 2. Calcul du score
-  const totalPoints = quizzData[0].questions.reduce((a, q) => a + q.points, 0);
-  const pourcentage = Math.round((score / totalPoints) * 100);
-
-  // 3. Affichage final
-  quizContainer.innerHTML = `
-    <div class="result-container">
-      <img src="images/laurier.png" alt="couronne de laurier" class="laurier-img">
-
-      <h2 class="result-name">${username}</h2>
-
-      <div class="score-circle">
-        <span>${pourcentage}%</span>
-      </div>
-
-      <button id="quitter">Quitter</button>
-    </div>
-  `;
-
-  // 4. Bouton quitter
-  document.getElementById("quitter").addEventListener("click", () => {
-    // Choisis ce que tu veux :
-    // location.href = "index.html";         // Retour page d’accueil
-    // window.close();                       // Fermer l’onglet (ne marche pas partout)
-    // location.reload();                    // Recharge la page (reset)
-    
-    location.href = "index.html"; // Version par défaut
-  });
-}
-// === Page finale ===
 function afficherPageFinale() {
 
   // 1. Récupération du nom
@@ -262,13 +224,6 @@ function afficherPageFinale() {
   // 3. Affichage final
   quizContainer.innerHTML = `
     <div class="result-container">
-      <img src="img/laurier.png" alt="couronne de laurier" class="laurier-img">
-
-      <h2 class="result-name">${username}</h2>
-
-      <div class="score-circle">
-        <span>${pourcentage}%</span>
-      </div>
 
       <button id="quitter">Quitter</button>
     </div>
@@ -276,7 +231,7 @@ function afficherPageFinale() {
 
   // 4. Bouton quitter
   document.getElementById("quitter").addEventListener("click", () => {
-    location.href = "sign.html"; // Version par défaut
+   window.close()
   });
 }
 

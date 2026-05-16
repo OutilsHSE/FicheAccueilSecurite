@@ -166,6 +166,10 @@ function replaceCanvasWithImages(source, targetContainer) {
     }
   }
 
+ function redirectToQuizz(){
+  window.open("quizz.html", 'blank')
+  }
+
 
 
 
