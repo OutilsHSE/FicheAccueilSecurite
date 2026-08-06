@@ -1,3 +1,5 @@
+renderChrome(4);
+
 const postesData = {
   conducteurs_tp: {
     risques: [
@@ -338,7 +340,7 @@ function createTable(posteKey, container) {
   if (!poste) return;
 
   const table = document.createElement("table");
-  table.classList.add("risques-table");
+  table.classList.add("risques-table", "tbl");
 
   // En-têtes
   const header = table.createTHead();
@@ -519,56 +521,60 @@ document.addEventListener("DOMContentLoaded", () => {
   // Chargement localStorage
   loadPageContent();
 
-  // Initialisation du canvas
-  setupCanvas("drawingCanvasRisk1");
-
-  // Sélecteur principal
-  const postesContainer = document.getElementById("postes-container");
-  const addBtn = document.getElementById("add-poste");
-  let posteCount = 1;
-
-  document.querySelector(".poste-select").addEventListener("change", function () {
-    const tableContainer = this.parentElement.querySelector(".table-container");
-    tableContainer.innerHTML = "";
-    if (this.value) createTable(this.value, tableContainer);
+  // Sélecteurs de poste : délégation d'événement
+  // (fonctionne aussi après restauration du brouillon et pour les postes ajoutés)
+  document.addEventListener("change", (e) => {
+    if (e.target.classList && e.target.classList.contains("poste-select")) {
+      const block = e.target.closest(".poste-block");
+      const tableContainer = block.querySelector(".table-container");
+      tableContainer.innerHTML = "";
+      if (e.target.value) createTable(e.target.value, tableContainer);
+    }
   });
 
-  // Ajouter un poste
-  addBtn.addEventListener("click", () => {
-    if (posteCount >= 3) {
-      alert("Vous pouvez ajouter jusqu’à 3 postes maximum.");
+  // Ajouter un poste (3 maximum)
+  document.addEventListener("click", (e) => {
+    if (e.target.id !== "add-poste") return;
+
+    const postesContainer = document.getElementById("postes-container");
+    if (postesContainer.querySelectorAll(".poste-block").length >= 3) {
+      alert("Vous pouvez ajouter jusqu'à 3 postes maximum.");
       return;
     }
 
     const newBlock = document.createElement("div");
     newBlock.classList.add("poste-block");
     newBlock.innerHTML = `
-      <label><b>Poste de Travail :</b></label>
-      <select class="poste-select">
-        <option value="">-- Sélectionner un poste --</option>
-        <option value="conducteurs_tp">Conducteurs d’engins TP</option>
-        <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
-        <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
-        <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
-        <option value="mecanicien">Mécanicien</option>
-        <option value="soudeur">Soudeur</option>
-        <option value="travaux_forestiers">Travaux forestiers</option>
-        <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
-        <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
-        <option value="intervenant_tereos">Intervenant TEREOS</option>
-      </select>
+      <div class="poste-select-row">
+        <div class="field">
+          <label>Poste de travail</label>
+          <select class="poste-select">
+            <option value="">-- Sélectionner un poste --</option>
+            <option value="conducteurs_tp">Conducteurs d'engins TP</option>
+            <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
+            <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
+            <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
+            <option value="mecanicien">Mécanicien</option>
+            <option value="soudeur">Soudeur</option>
+            <option value="travaux_forestiers">Travaux forestiers</option>
+            <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
+            <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
+            <option value="intervenant_tereos">Intervenant TEREOS</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-ghost del-poste no-print">✕ Retirer</button>
+      </div>
       <div class="table-container"></div>
     `;
 
     postesContainer.appendChild(newBlock);
+  });
 
-    newBlock.querySelector(".poste-select").addEventListener("change", function () {
-      const tableContainer = this.parentElement.querySelector(".table-container");
-      tableContainer.innerHTML = "";
-      if (this.value) createTable(this.value, tableContainer);
-    });
-
-    posteCount++;
+  // Retirer un poste ajouté
+  document.addEventListener("click", (e) => {
+    if (e.target.classList && e.target.classList.contains("del-poste")) {
+      e.target.closest(".poste-block").remove();
+    }
   });
 });
 

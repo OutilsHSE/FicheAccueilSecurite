@@ -1,93 +1,52 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+/* ===== Page Risques professionnels — spécifique ===== */
+
+.poste-block {
+    margin-bottom: 18px;
+    padding-bottom: 4px;
 }
 
-.container-risk {
-  background-color: white;
-  border: 1px solid #999;
-  padding: 20px;
-  margin: 0 auto;
+.poste-block + .poste-block {
+    border-top: 1px dashed var(--gris-bord);
+    padding-top: 16px;
 }
 
-h2 {
-  text-align: center;
-  background-color: #d3d3d3;
-  padding: 10px;
-  margin-bottom: 20px;
+.poste-select-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
 }
 
-label, select, button {
-  display: inline-block;
-  margin: 10px 0;
+.poste-select-row .field {
+    flex: 1;
+    min-width: 260px;
+    max-width: 480px;
 }
 
-select {
-  padding: 5px;
-  width: 60%;
+.table-container {
+    margin-top: 14px;
+    overflow-x: auto;
 }
 
-button {
-  background-color: #ddd;
-  border: 1px solid #aaa;
-  padding: 6px 12px;
-  cursor: pointer;
+/* Première colonne (nom du poste) mise en valeur */
+.risques-table td[rowspan] {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bleu-marine);
+    background: var(--bleu-pale) !important;
+    vertical-align: top;
+    width: 190px;
 }
 
-button:hover {
-  background-color: #ccc;
-}
-
-.instructions {
-  color: red;
-  font-weight: bold;
-  font-size: 13px;
-  margin-top: 10px;
-}
-
-.num {
-  color: red;
-  font-size: 1.2em;
-  margin-right: 5px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid black;
-  padding: 8px;
-  vertical-align: top;
-  text-align: left;
-}
-
-.signature-zone {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.signature-box {
-  border: 1px solid #888;
-  width: 250px;
-  margin: 10px auto;
-  padding: 20px;
-}
-
-#signature {
-  background-color: #eee;
-  border: 1px solid #aaa;
-  padding: 5px 15px;
+.risques-table input[type="checkbox"] {
+    vertical-align: middle;
 }
 
 @media (max-width: 600px) {
-  select {
-    width: 100%;
-  }
-
-  table {
-    font-size: 0.9em;
-  }
+    .poste-select-row .field {
+        max-width: 100%;
+    }
 }

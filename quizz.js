@@ -219,12 +219,18 @@ function afficherPageFinale() {
 
   // 2. Calcul du score
   const totalPoints = quizzData[0].questions.reduce((a, q) => a + q.points, 0);
-  const pourcentage = Math.round((score / totalPoints) * 100);
+  const pourcentage = Math.min(100, Math.round((score / totalPoints) * 100));
 
   // 3. Affichage final
+  const reussite = pourcentage >= 80;
   quizContainer.innerHTML = `
     <div class="result-container">
-
+      ${reussite ? '<img src="img/laurier.png" class="laurier-img" alt="Bravo">' : ''}
+      <div class="result-name">${username}</div>
+      <h2>${reussite ? 'Parcours sécurité validé !' : 'Parcours à retravailler'}</h2>
+      <div class="score-circle ${reussite ? '' : 'insuffisant'}">${pourcentage}%</div>
+      <p class="result-detail">Score : ${score} / ${totalPoints} points</p>
+      ${reussite ? '' : '<p class="result-detail">Revoyez les consignes avec votre animateur HSE avant de valider l\'engagement.</p>'}
       <button id="quitter">Quitter</button>
     </div>
   `;

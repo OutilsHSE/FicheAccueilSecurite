@@ -4,129 +4,139 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ACCUEIL HSE DES NOUVEAUX ARRIVANTS</title>
+  <title>Accueil HSE — Risques professionnels — CDES</title>
+  <meta name="theme-color" content="#003A6E">
+  <link rel="icon" type="image/png" href="img/CDES_Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="global.css">
   <link rel="stylesheet" href="risk.css">
 </head>
 
 <body>
-  <div class="container">
-    <img class="logo" src="img/CDES_Logo.png" alt="">
-    <h1> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</h1>
-  </div>
-  <div id="page4">
-    <div class="container-risk">
-      <h2>FORMATION ET SENSIBILISATION AUX RISQUES PROFESSIONNELS</h2>
+  <main class="main">
+    <div id="page4">
+      <div class="section container-risk">
+        <h2 class="section-title"><span class="dot"></span>Formation et sensibilisation aux risques professionnels</h2>
 
-      <div id="postes-container">
-        <!-- Premier sélecteur par défaut -->
-        <div class="poste-block">
-          <label><b>Poste de Travail :</b></label>
-          <select class="poste-select">
-            <option value="">-- Sélectionner un poste --</option>
-            <option value="conducteurs_tp">Conducteurs d’engins TP</option>
-            <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
-            <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
-            <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
-            <option value="mecanicien">Mécanicien</option>
-            <option value="soudeur">Soudeur</option>
-            <option value="travaux_forestiers">Travaux forestiers</option>
-            <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
-            <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
-            <option value="intervenant_tereos">Intervenant TEREOS</option>
-          </select>
-          <button id="add-poste">+ Ajouter un poste de travail</button>
+        <div class="alert alert-bleu">
+          <span class="alert-ico">👷</span>
+          <span>
+            <span class="bold">1.</span> Je coche uniquement les risques qui me concernent et dont j'ai lu les documents associés.<br>
+            <span class="bold">2.</span> Je prends connaissance de la fiche de formation qui me concerne.
+          </span>
+        </div>
 
-          <div class="instructions">
-            <p><span class="num">1️⃣</span> Je coche uniquement les risques qui me concernent et dont j’ai lu les
-              documents associés !</p>
-            <p><span class="num">2️⃣</span> Je prends connaissance de la fiche de formation qui me concerne !</p>
+        <div id="postes-container">
+          <!-- Premier sélecteur par défaut -->
+          <div class="poste-block">
+            <div class="poste-select-row">
+              <div class="field">
+                <label>Poste de travail</label>
+                <select class="poste-select">
+                  <option value="">-- Sélectionner un poste --</option>
+                  <option value="conducteurs_tp">Conducteurs d'engins TP</option>
+                  <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
+                  <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
+                  <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
+                  <option value="mecanicien">Mécanicien</option>
+                  <option value="soudeur">Soudeur</option>
+                  <option value="travaux_forestiers">Travaux forestiers</option>
+                  <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
+                  <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
+                  <option value="intervenant_tereos">Intervenant TEREOS</option>
+                </select>
+              </div>
+              <button id="add-poste" class="btn btn-ghost no-print" type="button">＋ Ajouter un poste de travail</button>
+            </div>
+
+            <div class="table-container"></div>
           </div>
-          <div class="table-container"></div>
+        </div>
+        <div id="tables-container"></div>
+      </div>
 
-          <div id="tables-container"></div>
-          <div class="table-retex">
-            <table>
-              <thead>
-                <tr>
-                  <th>Thématique</th>
-                  <th>Enseignement à retenir</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">
-                      Plaie avec un cutter</span><a
-                      href="https://drive.google.com/file/d/1RinR9XTqwOF2RrQHuGz1ycztNpjcQRV5/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>Utiliser un outil adapté et conforme à la tâche à réaliser.<br>
-                    Adopter les bons gestes de sécurité (couper à l’opposé du corps).<br>
-                    Déploiement de trousses de secours dans les cabines des engins.</td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;"> Coupure
-                      doigts
-                    </span><a href="https://drive.google.com/file/d/1Mzmb1Ukm_DR1Aw8LEJ7OrQGTczCgQ7ov/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>Sécuriser le stockage et le conditionnement des charges pour éviter tout déplacement
-                    accidentel.<br>
-                    Prioriser la manutention mécanique plutôt que le port manuel des charges lourdes.
-                    </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Chute à l'eau
-                    </span><a href="https://drive.google.com/file/d/1TLWGV-Hg636PSc5BFF80hLQvW49rUuGJ/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>
-                    Prévoir des moyens de sauvetage et de remontée accessibles en cas de chute à l’eau.<br>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Opération de
-                      déchargement
-                    </span><a href="https://drive.google.com/file/d/1V-G8buGGgEuihCKV0KAzn6Uku1I5zMeU/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>Ne jamais tenter de retenir une charge en mouvement avec les mains.<br>
-                    Guider systématiquement les charges avec des moyens adaptés pour maîtriser le balancement de la charge.<br>
-                    Éviter le travail isolé et maintenir une vigilance constante lors des opérations de levage.</td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;"> Explosion
-                      d'une batterie sur un pousseur
-                    </span><a href="https://drive.google.com/file/d/1RXyAaEekKIjdQEe9Nheuq59JAzjuz__D/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>Respecter les procédures de branchement et de manipulation des batteries.<br>
-                    Travailler dans un environnement sécurisé et adapté avant toute intervention électrique.<br>
-                    Porter systématiquement les EPI adaptés pour limiter les risques de projections et brûlures (visière).</td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Entorse de la
-                      cheville</span><a
-                      href="https://drive.google.com/file/d/1V09HfB-qnClD3Jvipv_2VOnahhDt76Yi/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>Vérifier l’état du sol et emprunter les cheminements sécurisés avant tout déplacement.<br>
-                    Monter et descendre des engins avec des accès propres et sécurisés. Resêcter les 3 points d'appui<br>
-                    Porter des chaussures montantes adaptées pour limiter les risques de chute et d’entorse.</td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Pollution
-                      mineure</span><a
-                      href="https://drive.google.com/file/d/10aPW8v_pvb2__D4rwzgK9PXza56qtoaB/view?usp=sharing"
-                      target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
-                  <td>Anticiper les risques de pollution avant toute opération de maintenance.<br>
-                     Mettre en place des dispositifs de rétention et des moyens anti-pollution adaptés.<br>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div class="section table-retex">
+        <h2 class="section-title rouge"><span class="dot"></span>Retours d'expérience — enseignements des accidents</h2>
+        <div class="tbl-wrapper">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Thématique</th>
+                <th>Enseignement à retenir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">
+                    Plaie avec un cutter</span><a
+                    href="https://drive.google.com/file/d/1RinR9XTqwOF2RrQHuGz1ycztNpjcQRV5/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Utiliser un outil adapté et conforme à la tâche à réaliser.<br>
+                  Adopter les bons gestes de sécurité (couper à l'opposé du corps).<br>
+                  Déploiement de trousses de secours dans les cabines des engins.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Coupure
+                    doigts</span><a href="https://drive.google.com/file/d/1Mzmb1Ukm_DR1Aw8LEJ7OrQGTczCgQ7ov/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Sécuriser le stockage et le conditionnement des charges pour éviter tout déplacement
+                  accidentel.<br>
+                  Prioriser la manutention mécanique plutôt que le port manuel des charges lourdes.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Chute à l'eau</span><a
+                    href="https://drive.google.com/file/d/1TLWGV-Hg636PSc5BFF80hLQvW49rUuGJ/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Prévoir des moyens de sauvetage et de remontée accessibles en cas de chute à l'eau.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Opération de
+                    déchargement</span><a href="https://drive.google.com/file/d/1V-G8buGGgEuihCKV0KAzn6Uku1I5zMeU/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Ne jamais tenter de retenir une charge en mouvement avec les mains.<br>
+                  Guider systématiquement les charges avec des moyens adaptés pour maîtriser le balancement de la charge.<br>
+                  Éviter le travail isolé et maintenir une vigilance constante lors des opérations de levage.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Explosion
+                    d'une batterie sur un pousseur</span><a
+                    href="https://drive.google.com/file/d/1RXyAaEekKIjdQEe9Nheuq59JAzjuz__D/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Respecter les procédures de branchement et de manipulation des batteries.<br>
+                  Travailler dans un environnement sécurisé et adapté avant toute intervention électrique.<br>
+                  Porter systématiquement les EPI adaptés pour limiter les risques de projections et brûlures (visière).</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Entorse de la
+                    cheville</span><a href="https://drive.google.com/file/d/1V09HfB-qnClD3Jvipv_2VOnahhDt76Yi/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Vérifier l'état du sol et emprunter les cheminements sécurisés avant tout déplacement.<br>
+                  Monter et descendre des engins avec des accès propres et sécurisés. Respecter les 3 points d'appui.<br>
+                  Porter des chaussures montantes adaptées pour limiter les risques de chute et d'entorse.</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="margin-right: 8px;"><span style="margin-right: 10px;">Pollution
+                    mineure</span><a href="https://drive.google.com/file/d/10aPW8v_pvb2__D4rwzgK9PXza56qtoaB/view?usp=sharing"
+                    target="_blank"><img src="img/doc.png" class="doc-icon no-print"></a></td>
+                <td>Anticiper les risques de pollution avant toute opération de maintenance.<br>
+                  Mettre en place des dispositifs de rétention et des moyens anti-pollution adaptés.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-  </div>
-  <button class="next-button" onclick="redirectToInstructionPage()">Suivant</button>
-  <script src="risk.js"></script>
+  </main>
 
+  <div class="nav-bar no-print">
+    <button class="btn btn-ghost" onclick="navTo('security.html')">⬅ Précédent</button>
+    <div class="nav-right">
+      <button class="btn btn-primary" onclick="redirectToInstructionPage()">Suivant ➜</button>
+    </div>
+  </div>
+
+  <script src="ui.js"></script>
+  <script src="risk.js"></script>
 </body>
 
 </html>

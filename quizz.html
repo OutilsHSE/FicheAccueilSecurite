@@ -2,18 +2,30 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Quiz Sécurité</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quizz sécurité — CDES</title>
+  <meta name="theme-color" content="#003A6E">
+  <link rel="icon" type="image/png" href="img/CDES_Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="quizz.css" />
 </head>
 <body>
 
+<header class="quizz-header">
+  <img src="img/CDES_Logo_blanc.png" alt="CDES">
+  <div>
+    <h1>Parcours sécurité numérique</h1>
+    <p>CDES — Quizz de validation de l'accueil HSE</p>
+  </div>
+</header>
+
 <div id="quiz-container">
-    <div id="progress-wrapper">
+  <div id="progress-wrapper">
     <div id="progress-text">Question 1</div>
     <div id="progress-container">
-    <div id="progress-bar"></div>
+      <div id="progress-bar"></div>
+    </div>
   </div>
-</div>
 
   <h1 id="theme"></h1>
 
@@ -31,12 +43,10 @@
   <div id="image-click-container">
     <img id="image-question-grande" alt="Image cliquable" />
   </div>
-  
+
   <div class="buttons">
     <button id="valider">Valider</button>
-    <button id="suivant" style="display:none;">Suivant</button>
-  
-
+    <button id="suivant" style="display:none;">Suivant ➜</button>
   </div>
 
   <!-- bloc explication -->
@@ -46,7 +56,7 @@
   </div>
 </div>
 
-  <script src="dataquizz.js"></script> 
+  <script src="dataquizz.js"></script>
   <script src="quizz.js"></script>
 </body>
 </html>

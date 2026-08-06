@@ -4,175 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</title>
+    <title>Accueil HSE des nouveaux arrivants — CDES</title>
+    <meta name="theme-color" content="#003A6E">
+  <link rel="icon" type="image/png" href="img/CDES_Logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="global.css">
 </head>
 
 <body>
-    <div id="page1">
+    <main class="main">
+        <div id="page1">
 
-        <div class="container">
-            <img class="logo" src="img/CDES_Logo.png" alt="">
-            <h1> ACCUEIL HSE DES NOUVEAUX ARRIVANTS</h1>
+            <div class="section">
+                <h2 class="section-title"><span class="dot"></span>Informations générales</h2>
+                <div class="grid-3">
+                    <div class="field">
+                        <label for="visite-date">Date de l'accueil sécurité</label>
+                        <input id="visite-date" class="input-bilan" type="date">
+                    </div>
+                    <div class="field">
+                        <label for="lieu">Lieu de l'accueil sécurité</label>
+                        <input id="lieu" class="input-bilan" type="text" placeholder="Chantier, atelier, siège…">
+                    </div>
+                    <div class="field">
+                        <label for="responsable">Animateur de l'accueil HSE</label>
+                        <input id="responsable" class="input-bilan" type="text" placeholder="Nom de l'animateur">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span class="dot"></span>Nouveau collaborateur accueilli</h2>
+                <div class="grid-2">
+                    <div class="field">
+                        <label for="nom">Nom</label>
+                        <input id="nom" class="input-bilan" type="text" placeholder="Nom du collaborateur">
+                    </div>
+                    <div class="field">
+                        <label for="prenom">Prénom</label>
+                        <input id="prenom" class="input-bilan" type="text" placeholder="Prénom du collaborateur">
+                    </div>
+                </div>
+                <div class="field" style="margin-top: 14px;">
+                    <label>Statut</label>
+                    <div class="pill-group">
+                        <label class="pill"><input type="checkbox" id="cdi" name="contract_type" value="CDI" data-exclusive="statut"> CDI</label>
+                        <label class="pill"><input type="checkbox" id="cdd" name="contract_type" value="CDD" data-exclusive="statut"> CDD</label>
+                        <label class="pill"><input type="checkbox" id="apprenti" name="contract_type" value="Apprenti" data-exclusive="statut"> Apprenti</label>
+                        <label class="pill"><input type="checkbox" id="interimaire" name="contract_type" value="Interimaire" data-exclusive="statut"> Intérimaire</label>
+                        <label class="pill"><input type="checkbox" id="collaborateur_ext" name="contract_type" value="Collaborateur externe" data-exclusive="statut"> Collaborateur externe</label>
+                    </div>
+                </div>
+                <div class="field" style="margin-top: 14px;">
+                    <label for="activites">Activités réalisées par le collaborateur</label>
+                    <input id="activites" class="input-bilan" type="text" placeholder="Ex : conduite d'engins, faucardage, mécanique…">
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title vert"><span class="dot"></span>Aptitude médicale du collaborateur</h2>
+                <div class="grid-2">
+                    <div class="field">
+                        <label for="date-medicale">Dernière visite médicale</label>
+                        <div class="pill-group" style="margin-bottom: 8px;">
+                            <label class="pill"><input type="checkbox" id="visite-planifiee" name="date_planif" value="Planifiée le" data-exclusive="visite-med"> Planifiée le</label>
+                            <label class="pill pill-vert"><input type="checkbox" id="visite-realisee" name="date_real" value="Réalisée et valide jusqu'au" data-exclusive="visite-med"> Réalisée et valide jusqu'au</label>
+                        </div>
+                        <input id="date-medicale" class="input-bilan" type="date">
+                    </div>
+                    <div class="field">
+                        <label>Activité nécessitant une visite médicale renforcée (conduite d'engins…)</label>
+                        <div class="pill-group">
+                            <label class="pill"><input type="checkbox" id="renforce-oui" name="visite_renforcee" value="yes" data-exclusive="renforce"> Oui</label>
+                            <label class="pill"><input type="checkbox" id="renforce-non" name="visite_renforcee" value="no" data-exclusive="renforce"> Non</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-rouge" style="margin-top: 16px;">
+                    <span class="alert-ico">⚠️</span>
+                    <span>Fournir au Responsable HSE l'attestation médicale à jour (obligatoire pour la réalisation de l'autorisation de conduite).</span>
+                </div>
+                <label class="photo-zone no-print" for="photo-input">
+                    <span class="ico">📎</span> Joindre l'attestation médicale (photo ou capture)
+                </label>
+                <input type="file" id="photo-input" class="hidden-file" accept="image/*" multiple>
+                <div id="photo-container"></div>
+            </div>
         </div>
-        <table id="obs-table">
-            <thead>
-                <tr>
-                    <th colspan="3">INFORMATIONS GENERALES</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 20px;"> Date de l'accueil sécurité : </span>
-                            <input id="visite-date" class="input-bilan" type="date">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Lieu de l’accueil sécurité : </span> 
-                            <input id="lieu" class="input-bilan" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Animateur de l’accueil HSE : </span>
-                            <input id="responsable" class="input-bilan" type="text">
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table id="obs-table">
-            <thead>
-                <tr>
-                    <th colspan="4">NOUVEAU COLLABORATEUR ACCUEILLI</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Nom : </span>
-                            <input id="prenom" class="input-bilan" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Prénom : </span>
-                            <input id="nom" class="input-bilan" type="text">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Statut : </span>
-                            <label>
-                                <input type="checkbox" id="cdd" name="contract_type" value="CDD"> CDD
-                            </label>
-                            <label>
-                                <input type="checkbox" id="cdi" name="contract_type" value="CDI"> CDI
-                            </label>
-                            <label>
-                                <input type="checkbox" id="apprenti" name="contract_type" value="Apprenti"> Apprenti
-                            </label>
-                            <label>
-                                <input type="checkbox" id="interimaire" name="contract_type" value="Interimaire">
-                                Intérimaire
-                            </label>
-                            <label>
-                                <input type="checkbox" id="collaborateur_ext" name="contract_type"
-                                    value="Collaborateur externe">
-                                Collaborateur externe
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <div class="large-row">
-                            Activités réalisées le collaborateur :
-                            <input id="activites" class="input-bilan" type="text">
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table id="obs-table">
-            <thead>
-                <tr>
-                    <th colspan="3" class="green-background">APTITUDE MEDICALE DU COLLABORATEUR</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Date de la dernière visite médicale : </span>
-                            <div class="checkbox-date">
-                             <label>  
-                            <input type="checkbox" id="cdd" name="date_planif" value="Planifié le"> Planifiée le :
-                            </label>
-                            <label>
-                                <input type="checkbox" id="cdi" name="date_real" value="Réalisée et valide jusqu'au"> Réalisée et valide jusqu'au :
-                            </label>
-                            </div>
-                            <input id="date-medicale" class="input-bilan" type="date">
-                        </div>
-                    </td>
-                    <td>
-                        <div class="large-row">
-                            <span style="padding-top: 15px;"> Activité nécessitant une visite médicale renforcée (conduite d’engins…) : </span>
-                            <label>
-                                <input type="checkbox" id="renforce-oui" name="contract_type" value="yes"> Oui
-                            </label>
-                            <label>
-                                <input type="checkbox" id="renforce-non" name="contract_type" value="no"> Non
-                            </label><br>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <div class="large-row red-text">
-                            Fournir au Responsable HSE, l’attestation médicale à jour (obligatoire pour la réalisation
-                            de l’autorisation de conduite)
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <input type="file" id="photo-input" accept="image/* .png" multiple>
-                        <div id="photo-container"></div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <button class="show-consignes open-button" id="openModalBtn">?</button>
-    <button class="next-button" onclick="redirectToAutorisationPage()">Suivant</button>
+    </main>
 
-    <!-- Structure de la modale -->
+    <div class="nav-bar no-print">
+        <button class="btn-aide" id="openModalBtn" title="Dispositif tutorat &amp; formation au poste">?</button>
+        <div class="nav-right">
+            <button class="btn btn-ghost" onclick="nouvelleFiche()">🗑 Nouvelle fiche</button>
+            <button class="btn btn-primary" onclick="redirectToAutorisationPage()">Suivant ➜</button>
+        </div>
+    </div>
+
+    <!-- Modale d'information -->
     <div id="imageModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h3>Dispositif tutorat & formation au poste</h1>
-                <ul>
-                    <li>Fiches remises aux nouveaux sur postes à risque : faucardage, bathy, grue, pousseur, élagage,
-                        soudure, Tereos, travaux forestiers.</li>
-                    <li>Présentation des tâches, des risques, des EPI obligatoires et des bons gestes.</li>
-                    <li>Formation pratique encadrée par un tuteur expérimenté (≥ 3 ans sur l’activité).</li>
-                    <li>Suivi des acquis via une fiche tutorat : traçabilité, points de vigilance, validation avant
-                        autonomie.</li>
-                    <li>Objectif : garantir une prise de poste sécurisée, maîtriser les risques et transmettre les
-                        bonnes
-                        pratiques.</li>
-                </ul>
-                <span class="close" style="cursor: pointer;">&times;</span>
+            <span class="close" style="cursor: pointer;">&times;</span>
+            <h3>Dispositif tutorat &amp; formation au poste</h3>
+            <ul>
+                <li>Fiches remises aux nouveaux sur postes à risque : faucardage, bathy, grue, pousseur, élagage,
+                    soudure, Tereos, travaux forestiers.</li>
+                <li>Présentation des tâches, des risques, des EPI obligatoires et des bons gestes.</li>
+                <li>Formation pratique encadrée par un tuteur expérimenté (≥ 3 ans sur l'activité).</li>
+                <li>Suivi des acquis via une fiche tutorat : traçabilité, points de vigilance, validation avant
+                    autonomie.</li>
+                <li>Objectif : garantir une prise de poste sécurisée, maîtriser les risques et transmettre les
+                    bonnes pratiques.</li>
+            </ul>
         </div>
     </div>
 
+    <script src="ui.js"></script>
     <script src="index.js"></script>
-
 </body>
 
 </html>
