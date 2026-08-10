@@ -368,3 +368,54 @@ button:disabled { opacity: 0.5; filter: none; transform: none; cursor: default; 
     margin: 10px 0 0;
   }
 }
+
+/* ===== Diplôme imprimable depuis le quizz ===== */
+.diplome {
+  display: none;
+  border: 6px double var(--bleu-marine);
+  border-radius: 6px;
+  padding: 34px 40px;
+  text-align: center;
+  background: white;
+}
+
+.diplome .dp-logo { height: 60px; margin: 0 auto 8px; display: block; }
+.diplome .dp-titre {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26pt;
+  font-weight: 700;
+  color: var(--bleu-marine);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 6px 0;
+}
+.diplome .dp-sous { font-size: 12pt; color: var(--texte-doux); margin-bottom: 16px; }
+.diplome .dp-nom {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22pt;
+  font-weight: 700;
+  color: var(--bleu-clair);
+  margin: 12px 0 4px;
+}
+.diplome .dp-texte { font-size: 11.5pt; line-height: 1.6; max-width: 560px; margin: 0 auto; }
+.diplome .dp-score {
+  display: inline-block;
+  margin: 14px auto;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16pt;
+  font-weight: 700;
+  color: var(--vert-fonce);
+  border: 3px solid var(--vert);
+  border-radius: 50px;
+  padding: 8px 26px;
+}
+.diplome .dp-laurier { height: 74px; margin: 4px auto; display: block; }
+.diplome .dp-date { font-size: 10.5pt; color: var(--texte-doux); margin-top: 10px; }
+
+@media print {
+  @page { size: A4 portrait; margin: 12mm; }
+
+  body.print-diplome .quizz-header,
+  body.print-diplome #quiz-container { display: none !important; }
+  body.print-diplome .diplome { display: block !important; }
+}

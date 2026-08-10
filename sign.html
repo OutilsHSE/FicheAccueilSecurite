@@ -54,9 +54,19 @@
               avoir été sensibilisé à leur utilisation et aux consignes de sécurité associées,
               et m'engage à les porter et à appliquer ces consignes dans le cadre de mes activités.</span></label>
           <label class="engagement"><input type="checkbox">
-            <span>J'atteste avoir réalisé et validé le parcours sécurité numérique.</span>
-            <button class="btn btn-vert quizz-button no-print" type="button" onclick="redirectToQuizz()">🎓 Quizz</button></label>
+            <span>J'atteste avoir réalisé et validé le parcours sécurité numérique.</span></label>
         </div>
+
+        <div class="field" style="margin-top: 14px;">
+          <label>Parcours sécurité réalisé via</label>
+          <div class="pill-group" style="align-items: center;">
+            <label class="pill"><input type="checkbox" id="quizz-kromi" data-exclusive="type-quizz"> Quizz Kromi</label>
+            <label class="pill"><input type="checkbox" id="quizz-demat" data-exclusive="type-quizz"> Quizz de la fiche dématérialisée</label>
+            <button class="btn btn-vert quizz-button no-print" type="button" onclick="redirectToQuizz()" style="padding: 8px 16px;">🎓 Lancer le quizz</button>
+          </div>
+        </div>
+
+        <div id="quizz-resultat" class="quizz-resultat" style="display:none;"></div>
       </div>
 
       <div class="section">

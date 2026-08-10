@@ -221,19 +221,59 @@ function afficherPageFinale() {
   const totalPoints = quizzData[0].questions.reduce((a, q) => a + q.points, 0);
   const pourcentage = Math.min(100, Math.round((score / totalPoints) * 100));
 
-  // 3. Affichage final
+  // 3. Enregistrement du résultat (repris sur la page Signatures + diplôme)
   const reussite = pourcentage >= 80;
+  const dateResultat = new Date().toLocaleDateString('fr-FR');
+  try {
+    localStorage.setItem('quizzResultat', JSON.stringify({
+      score: score,
+      total: totalPoints,
+      pourcentage: pourcentage,
+      date: dateResultat,
+      reussite: reussite
+    }));
+  } catch (e) { console.warn(e); }
+
+  // 4. Affichage final
   quizContainer.innerHTML = `
     <div class="result-container">
       ${reussite ? '<img src="img/laurier.png" class="laurier-img" alt="Bravo">' : ''}
       <div class="result-name">${username}</div>
       <h2>${reussite ? 'Parcours sécurité validé !' : 'Parcours à retravailler'}</h2>
       <div class="score-circle ${reussite ? '' : 'insuffisant'}">${pourcentage}%</div>
-      <p class="result-detail">Score : ${score} / ${totalPoints} points</p>
-      ${reussite ? '' : '<p class="result-detail">Revoyez les consignes avec votre animateur HSE avant de valider l\'engagement.</p>'}
+      <p class="result-detail">Score : ${score} / ${totalPoints} points — le résultat est reporté sur la page Signatures de la fiche d'accueil.</p>
+      ${reussite ? '<button id="imprimer-diplome">🎓 Imprimer mon diplôme</button>' : '<p class="result-detail">Revoyez les consignes avec votre animateur HSE avant de relancer le quizz.</p>'}
       <button id="quitter">Quitter</button>
     </div>
   `;
+
+  // Diplôme imprimable depuis le quizz
+  const btnDiplome = document.getElementById('imprimer-diplome');
+  if (btnDiplome) {
+    btnDiplome.addEventListener('click', () => {
+      let dip = document.getElementById('diplome-quizz');
+      if (!dip) {
+        dip = document.createElement('div');
+        dip.id = 'diplome-quizz';
+        dip.className = 'diplome';
+        dip.innerHTML = `
+          <img class="dp-logo" src="img/CDES_Logo.png" alt="CDES">
+          <div class="dp-titre">Diplôme du parcours sécurité</div>
+          <div class="dp-sous">Accueil HSE des nouveaux arrivants — CDES</div>
+          <img class="dp-laurier" src="img/laurier.png" alt="">
+          <div class="dp-nom">${username}</div>
+          <div class="dp-texte">a suivi l'accueil sécurité des nouveaux arrivants et validé avec succès
+            le parcours sécurité numérique CDES : règles qui sauvent, équipements de protection individuelle,
+            risques professionnels et consignes de sécurité sur les chantiers.</div>
+          <div class="dp-score">Score obtenu : ${pourcentage} % (${score} / ${totalPoints} points)</div>
+          <div class="dp-date">Fait le ${dateResultat} — Curages Dragages et Systèmes</div>`;
+        document.body.appendChild(dip);
+      }
+      document.body.classList.add('print-diplome');
+      window.print();
+      setTimeout(() => document.body.classList.remove('print-diplome'), 500);
+    });
+  }
 
   // 4. Bouton quitter
   document.getElementById("quitter").addEventListener("click", () => {

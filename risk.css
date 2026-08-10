@@ -24,25 +24,35 @@
 }
 
 .table-container {
-    margin-top: 14px;
-    overflow-x: auto;
+    margin-top: 8px;
 }
 
-/* Première colonne (nom du poste) mise en valeur */
-.risques-table td[rowspan] {
+.poste-titre {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--bleu-marine);
-    background: var(--bleu-pale) !important;
-    vertical-align: top;
-    width: 190px;
 }
 
-.risques-table input[type="checkbox"] {
-    vertical-align: middle;
+.poste-titre-ico { font-size: 1.2rem; }
+
+.poste-titre-nb {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--texte-doux);
+    background: var(--gris-clair);
+    border: 1px solid var(--gris-bord);
+    border-radius: 20px;
+    padding: 3px 11px;
 }
 
 @media (max-width: 600px) {

@@ -30,8 +30,10 @@ function redirectToAutorisationPage() {
 function nouvelleFiche() {
     if (!confirm("Commencer une nouvelle fiche d'accueil ? Les données saisies seront effacées.")) return;
     window.onbeforeunload = null;
+    const version = localStorage.getItem('ficheAccueilVersion');
     localStorage.clear();
     sessionStorage.clear();
+    if (version) localStorage.setItem('ficheAccueilVersion', version);
     window.location.reload();
 }
 
@@ -45,7 +47,6 @@ window.onload = function () {
         if (newPage) document.querySelector('#page1').innerHTML = newPage.innerHTML;
     } else {
         document.getElementById('visite-date').valueAsDate = new Date();
-        document.getElementById('date-medicale').valueAsDate = new Date();
     }
 }
 
@@ -71,50 +72,3 @@ window.onclick = function (event) {
         closeModal();
     }
 };
-
-/* ===== Pièces jointes (attestation médicale) ===== */
-const photoInput = document.getElementById('photo-input');
-
-photoInput.addEventListener('change', function () {
-    const photoContainer = document.getElementById('photo-container');
-    Array.from(this.files).forEach((file) => {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            const imageWrapper = document.createElement('div');
-            imageWrapper.className = 'photo-thumb';
-
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = 'Pièce jointe';
-
-            const btn = document.createElement('button');
-            btn.textContent = '✕';
-            btn.className = 'del-photo no-print';
-            btn.type = 'button';
-
-            const textarea = document.createElement('textarea');
-            textarea.placeholder = 'Ajouter un commentaire…';
-            textarea.rows = 2;
-
-            imageWrapper.appendChild(img);
-            imageWrapper.appendChild(btn);
-            imageWrapper.appendChild(textarea);
-            photoContainer.appendChild(imageWrapper);
-        };
-
-        reader.readAsDataURL(file);
-    });
-    this.value = "";
-});
-
-/* Délégation : suppression et zoom des pièces jointes
-   (fonctionne aussi après restauration du brouillon) */
-document.addEventListener('click', (e) => {
-    if (e.target.classList && e.target.classList.contains('del-photo')) {
-        e.target.closest('.photo-thumb').remove();
-    } else if (e.target.tagName === 'IMG' && e.target.closest('.photo-thumb')) {
-        const w = window.open('', '_blank');
-        if (w) w.document.write('<img src="' + e.target.src + '" style="max-width:100%">');
-    }
-});

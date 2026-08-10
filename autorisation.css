@@ -1,81 +1,10 @@
-/* ===== Page Autorisations & habilitations — spécifique ===== */
+/* ===== Page Aptitude médicale & autorisations — spécifique ===== */
 
-.tables-wrapper {
+.pj-liste {
     display: flex;
-    gap: 24px;
-    align-items: flex-start;
-}
-
-.tables-wrapper .tbl-wrapper {
-    flex: 1;
-    min-width: 0;
-}
-
-/* Deux blocs côte à côte : texte libre + cadre "Dans tous les cas" */
-.form-et-cadre {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-}
-
-.form-et-cadre .bloc-textarea {
-    flex: 1;
-}
-
-.form-et-cadre .bloc-textarea textarea {
-    min-height: 180px;
-}
-
-/* Cadre rouge "Dans tous les cas…" */
-.cas {
-    flex: 1.2;
-    border: 2px solid var(--rouge);
-    border-radius: 10px;
-    padding: 16px 18px;
-    background: var(--rouge-pale);
-}
-
-.cas h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--rouge);
-    margin: 0 0 10px;
-    font-size: 1.1rem;
-}
-
-.cas .icons {
-    display: flex;
+    flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 12px;
-}
-
-.cas .icons img {
-    width: 44px;
-    height: 44px;
-}
-
-.cas .tbl th { background: var(--rouge); }
-.cas .tbl td { background: white; font-size: 0.85rem; }
-.cas .tbl tbody tr:nth-child(even) td { background: white; }
-.cas .tbl tbody tr:hover td { background: var(--rouge-pale); }
-
-.formations-prevoir textarea {
-    min-height: 120px;
-}
-
-@media (max-width: 1000px) {
-    .tables-wrapper {
-        flex-direction: column;
-    }
-
-    .form-et-cadre {
-        flex-direction: column;
-    }
-
-    .form-et-cadre .cas {
-        width: 100%;
-    }
+    margin-top: 12px;
 }
 
 @media print {
@@ -84,13 +13,8 @@
         page-break-inside: avoid !important;
     }
 
-    .tables-wrapper {
-        flex-direction: column !important;
-        gap: 10px !important;
-    }
-
-    .cas {
-        border: 2px solid #c00 !important;
-        background: white !important;
+    .cat-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 }

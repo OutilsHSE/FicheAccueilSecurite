@@ -1,7 +1,7 @@
 /* ===== Page Équipements de travail — spécifique ===== */
 
 .other-equipments-textarea {
-    min-height: 140px;
+    min-height: 128px;
 }
 
 @media print {
@@ -10,12 +10,6 @@
         page-break-inside: avoid !important;
     }
 
-    table {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-
-    /* Autoriser la coupure uniquement ici */
     .other-equipments {
         page-break-inside: auto !important;
         break-inside: auto !important;
@@ -23,7 +17,7 @@
 
     .other-equipments-textarea {
         height: auto !important;
-        min-height: 120px !important;
+        min-height: 100px !important;
         max-height: none !important;
     }
 }

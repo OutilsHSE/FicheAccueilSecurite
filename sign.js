@@ -1,5 +1,69 @@
 renderChrome(6);
 
+/* =========================================================
+   RÉSULTAT DU QUIZZ (rempli automatiquement après le quizz
+   de la fiche dématérialisée)
+   ========================================================= */
+function lireQuizzResultat() {
+  try { return JSON.parse(localStorage.getItem('quizzResultat')); } catch (e) { return null; }
+}
+
+function majQuizzResultat() {
+  const zone = document.getElementById('quizz-resultat');
+  if (!zone) return;
+  const r = lireQuizzResultat();
+  if (!r) { zone.style.display = 'none'; return; }
+
+  zone.style.display = 'flex';
+  zone.classList.toggle('reussi', r.reussite);
+  zone.classList.toggle('echec', !r.reussite);
+  zone.innerHTML = `
+    <span style="font-size:1.3rem;">${r.reussite ? '🏆' : '❌'}</span>
+    <span class="qr-score" style="color:${r.reussite ? 'var(--vert-fonce)' : 'var(--rouge)'};">${r.pourcentage}%</span>
+    <span>${r.reussite
+      ? `<span class="bold">Parcours sécurité validé</span> le ${r.date} — score ${r.score} / ${r.total} points. Le diplôme sera annexé à l'export PDF.`
+      : `Parcours <span class="bold">non validé</span> le ${r.date} (score ${r.score} / ${r.total}). Revoir les consignes puis relancer le quizz.`}</span>`;
+
+  // Coche automatiquement « quizz de la fiche dématérialisée »
+  if (r.reussite) {
+    const demat = document.getElementById('quizz-demat');
+    if (demat && !demat.checked) {
+      demat.checked = true;
+      const kromi = document.getElementById('quizz-kromi');
+      if (kromi) kromi.checked = false;
+    }
+  }
+}
+
+/* Le quizz s'ouvre dans un autre onglet : on rafraîchit au retour */
+window.addEventListener('focus', majQuizzResultat);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) majQuizzResultat(); });
+
+/* =========================================================
+   DIPLÔME (annexé à l'export PDF)
+   ========================================================= */
+function construireDiplome() {
+  const r = lireQuizzResultat();
+  if (!r || !r.reussite) return null;
+
+  const nom = (localStorage.getItem('Nom') || 'Le collaborateur').trim();
+  const d = document.createElement('div');
+  d.className = 'diplome';
+  d.id = 'diplome-print';
+  d.innerHTML = `
+    <img class="dp-logo" src="img/CDES_Logo.png" alt="CDES">
+    <div class="dp-titre">Diplôme du parcours sécurité</div>
+    <div class="dp-sous">Accueil HSE des nouveaux arrivants — CDES</div>
+    <img class="dp-laurier" src="img/laurier.png" alt="">
+    <div class="dp-nom">${nom}</div>
+    <div class="dp-texte">a suivi l'accueil sécurité des nouveaux arrivants et validé avec succès
+      le parcours sécurité numérique CDES : règles qui sauvent, équipements de protection individuelle,
+      risques professionnels et consignes de sécurité sur les chantiers.</div>
+    <div class="dp-score">Score obtenu : ${r.pourcentage} % (${r.score} / ${r.total} points)</div>
+    <div class="dp-date">Fait le ${r.date} — Curages Dragages et Systèmes</div>`;
+  return d;
+}
+
 /* ===== Canvas de signature ===== */
 function setupCanvas(canvasId) {
   const canvas = document.getElementById(canvasId);
@@ -179,6 +243,10 @@ function printAllPages() {
 
   document.body.insertBefore(finalContainer, document.body.firstChild);
 
+  // Diplôme annexé en fin de document (si quizz validé)
+  const diplome = construireDiplome();
+  if (diplome) document.body.appendChild(diplome);
+
   // Nom de fichier explicite : AAAA-MM-JJ-Accueil HSE-Nom Prénom
   const nom = (localStorage.getItem('Nom') || '').trim();
   const date = document.getElementById('visite-date-reponsable')?.value
@@ -194,6 +262,8 @@ function printAllPages() {
     setTimeout(() => {
       const assembly = document.getElementById('print-assembly');
       if (assembly) assembly.remove();
+      const dip = document.getElementById('diplome-print');
+      if (dip) dip.remove();
       document.title = ancienTitre;
     }, 500);
   }, 500);
@@ -209,6 +279,8 @@ window.onload = function () {
     document.getElementById('visite-date-reponsable').valueAsDate = new Date();
     document.getElementById('visite-date-collaborateur').valueAsDate = new Date();
   }
+
+  majQuizzResultat();
 }
 
 window.onbeforeunload = function () {

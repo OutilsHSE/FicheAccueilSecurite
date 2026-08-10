@@ -333,63 +333,72 @@ function getPosteName(key) {
   return map[key] || key;
 }
 
-// 🔹 Crée la table dynamique des risques
+// 🔹 Crée la grille de cartes des risques du poste
 function createTable(posteKey, container) {
   const posteNom = getPosteName(posteKey);
   const poste = postesData[posteKey];
   if (!poste) return;
 
-  const table = document.createElement("table");
-  table.classList.add("risques-table", "tbl");
+  const titre = document.createElement("div");
+  titre.className = "poste-titre";
+  titre.innerHTML = `<span class="poste-titre-ico">👷</span> ${posteNom} <span class="poste-titre-nb">${poste.risques.length} fiches de risque</span>`;
+  container.appendChild(titre);
 
-  // En-têtes
-  const header = table.createTHead();
-  const headerRow = header.insertRow();
-  ["Poste de travail", "Fiche de risque"].forEach((text) => {
-    const th = document.createElement("th");
-    th.textContent = text;
-    headerRow.appendChild(th);
+  const grille = document.createElement("div");
+  grille.className = "risk-grid";
+
+  poste.risques.forEach((risque, i) => {
+    const lien = poste.liens_risques[i];
+    const carte = document.createElement("label");
+    carte.className = "risk-card";
+    carte.innerHTML = `<input type="checkbox"><span class="risk-lbl">${risque}</span>`;
+    carte.appendChild(vignetteDoc(lien));
+    grille.appendChild(carte);
   });
 
-  // Corps
-  const tbody = table.createTBody();
+  container.appendChild(grille);
+}
 
-  for (let i = 0; i < poste.risques.length; i++) {
-    const row = tbody.insertRow();
+/* =========================================================
+   RETEX — retours d'expérience (cartes visuelles)
+   ========================================================= */
+const RETEX = [
+  { titre: "Plaie avec un cutter", lien: "https://drive.google.com/file/d/1RinR9XTqwOF2RrQHuGz1ycztNpjcQRV5/view?usp=sharing",
+    lecons: ["Utiliser un outil adapté et conforme à la tâche à réaliser.", "Adopter les bons gestes de sécurité (couper à l'opposé du corps).", "Déploiement de trousses de secours dans les cabines des engins."] },
+  { titre: "Coupure aux doigts", lien: "https://drive.google.com/file/d/1Mzmb1Ukm_DR1Aw8LEJ7OrQGTczCgQ7ov/view?usp=sharing",
+    lecons: ["Sécuriser le stockage et le conditionnement des charges pour éviter tout déplacement accidentel.", "Prioriser la manutention mécanique plutôt que le port manuel des charges lourdes."] },
+  { titre: "Chute à l'eau", lien: "https://drive.google.com/file/d/1TLWGV-Hg636PSc5BFF80hLQvW49rUuGJ/view?usp=sharing",
+    lecons: ["Prévoir des moyens de sauvetage et de remontée accessibles en cas de chute à l'eau."] },
+  { titre: "Opération de déchargement", lien: "https://drive.google.com/file/d/1V-G8buGGgEuihCKV0KAzn6Uku1I5zMeU/view?usp=sharing",
+    lecons: ["Ne jamais tenter de retenir une charge en mouvement avec les mains.", "Guider systématiquement les charges avec des moyens adaptés pour maîtriser le balancement.", "Éviter le travail isolé et maintenir une vigilance constante lors des opérations de levage."] },
+  { titre: "Explosion d'une batterie sur un pousseur", lien: "https://drive.google.com/file/d/1RXyAaEekKIjdQEe9Nheuq59JAzjuz__D/view?usp=sharing",
+    lecons: ["Respecter les procédures de branchement et de manipulation des batteries.", "Travailler dans un environnement sécurisé et adapté avant toute intervention électrique.", "Porter systématiquement les EPI adaptés (visière) contre projections et brûlures."] },
+  { titre: "Entorse de la cheville", lien: "https://drive.google.com/file/d/1V09HfB-qnClD3Jvipv_2VOnahhDt76Yi/view?usp=sharing",
+    lecons: ["Vérifier l'état du sol et emprunter les cheminements sécurisés avant tout déplacement.", "Monter et descendre des engins avec des accès propres et sécurisés. Respecter les 3 points d'appui.", "Porter des chaussures montantes adaptées pour limiter les risques de chute et d'entorse."] },
+  { titre: "Pollution mineure", lien: "https://drive.google.com/file/d/10aPW8v_pvb2__D4rwzgK9PXza56qtoaB/view?usp=sharing",
+    lecons: ["Anticiper les risques de pollution avant toute opération de maintenance.", "Mettre en place des dispositifs de rétention et des moyens anti-pollution adaptés."] }
+];
 
-    // Première cellule fusionnée sur toutes les lignes
-    if (i === 0) {
-      const cellPoste = row.insertCell(0);
-      cellPoste.textContent = posteNom;
-      cellPoste.rowSpan = poste.risques.length;
-    }
+function construireRetex() {
+  const conteneur = document.getElementById("retex-container");
+  if (!conteneur || conteneur.children.length > 0) return;
 
-    const cellFiche = row.insertCell(-1);
+  RETEX.forEach((r, i) => {
+    const carte = document.createElement("div");
+    carte.className = "retex-card";
+    const tete = document.createElement("div");
+    tete.className = "retex-head";
+    tete.innerHTML = `<input type="checkbox" id="retex${i}"><label class="retex-title" for="retex${i}">⚠️ ${r.titre}</label>`;
+    tete.appendChild(vignetteDoc(r.lien));
+    carte.appendChild(tete);
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.style.marginRight = "8px";
+    const corps = document.createElement("div");
+    corps.className = "retex-body";
+    corps.innerHTML = "<ul class='no-bullet'>" + r.lecons.map(l => "<li>• " + l + "</li>").join("") + "</ul>";
+    carte.appendChild(corps);
 
-    const texte = document.createElement("span");
-    texte.textContent = poste.risques[i];
-    texte.style.marginRight = "10px";
-
-    // 🔹 L’icône reste un lien cliquable
-    const iconLink = document.createElement("a");
-    iconLink.href = poste.liens_risques[i];
-    iconLink.target = "_blank";
-
-    const icon = document.createElement("img");
-    icon.src = "img/doc.png";
-    icon.classList.add("doc-icon");
-    icon.classList.add("no-print");
-    iconLink.appendChild(icon);
-    cellFiche.appendChild(checkbox);
-    cellFiche.appendChild(texte);
-    cellFiche.appendChild(iconLink); // icône ici
-  }
-
-  container.appendChild(table);
+    conteneur.appendChild(carte);
+  });
 }
 
 // 🔹 Canvas signature
@@ -520,6 +529,9 @@ function redirectToInstructionPage() {
 document.addEventListener("DOMContentLoaded", () => {
   // Chargement localStorage
   loadPageContent();
+
+  // RETEX (uniquement si non restaurés)
+  construireRetex();
 
   // Sélecteurs de poste : délégation d'événement
   // (fonctionne aussi après restauration du brouillon et pour les postes ajoutés)
