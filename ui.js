@@ -8,12 +8,12 @@
    enregistré avec une ANCIENNE version des pages, on le purge pour
    éviter de restaurer l'ancienne mise en page. À incrémenter à chaque
    évolution de la structure des pages. */
-const FICHE_VERSION = "v3-2026-08";
+const FICHE_VERSION = "v4-2026-08";
 (function () {
   try {
     if (localStorage.getItem("ficheAccueilVersion") !== FICHE_VERSION) {
       ["page1Content", "page2Content", "page3Content", "page4Content",
-       "page5Content", "page6Content", "Nom", "quizzResultat"].forEach(k => localStorage.removeItem(k));
+       "page5Content", "page6Content", "Nom", "quizzResultat", "activiteCollaborateur"].forEach(k => localStorage.removeItem(k));
       localStorage.setItem("ficheAccueilVersion", FICHE_VERSION);
     }
   } catch (e) { console.warn(e); }

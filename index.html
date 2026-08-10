@@ -45,25 +45,35 @@
                         <input id="prenom" class="input-bilan" type="text" placeholder="Prénom du collaborateur">
                     </div>
                 </div>
-                <div class="field" style="margin-top: 14px;">
-                    <label>Statut</label>
-                    <div class="pill-group">
-                        <label class="pill"><input type="checkbox" id="cdi" name="contract_type" value="CDI" data-exclusive="statut"> CDI</label>
-                        <label class="pill"><input type="checkbox" id="cdd" name="contract_type" value="CDD" data-exclusive="statut"> CDD</label>
-                        <label class="pill"><input type="checkbox" id="apprenti" name="contract_type" value="Apprenti" data-exclusive="statut"> Apprenti</label>
-                        <label class="pill"><input type="checkbox" id="interimaire" name="contract_type" value="Interimaire" data-exclusive="statut"> Intérimaire</label>
-                        <label class="pill"><input type="checkbox" id="collaborateur_ext" name="contract_type" value="Collaborateur externe" data-exclusive="statut"> Collaborateur externe</label>
+                <div class="grid-3" style="margin-top: 14px;">
+                    <div class="field">
+                        <label for="statut">Statut</label>
+                        <select id="statut">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="CDI">CDI</option>
+                            <option value="CDD">CDD</option>
+                            <option value="Apprenti">Apprenti</option>
+                            <option value="Intérimaire">Intérimaire</option>
+                            <option value="Collaborateur externe">Collaborateur externe</option>
+                        </select>
                     </div>
-                </div>
-                <div class="grid-2" style="margin-top: 14px;">
                     <div class="field">
                         <label for="date-entree">Date d'entrée / début de mission</label>
                         <input id="date-entree" class="input-bilan" type="date">
                     </div>
                     <div class="field">
-                        <label for="agence">Entreprise / agence d'intérim <span style="text-transform:none; font-weight:400;">(si intérimaire ou externe)</span></label>
-                        <input id="agence" class="input-bilan" type="text" placeholder="Nom de l'agence ou de l'entreprise">
+                        <label for="agence-cdes">Intégré à l'agence de</label>
+                        <select id="agence-cdes">
+                            <option value="">-- Sélectionner une agence --</option>
+                            <option value="Île-de-France">Île-de-France</option>
+                            <option value="Nouvelle-Aquitaine">Nouvelle-Aquitaine</option>
+                            <option value="Bretagne – Pays de la Loire">Bretagne – Pays de la Loire</option>
+                        </select>
                     </div>
+                </div>
+                <div class="field" style="margin-top: 14px;" id="bloc-agence-interim">
+                    <label for="agence">Entreprise / agence d'intérim <span style="text-transform:none; font-weight:400;">(si intérimaire ou collaborateur externe)</span></label>
+                    <input id="agence" class="input-bilan" type="text" placeholder="Nom de l'agence ou de l'entreprise">
                 </div>
                 <div class="field" style="margin-top: 14px;">
                     <label for="activites">Activités réalisées par le collaborateur</label>

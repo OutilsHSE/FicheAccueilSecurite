@@ -2,6 +2,8 @@ renderChrome(1);
 
 function savePageContent() {
     localStorage.setItem("Nom", document.querySelector("#nom").value + ' ' + document.querySelector("#prenom").value);
+    const act = document.querySelector("#activites");
+    if (act) localStorage.setItem("activiteCollaborateur", act.value);
 
     const page = document.querySelector('#page1');
     const inputs = page.querySelectorAll('input, textarea, select');
@@ -14,12 +16,34 @@ function savePageContent() {
             }
         } else if (input.tagName.toLowerCase() === 'textarea') {
             input.textContent = input.value;
+        } else if (input.tagName.toLowerCase() === 'select') {
+            input.querySelectorAll('option').forEach(opt => {
+                if (opt.value === input.value) {
+                    opt.setAttribute('selected', 'selected');
+                } else {
+                    opt.removeAttribute('selected');
+                }
+            });
         } else {
             input.setAttribute('value', input.value);
         }
     });
     localStorage.setItem('page1Content', document.querySelector('#page1').outerHTML);
 }
+
+/* Le champ « agence d'intérim » n'apparaît que pour les intérimaires
+   et collaborateurs externes */
+function majAgenceInterim() {
+    const statut = document.getElementById('statut');
+    const bloc = document.getElementById('bloc-agence-interim');
+    if (!statut || !bloc) return;
+    const concerne = statut.value === 'Intérimaire' || statut.value === 'Collaborateur externe';
+    bloc.style.display = concerne ? '' : 'none';
+}
+
+document.addEventListener('change', (e) => {
+    if (e.target.id === 'statut') majAgenceInterim();
+});
 
 function redirectToAutorisationPage() {
     savePageContent();
@@ -48,6 +72,7 @@ window.onload = function () {
     } else {
         document.getElementById('visite-date').valueAsDate = new Date();
     }
+    majAgenceInterim();
 }
 
 window.onbeforeunload = function () {

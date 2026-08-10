@@ -5,24 +5,35 @@ renderChrome(3);
    side : L/R (colonne de la puce), top : position verticale (%),
    ax/ay : point d'ancrage de la flèche sur le personnage (%)
    ========================================================= */
+/* EPI. Pour utiliser la banque d'images CDES : renseigner img. */
 const EPI_ITEMS = [
-  { ico: "⛑️", lbl: "Casque avec visière de protection",  side: "L", top: 0,  ax: 47, ay: 8 },
-  { ico: "🎧", lbl: "Protection contre le bruit (casque, bouchons moulés)", side: "R", top: 0,  ax: 56, ay: 12 },
-  { ico: "🛟", lbl: "Gilet de sauvetage", side: "L", top: 24, ax: 45, ay: 28 },
-  { ico: "🦺", lbl: "Vêtements de travail haute visibilité", side: "R", top: 24, ax: 61, ay: 40 },
-  { ico: "🧤", lbl: "Gants de protection étanches (manutention, produits chimiques)", side: "L", top: 48, ax: 38, ay: 60 },
-  { ico: "🧥", lbl: "Vêtements de pluie", side: "R", top: 48, ax: 62, ay: 52 },
-  { ico: "👢", lbl: "Bottes de sécurité", side: "L", top: 74, ax: 44, ay: 93 },
-  { ico: "👟", lbl: "Chaussures de sécurité montantes", side: "R", top: 74, ax: 56, ay: 93 }
+  { ico: "⛑️", img: "", lbl: "Casque avec visière de protection",  side: "L", top: 0,  ax: 47, ay: 8 },
+  { ico: "🎧", img: "", lbl: "Protection contre le bruit (casque, bouchons moulés)", side: "R", top: 0,  ax: 56, ay: 12 },
+  { ico: "🛟", img: "", lbl: "Gilet de sauvetage", side: "L", top: 24, ax: 45, ay: 28 },
+  { ico: "🦺", img: "", lbl: "Vêtements de travail haute visibilité", side: "R", top: 24, ax: 61, ay: 40 },
+  { ico: "🧤", img: "", lbl: "Gants de protection étanches (manutention, produits chimiques)", side: "L", top: 48, ax: 38, ay: 60 },
+  { ico: "🧥", img: "", lbl: "Vêtements de pluie", side: "R", top: 48, ax: 62, ay: 52 },
+  { ico: "👢", img: "", lbl: "Bottes de sécurité", side: "L", top: 74, ax: 44, ay: 93 },
+  { ico: "👟", img: "", lbl: "Chaussures de sécurité montantes", side: "R", top: 74, ax: 56, ay: 93 }
 ];
 
+/* Équipements HSE.
+   Pour utiliser la banque d'images CDES : ajouter un champ
+   img: "img/equipements/trousse.png" — il remplace alors l'émoji. */
 const EQUIPEMENTS_HSE = [
-  { ico: "🩹", lbl: "Trousse de secours" },
-  { ico: "🌉", lbl: "Passerelle de chantier" },
-  { ico: "🔦", lbl: "Lampe frontale" },
-  { ico: "🛢️", lbl: "Bac de rétention souple" },
-  { ico: "📦", lbl: "Caisse de stockage des DIS" }
+  { ico: "⛑️", img: "", lbl: "Trousse de secours" },
+  { ico: "🪜", img: "", lbl: "Passerelle de chantier" },
+  { ico: "🔦", img: "", lbl: "Lampe frontale" },
+  { ico: "🛢️", img: "", lbl: "Bac de rétention souple" },
+  { ico: "🗃️", img: "", lbl: "Caisse de stockage des DIS" }
 ];
+
+/* Icône : image de la banque CDES si fournie, sinon émoji */
+function icoHtml(e, classe) {
+  return e.img
+    ? `<img class="${classe}-img" src="${e.img}" alt="">`
+    : `<span class="${classe}">${e.ico}</span>`;
+}
 
 function triHtml(groupe) {
   return `<span class="tri">
@@ -45,7 +56,7 @@ function construireEpi() {
     chip.id = "chip-epi" + i;
     chip.innerHTML = `
       <div class="epi-chip-top">
-        <span class="epi-chip-ico">${e.ico}</span>
+        ${icoHtml(e, "epi-chip-ico")}
         <span class="epi-chip-lbl">${e.lbl}</span>
       </div>
       ${triHtml("epi" + i)}`;
@@ -63,7 +74,7 @@ function construireEquipements() {
   if (!conteneur || conteneur.children.length > 0) return;
   conteneur.innerHTML = EQUIPEMENTS_HSE.map((e, i) => `
     <div class="equip-row">
-      <span class="equip-ico">${e.ico}</span>
+      ${icoHtml(e, "equip-ico")}
       <span class="equip-lbl">${e.lbl}</span>
       ${triHtml("hse" + i)}
     </div>`).join("");

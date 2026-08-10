@@ -65,14 +65,33 @@
                     <div class="consigne-tx red-text bold">La consommation d'alcool et/ou de substances psychoactives est strictement interdite sur les chantiers CDES. CDES est habilité à procéder à des tests de dépistage.</div>
                     <label class="vu-ack"><input type="checkbox"> ✓ Vu</label>
                 </div>
-                <div class="consigne-row">
-                    <div class="consigne-tx">Présenter la procédure pour <span class="bold">remonter les situations dangereuses</span> sur le chantier (<span class="bold">Vigiminute</span>).</div>
-                    <label class="vu-ack"><input type="checkbox"> ✓ Vu</label>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span class="dot"></span>Vigiminute — remontées terrain</h2>
+
+                <div class="vigi-apercu">
+                    <div class="vigi-image" onclick="window.open(LIEN_VIGIMINUTE,'_blank')">
+                        <img src="img/vigiminute.jpg" alt="Aperçu du formulaire Vigiminute">
+                    </div>
+                    <div class="vigi-barre">
+                        <span>📋 Cliquez sur l'aperçu pour accéder à la Vigiminute</span>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSele9D-cZ9WPeA3hStvWejoYF5_3LZrxsOfV3Ga8KDycUypyg/viewform?usp=header"
+                           target="_blank" class="vigi-btn no-print" onclick="event.stopPropagation()">Ouvrir →</a>
+                    </div>
                 </div>
 
-                <div class="consigne-group-head">
-                    <span class="cg-ico">📄</span><span class="cg-t">Documents sécurité à présenter</span><span class="cg-line"></span>
-                </div>
+                <label class="vigi-row"><input type="checkbox" class="vigi-cb">
+                    <span class="vigi-tx">Le collaborateur a reçu le lien de la Vigiminute et connaît l'outil.</span></label>
+                <label class="vigi-row"><input type="checkbox" class="vigi-cb">
+                    <span class="vigi-tx">J'ai analysé les risques au poste de travail en utilisant la Vigiminute.</span></label>
+                <label class="vigi-row"><input type="checkbox" class="vigi-cb">
+                    <span class="vigi-tx">J'ai réalisé une remontée (Situation Dangereuse / Point d'Amélioration / Bonne Pratique) et/ou j'ai présenté la démarche.</span></label>
+            </div>
+
+            <div class="section">
+
+                <h2 class="section-title"><span class="dot"></span>Documents sécurité à présenter</h2>
                 <div class="consigne-row">
                     <img class="doc-vignette no-print" data-lien="https://drive.google.com/file/d/1XpSCHEKekaVgqAC4RqqcgztYp1UhrKWp/view?usp=sharing"
                         src="https://drive.google.com/thumbnail?id=1XpSCHEKekaVgqAC4RqqcgztYp1UhrKWp&sz=w200"
@@ -102,13 +121,17 @@
                     <label class="vu-ack"><input type="checkbox"> ✓ Vu</label>
                 </div>
 
-                <div class="consigne-group-head">
-                    <span class="cg-ico">🎓</span><span class="cg-t">Fiches de formation au poste (obligatoires)</span><span class="cg-line"></span>
-                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span class="dot"></span>Fiches de formation au poste</h2>
                 <div class="consigne-row">
                     <div class="consigne-tx">Pour les <span class="bold">postes à risque</span> (faucardage, bathy, grue, pousseur, élagage, soudure, Tereos, travaux forestiers…), la <span class="bold red-text">fiche de formation &amp; accompagnement au poste est obligatoire</span> avant l'autonomie du collaborateur : présentation des tâches, des risques, des EPI, tutorat encadré et validation des acquis.
                         <br><a class="no-print" href="https://outilshse.github.io/FORMATIONS-AUTORISATIONS-DE-CONDUITE/" target="_blank" style="font-weight:600;">🔗 Accéder aux fiches de formation au poste</a></div>
-                    <label class="vu-ack"><input type="checkbox"> ✓ Vu</label>
+                    <div class="vu-groupe">
+                        <label class="vu-ack"><input type="checkbox" data-exclusive="fiche-formation"> ✓ Vu</label>
+                        <label class="vu-ack vu-na"><input type="checkbox" data-exclusive="fiche-formation"> Non concerné</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,6 +144,9 @@
         </div>
     </div>
 
+    <script>
+        const LIEN_VIGIMINUTE = "https://docs.google.com/forms/d/e/1FAIpQLSele9D-cZ9WPeA3hStvWejoYF5_3LZrxsOfV3Ga8KDycUypyg/viewform?usp=header";
+    </script>
     <script src="ui.js"></script>
     <script src="instruction.js"></script>
 </body>

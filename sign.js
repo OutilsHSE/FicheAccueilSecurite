@@ -27,11 +27,7 @@ function majQuizzResultat() {
   // Coche automatiquement « quizz de la fiche dématérialisée »
   if (r.reussite) {
     const demat = document.getElementById('quizz-demat');
-    if (demat && !demat.checked) {
-      demat.checked = true;
-      const kromi = document.getElementById('quizz-kromi');
-      if (kromi) kromi.checked = false;
-    }
+    if (demat && !demat.checked) demat.checked = true;
   }
 }
 

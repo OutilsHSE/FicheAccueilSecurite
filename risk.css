@@ -60,3 +60,79 @@
         max-width: 100%;
     }
 }
+
+/* ===== Familles de risques (v4) ===== */
+.famille-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 18px 2px 6px;
+}
+
+.famille-ico { font-size: 1.15rem; flex-shrink: 0; }
+
+.famille-t {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--bleu-marine);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+}
+
+.famille-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--bleu-pale), transparent);
+    border-radius: 2px;
+}
+
+/* Liste légère : 2 colonnes, lignes fines, sans cadres colorés */
+.risk-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 0 22px;
+}
+
+.risk-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 4px;
+    border-bottom: 1px solid var(--gris-bord);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.risk-row:hover { background: var(--bleu-pale); }
+
+.risk-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--vert);
+}
+
+.risk-row .risk-lbl {
+    flex: 1;
+    font-size: 0.88rem;
+    color: var(--texte);
+    line-height: 1.35;
+}
+
+.risk-row:has(input:checked) .risk-lbl {
+    color: var(--vert-fonce);
+    font-weight: 600;
+}
+
+.doc-vignette-mini {
+    width: 30px;
+    height: 38px;
+    border-radius: 4px;
+}
+
+@media print {
+    .risk-list { display: block !important; }
+    .risk-row { border-bottom: none !important; padding: 1px 0 !important; page-break-inside: avoid; }
+    .famille-head { margin: 8px 0 2px !important; }
+}

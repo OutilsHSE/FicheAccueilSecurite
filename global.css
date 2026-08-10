@@ -1495,3 +1495,251 @@ input[type="file"].hidden-file { display: none; }
 .pj-pdf:hover { border-color: var(--bleu-accent); background: var(--bleu-pale); }
 .pj-pdf-ico { font-size: 2.4rem; }
 .pj-pdf-nom { font-size: 0.8rem; font-weight: 600; text-align: center; word-break: break-word; }
+
+/* =========================================================
+   V4 — Croix verte, filtre d'activité, icônes de formation
+   ========================================================= */
+
+.section-title .croix-verte {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: var(--vert);
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.filtre-activite {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  background: var(--gris-clair);
+  border: 1.5px solid var(--gris-bord);
+}
+
+.filtre-activite .field { flex: 1; min-width: 260px; max-width: 460px; }
+.filtre-activite .tgl { margin-bottom: 2px; }
+
+.formation-ico {
+  font-size: 1.3rem;
+  width: 34px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.formation-ico-img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.formation-row.hors-activite {
+  background: #FFFBEE;
+  border-radius: 8px;
+}
+
+.formation-row.hors-activite .formation-lbl::after {
+  content: " · hors activité sélectionnée";
+  color: #856404;
+  font-size: 0.76rem;
+  font-style: italic;
+}
+
+.cat-vide {
+  display: none;
+  padding: 12px 4px;
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--texte-doux);
+}
+
+@media print {
+  .filtre-activite { display: none !important; }
+  .cat-vide { display: none !important; }
+}
+
+/* ── RETEX repliables (v4) : on ne voit que les titres par défaut ── */
+.retex-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+
+.retex-card { padding: 10px 12px; gap: 0; }
+
+.retex-card .retex-body {
+  display: none;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--gris-bord);
+}
+
+.retex-card.open .retex-body { display: block; }
+
+.retex-toggle {
+  background: none;
+  border: none;
+  color: var(--texte-doux);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  transition: transform 0.25s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.retex-toggle:hover { color: var(--bleu-marine); }
+.retex-card.open .retex-toggle { transform: rotate(180deg); }
+
+@media print {
+  .retex-card .retex-body { display: block !important; }
+  .retex-toggle { display: none !important; }
+}
+
+/* =========================================================
+   V4 — Vigiminute (mise en page reprise de la fiche faucardage)
+   ========================================================= */
+.vigi-apercu {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--gris-bord);
+  margin-bottom: 18px;
+  box-shadow: 0 4px 18px rgba(0,58,110,0.12);
+}
+
+.vigi-image { position: relative; cursor: pointer; line-height: 0; }
+
+.vigi-image img {
+  width: 100%;
+  display: block;
+  max-height: 240px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.vigi-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,58,110,0);
+  transition: background 0.2s;
+}
+
+.vigi-image:hover::after { background: rgba(0,58,110,0.08); }
+
+.vigi-barre {
+  background: linear-gradient(90deg, var(--bleu-marine), var(--bleu-clair));
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.vigi-btn {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.vigi-btn:hover { background: rgba(255,255,255,0.32); }
+
+.vigi-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 13px;
+  border-radius: 11px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  border: 1.5px solid var(--gris-bord);
+  background: var(--gris-clair);
+  transition: background 0.2s, border-color 0.2s, transform 0.18s;
+}
+
+.vigi-row:hover { background: var(--bleu-pale); border-color: var(--bleu-accent); transform: translateX(4px); }
+.vigi-row:has(input:checked) { background: var(--vert-pale); border-color: var(--vert); }
+
+.vigi-cb { width: 20px; height: 20px; accent-color: var(--vert); flex-shrink: 0; }
+.vigi-tx { flex: 1; font-size: 0.9rem; line-height: 1.4; font-weight: 500; }
+
+/* Groupe Vu / Non concerné */
+.vu-groupe { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+
+.vu-ack.vu-na:has(input:checked) {
+  border-style: solid;
+  border-color: var(--texte-doux);
+  background: var(--gris-clair);
+  color: var(--texte-doux);
+}
+
+@media print {
+  .vigi-apercu { box-shadow: none !important; page-break-inside: avoid; }
+  .vigi-image img { max-height: 180px !important; object-fit: cover !important; object-position: top !important; }
+  .vigi-barre { background: #dfe8f0 !important; color: var(--bleu-marine) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .vigi-row { padding: 4px 6px !important; page-break-inside: avoid; }
+}
+
+/* ── Bandeau validation des connaissances (page Signatures) ── */
+.validation-bandeau {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, var(--bleu-marine), var(--bleu-clair));
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: white;
+  flex-wrap: wrap;
+}
+
+.validation-bandeau .vb-ico {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.validation-bandeau .vb-texte { flex: 1; min-width: 240px; }
+
+.validation-bandeau .vb-titre {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.validation-bandeau .vb-sous { font-size: 0.86rem; opacity: 0.92; margin-top: 2px; line-height: 1.4; }
+
+@media print {
+  .validation-bandeau {
+    background: #dfe8f0 !important;
+    color: var(--bleu-marine) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    page-break-inside: avoid;
+  }
+  .validation-bandeau .vb-ico { border-color: var(--bleu-marine) !important; }
+}

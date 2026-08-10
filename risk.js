@@ -333,7 +333,39 @@ function getPosteName(key) {
   return map[key] || key;
 }
 
-// 🔹 Crée la grille de cartes des risques du poste
+/* =========================================================
+   FAMILLES DE RISQUES — regroupement pour aérer la page
+   ========================================================= */
+const FAMILLES_RISQUES = [
+  {
+    id: "circulation", ico: "🚜", titre: "Circulation & engins",
+    risques: ["Circulation en engins TP", "Coactivité Engins Piétons", "Risque routier", "Opérations de levage mécanique"]
+  },
+  {
+    id: "eau_env", ico: "🌊", titre: "Eau & environnement",
+    risques: ["Risque de chute à l’eau et noyade", "Protection de l’environnement", "Produits chimiques"]
+  },
+  {
+    id: "corps", ico: "🦺", titre: "Corps, gestes & déplacements",
+    risques: ["Port des EPI", "Port des EPI Atelier", "Manutention manuelle", "Risques de chute de plain-pied",
+              "Risque de chute de hauteur", "Risques de chute de hauteur", "Risques de chute de hauteur / échelle"]
+  },
+  {
+    id: "energies", ico: "⚡", titre: "Énergies & interventions techniques",
+    risques: ["Risque électrique", "Intervention mécanique"]
+  },
+  {
+    id: "organisation", ico: "🧭", titre: "Organisation & comportement",
+    risques: ["Ordre et propreté sur le chantier", "Réfléchir avant d’agir"]
+  }
+];
+
+function familleDuRisque(nom) {
+  const f = FAMILLES_RISQUES.find(fam => fam.risques.includes(nom));
+  return f ? f.id : "organisation";
+}
+
+// 🔹 Crée les listes de risques du poste, regroupées par famille
 function createTable(posteKey, container) {
   const posteNom = getPosteName(posteKey);
   const poste = postesData[posteKey];
@@ -344,19 +376,35 @@ function createTable(posteKey, container) {
   titre.innerHTML = `<span class="poste-titre-ico">👷</span> ${posteNom} <span class="poste-titre-nb">${poste.risques.length} fiches de risque</span>`;
   container.appendChild(titre);
 
-  const grille = document.createElement("div");
-  grille.className = "risk-grid";
-
+  // Répartition des risques du poste dans les familles
+  const parFamille = {};
   poste.risques.forEach((risque, i) => {
-    const lien = poste.liens_risques[i];
-    const carte = document.createElement("label");
-    carte.className = "risk-card";
-    carte.innerHTML = `<input type="checkbox"><span class="risk-lbl">${risque}</span>`;
-    carte.appendChild(vignetteDoc(lien));
-    grille.appendChild(carte);
+    const fam = familleDuRisque(risque);
+    (parFamille[fam] = parFamille[fam] || []).push({ nom: risque, lien: poste.liens_risques[i] });
   });
 
-  container.appendChild(grille);
+  FAMILLES_RISQUES.forEach(fam => {
+    const liste = parFamille[fam.id];
+    if (!liste || !liste.length) return;
+
+    const entete = document.createElement("div");
+    entete.className = "famille-head";
+    entete.innerHTML = `<span class="famille-ico">${fam.ico}</span><span class="famille-t">${fam.titre}</span><span class="famille-line"></span>`;
+    container.appendChild(entete);
+
+    const grille = document.createElement("div");
+    grille.className = "risk-list";
+
+    liste.forEach(r => {
+      const ligne = document.createElement("label");
+      ligne.className = "risk-row";
+      ligne.innerHTML = `<input type="checkbox"><span class="risk-lbl">${r.nom}</span>`;
+      ligne.appendChild(vignetteDoc(r.lien, "doc-vignette doc-vignette-mini"));
+      grille.appendChild(ligne);
+    });
+
+    container.appendChild(grille);
+  });
 }
 
 /* =========================================================
@@ -388,8 +436,10 @@ function construireRetex() {
     carte.className = "retex-card";
     const tete = document.createElement("div");
     tete.className = "retex-head";
-    tete.innerHTML = `<input type="checkbox" id="retex${i}"><label class="retex-title" for="retex${i}">⚠️ ${r.titre}</label>`;
-    tete.appendChild(vignetteDoc(r.lien));
+    tete.innerHTML = `<input type="checkbox" id="retex${i}">
+      <label class="retex-title" for="retex${i}">⚠️ ${r.titre}</label>
+      <button type="button" class="retex-toggle no-print" title="Voir les enseignements">▼</button>`;
+    tete.appendChild(vignetteDoc(r.lien, "doc-vignette doc-vignette-mini"));
     carte.appendChild(tete);
 
     const corps = document.createElement("div");
@@ -400,6 +450,13 @@ function construireRetex() {
     conteneur.appendChild(carte);
   });
 }
+
+/* Ouverture / fermeture d'un RETEX (délégation) */
+document.addEventListener("click", (e) => {
+  if (e.target.classList && e.target.classList.contains("retex-toggle")) {
+    e.target.closest(".retex-card").classList.toggle("open");
+  }
+});
 
 // 🔹 Canvas signature
 function setupCanvas(canvasId) {

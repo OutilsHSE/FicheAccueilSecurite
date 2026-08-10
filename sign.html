@@ -16,11 +16,23 @@
   <main class="main">
     <div id="page6">
       <div class="section">
-        <h2 class="section-title"><span class="dot"></span>Parcours sécurité sur l'ERP</h2>
-        <div class="alert alert-rouge">
-          <span class="alert-ico">🖥️</span>
-          <span>Pour tous les nouveaux arrivants CDES : réaliser le <span class="bold">parcours sécurité</span> sur l'ERP.</span>
+        <h2 class="section-title"><span class="dot"></span>Validation des connaissances</h2>
+
+        <div class="validation-bandeau">
+          <div class="vb-ico">🎓</div>
+          <div class="vb-texte">
+            <div class="vb-titre">Parcours sécurité du nouvel arrivant</div>
+            <div class="vb-sous">À valider via le <span class="bold">parcours sécurité Kromi</span> et/ou le <span class="bold">quizz de la fiche dématérialisée</span>.</div>
+          </div>
+          <button class="btn btn-vert no-print" type="button" onclick="redirectToQuizz()">Lancer le quizz ➜</button>
         </div>
+
+        <div class="pill-group" style="margin-top: 14px;">
+          <label class="pill pill-vert"><input type="checkbox" id="quizz-kromi"> Parcours sécurité Kromi réalisé</label>
+          <label class="pill pill-vert"><input type="checkbox" id="quizz-demat"> Quizz de la fiche dématérialisée réalisé</label>
+        </div>
+
+        <div id="quizz-resultat" class="quizz-resultat" style="display:none;"></div>
       </div>
 
       <div class="section">
@@ -53,20 +65,7 @@
             <span>Je reconnais avoir reçu les équipements de protection individuelle,
               avoir été sensibilisé à leur utilisation et aux consignes de sécurité associées,
               et m'engage à les porter et à appliquer ces consignes dans le cadre de mes activités.</span></label>
-          <label class="engagement"><input type="checkbox">
-            <span>J'atteste avoir réalisé et validé le parcours sécurité numérique.</span></label>
         </div>
-
-        <div class="field" style="margin-top: 14px;">
-          <label>Parcours sécurité réalisé via</label>
-          <div class="pill-group" style="align-items: center;">
-            <label class="pill"><input type="checkbox" id="quizz-kromi" data-exclusive="type-quizz"> Quizz Kromi</label>
-            <label class="pill"><input type="checkbox" id="quizz-demat" data-exclusive="type-quizz"> Quizz de la fiche dématérialisée</label>
-            <button class="btn btn-vert quizz-button no-print" type="button" onclick="redirectToQuizz()" style="padding: 8px 16px;">🎓 Lancer le quizz</button>
-          </div>
-        </div>
-
-        <div id="quizz-resultat" class="quizz-resultat" style="display:none;"></div>
       </div>
 
       <div class="section">
