@@ -1,0 +1,102 @@
+/* ===== Page Signatures — spécifique ===== */
+
+.attestation td {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    border: none;
+    padding: 0;
+}
+
+.attestation td img.nage-img {
+    max-width: 90px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.attestation .texte {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 5px;
+}
+
+.engagements {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.engagement {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--gris-bord);
+    border-radius: 9px;
+    background: var(--gris-clair);
+    cursor: pointer;
+    font-weight: 500;
+    line-height: 1.45;
+    transition: all 0.15s;
+}
+
+.engagement:hover { border-color: var(--bleu-accent); }
+
+.engagement:has(input:checked) {
+    background: var(--vert-pale);
+    border-color: var(--vert);
+}
+
+.engagement input[type="checkbox"] {
+    margin-top: 2px;
+}
+
+.engagement .quizz-button {
+    margin-left: auto;
+    padding: 8px 16px;
+    flex-shrink: 0;
+}
+
+.signatures-grid .sign {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border: 1.5px solid var(--gris-bord);
+    border-radius: 10px;
+    background: var(--gris-clair);
+}
+
+.sign-titre {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bleu-marine);
+}
+
+.sign-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--bleu-marine);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sign .btn {
+    align-self: flex-start;
+    padding: 8px 16px;
+    font-size: 0.88rem;
+}
+
+@media (max-width: 650px) {
+    .engagement {
+        flex-wrap: wrap;
+    }
+
+    .engagement .quizz-button {
+        margin-left: 27px;
+    }
+}

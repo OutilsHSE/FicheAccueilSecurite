@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil HSE — Équipements de travail — CDES</title>
+    <meta name="theme-color" content="#003A6E">
+    <link rel="icon" type="image/png" href="img/CDES_Logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="security.css">
+</head>
+
+<body>
+    <main class="main">
+        <div id="page3">
+            <div class="section">
+                <h2 class="section-title"><span class="dot"></span>Équipements de Protection Individuelle</h2>
+                <div class="alert alert-bleu">
+                    <span class="alert-ico">🦺</span>
+                    <span>Le collaborateur est-il équipé des EPI requis pour prendre son poste ? Pour chaque équipement : <span class="bold">Oui</span> (fourni), <span class="bold">Non</span> (manquant) ou <span class="bold">N.N.</span> (non nécessaire pour son activité).</span>
+                </div>
+
+                <div class="epi-fig" id="epi-fig">
+                    <svg class="epi-lines" id="epi-lines" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+                    <img class="epi-perso" src="img/epi_perso.jpg" alt="Opérateur CDES équipé de ses EPI">
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span class="dot"></span>Autres équipements HSE</h2>
+                <div id="equipements-hse"></div>
+            </div>
+
+            <div class="section other-equipments no-break">
+                <div class="field lined-field">
+                    <label>✍️ Autres équipements fournis au collaborateur nécessaires à son activité</label>
+                    <textarea class="other-equipments-textarea" placeholder="Ex : téléphone de chantier, VHF, matériel topo…"></textarea>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="nav-bar no-print">
+        <button class="btn btn-ghost" onclick="navTo('autorisation.html')">⬅ Précédent</button>
+        <div class="nav-right">
+            <button class="btn btn-primary" onclick="redirectToAutorisationPage()">Suivant ➜</button>
+        </div>
+    </div>
+
+    <script src="ui.js"></script>
+    <script src="security.js"></script>
+</body>
+
+</html>
