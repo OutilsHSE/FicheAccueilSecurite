@@ -1,22 +1,6 @@
 renderChrome(2);
 
 /* =========================================================
-   ACTIVITÉS CDES — servent à filtrer les formations
-   ========================================================= */
-const ACTIVITES = [
-  { id: "conducteur_tp",      lbl: "Conducteur d'engins TP" },
-  { id: "conducteur_fluvial", lbl: "Conducteur d'équipements fluviaux / faucardage" },
-  { id: "marinier",           lbl: "Marinier / conducteur de bateau" },
-  { id: "chauffeur_pl",       lbl: "Chauffeur PL / grue auxiliaire" },
-  { id: "mecanicien",         lbl: "Mécanicien / atelier" },
-  { id: "soudeur",            lbl: "Soudeur" },
-  { id: "forestier",          lbl: "Travaux forestiers" },
-  { id: "polyvalent",         lbl: "Opérateur polyvalent" },
-  { id: "bathy_topo",         lbl: "Intervenant bathymétrie / topographie" },
-  { id: "encadrant",          lbl: "Encadrant / conducteur de travaux" }
-];
-
-/* =========================================================
    CATALOGUE DES FORMATIONS / HABILITATIONS PAR CATÉGORIE
    ico  : émoji (remplaçable par une image via le champ img)
    img  : chemin d'une image de la banque CDES (prioritaire sur ico)
@@ -29,17 +13,17 @@ const CATEGORIES_FORMATIONS = [
     titre: "Formations conduite d'équipements",
     sous: "CACES, permis et autorisations de conduite",
     items: [
-      { ico: "🚜", lbl: "Engins compacts < 6t — Engins de chantier TP (R 482)", exi: "CACES A", act: ["conducteur_tp", "polyvalent"] },
-      { ico: "🏗️", lbl: "Pelles mécaniques > 6t — Engins de chantier TP (R 482)", exi: "CACES B1", act: ["conducteur_tp"] },
-      { ico: "🏗️", lbl: "Pelle à pneus — Engins de chantier TP (R 482)", exi: "CACES B1 + Expérience demandée / Tutorat", act: ["conducteur_tp"] },
-      { ico: "🛥️", lbl: "Pelle amphibie — Engins de chantier TP (R 482)", exi: "CACES B1 + Expérience demandée / Tutorat", act: ["conducteur_tp", "conducteur_fluvial"] },
-      { ico: "🚧", lbl: "Chargeuses — Engins de chantier TP (R 482)", exi: "CACES C1", act: ["conducteur_tp"] },
-      { ico: "🚛", lbl: "Engins de transport (dumper…) — Engins de chantier TP (R 482)", exi: "CACES E", act: ["conducteur_tp", "chauffeur_pl"] },
-      { ico: "🏋️", lbl: "Manitou / chariot télescopique — Engins de chantier TP (R 482)", exi: "CACES F", act: ["conducteur_tp", "polyvalent"] },
-      { ico: "📦", lbl: "Chariot élévateur — Engins de manutention (R 489)", exi: "CACES catégorie 3", act: ["mecanicien", "polyvalent", "chauffeur_pl"] },
-      { ico: "🪝", lbl: "Grue auxiliaire — Grue de chargement (R 490)", exi: "CACES R490", act: ["chauffeur_pl"] },
-      { ico: "🚢", lbl: "Conduite de pousseurs fluviaux", exi: "Permis PC + Grille Métier Formation au poste", act: ["marinier", "conducteur_fluvial"] },
-      { ico: "🚐", lbl: "Conduite de véhicule de la société", exi: "Permis B — contrôler le permis de conduire", act: ["conducteur_tp", "conducteur_fluvial", "marinier", "chauffeur_pl", "mecanicien", "soudeur", "forestier", "polyvalent", "bathy_topo", "encadrant"] }
+      { ico: "🚜", lbl: "Engins compacts < 6t — Engins de chantier TP (R 482)", exi: "CACES A" },
+      { ico: "🏗️", lbl: "Pelles mécaniques > 6t — Engins de chantier TP (R 482)", exi: "CACES B1" },
+      { ico: "🏗️", lbl: "Pelle à pneus — Engins de chantier TP (R 482)", exi: "CACES B1 + Expérience demandée / Tutorat" },
+      { ico: "🛥️", lbl: "Pelle amphibie — Engins de chantier TP (R 482)", exi: "CACES B1 + Expérience demandée / Tutorat" },
+      { ico: "🚧", lbl: "Chargeuses — Engins de chantier TP (R 482)", exi: "CACES C1" },
+      { ico: "🚛", lbl: "Engins de transport (dumper…) — Engins de chantier TP (R 482)", exi: "CACES E" },
+      { ico: "🏋️", lbl: "Manitou / chariot télescopique — Engins de chantier TP (R 482)", exi: "CACES F" },
+      { ico: "📦", lbl: "Chariot élévateur — Engins de manutention (R 489)", exi: "CACES catégorie 3" },
+      { ico: "🪝", lbl: "Grue auxiliaire — Grue de chargement (R 490)", exi: "CACES R490" },
+      { ico: "🚢", lbl: "Conduite de pousseurs fluviaux", exi: "Permis PC + Grille Métier Formation au poste" },
+      { ico: "🚐", lbl: "Conduite de véhicule de la société", exi: "Permis B — contrôler le permis de conduire" }
     ]
   },
   {
@@ -48,15 +32,15 @@ const CATEGORIES_FORMATIONS = [
     titre: "Formations particulières",
     sous: "Habilitations et formations spécifiques aux travaux à risque",
     items: [
-      { ico: "🔧", lbl: "Machines / outils portatifs dangereux, travaux divers", exi: "Formation au poste + Vérification des EPI", act: ["mecanicien", "polyvalent", "soudeur", "forestier"] },
-      { ico: "🌲", lbl: "Travaux forestiers (abattage, tronçonnage…)", exi: "Formation Tronçonnage + Dotation EPI spécifiques", act: ["forestier", "polyvalent"] },
-      { ico: "⛓️", lbl: "Opérations de levage / élingage", exi: "Formation Élingage", act: ["conducteur_tp", "chauffeur_pl", "mecanicien", "polyvalent", "marinier"] },
-      { ico: "🕳️", lbl: "Travaux à proximité de réseaux", exi: "Formation AIPR", act: ["conducteur_tp", "encadrant", "polyvalent"] },
-      { ico: "⚡", lbl: "Travaux à proximité d'installations électriques", exi: "Habilitation électrique", act: ["mecanicien", "marinier", "conducteur_fluvial"] },
-      { ico: "🪜", lbl: "Travaux en hauteur", exi: "Formation Travail en hauteur + Port du harnais", act: ["mecanicien", "marinier", "polyvalent", "soudeur"] },
-      { ico: "🚪", lbl: "Travaux en espace confiné", exi: "CATEC", act: ["mecanicien", "polyvalent"] },
-      { ico: "🔥", lbl: "Travaux par points chauds (soudure…)", exi: "Formation Métier au poste", act: ["soudeur", "mecanicien"] },
-      { ico: "🌊", lbl: "Conduite d'équipements flottants (faucardage)", exi: "Formation Métier au poste", act: ["conducteur_fluvial", "marinier"] }
+      { ico: "🔧", lbl: "Machines / outils portatifs dangereux, travaux divers", exi: "Formation au poste + Vérification des EPI" },
+      { ico: "🌲", lbl: "Travaux forestiers (abattage, tronçonnage…)", exi: "Formation Tronçonnage + Dotation EPI spécifiques" },
+      { ico: "⛓️", lbl: "Opérations de levage / élingage", exi: "Formation Élingage" },
+      { ico: "🕳️", lbl: "Travaux à proximité de réseaux", exi: "Formation AIPR" },
+      { ico: "⚡", lbl: "Travaux à proximité d'installations électriques", exi: "Habilitation électrique" },
+      { ico: "🪜", lbl: "Travaux en hauteur", exi: "Formation Travail en hauteur + Port du harnais" },
+      { ico: "🚪", lbl: "Travaux en espace confiné", exi: "CATEC" },
+      { ico: "🔥", lbl: "Travaux par points chauds (soudure…)", exi: "Formation Métier au poste" },
+      { ico: "🌊", lbl: "Conduite d'équipements flottants (faucardage)", exi: "Formation Métier au poste" }
     ]
   },
   {
@@ -65,8 +49,8 @@ const CATEGORIES_FORMATIONS = [
     titre: "Formations HSE",
     sous: "Secourisme, incendie et sécurité générale",
     items: [
-      { ico: "🚑", lbl: "Sauveteur Secouriste du Travail", exi: "Formation SST en cours de validité", act: ["conducteur_tp", "conducteur_fluvial", "marinier", "chauffeur_pl", "mecanicien", "soudeur", "forestier", "polyvalent", "bathy_topo", "encadrant"] },
-      { ico: "🧯", lbl: "Manipulation des extincteurs", exi: "Formation incendie / exercice pratique", act: ["conducteur_tp", "conducteur_fluvial", "marinier", "chauffeur_pl", "mecanicien", "soudeur", "forestier", "polyvalent", "bathy_topo", "encadrant"] }
+      { ico: "🚑", lbl: "Sauveteur Secouriste du Travail", exi: "Formation SST en cours de validité" },
+      { ico: "🧯", lbl: "Manipulation des extincteurs", exi: "Formation incendie / exercice pratique" }
     ]
   }
 ];
@@ -76,18 +60,6 @@ function iconeHtml(item, classe) {
   return item.img
     ? `<img class="${classe}-img" src="${item.img}" alt="">`
     : `<span class="${classe}">${item.ico}</span>`;
-}
-
-/* Remplit la liste déroulante des activités */
-function construireActivites() {
-  const sel = document.getElementById("activite-filtre");
-  if (!sel || sel.options.length > 1) return;
-  ACTIVITES.forEach(a => {
-    const o = document.createElement("option");
-    o.value = a.id;
-    o.textContent = a.lbl;
-    sel.appendChild(o);
-  });
 }
 
 /* Construit les catégories déroulantes (uniquement si non restaurées) */
@@ -108,7 +80,7 @@ function construireFormations() {
       </div>
       <div class="cat-body">
         ${cat.items.map((item) => `
-          <div class="formation-row" data-act="${item.act.join(" ")}">
+          <div class="formation-row">
             ${iconeHtml(item, "formation-ico")}
             <div class="formation-lbl"><span class="bold">${item.lbl}</span><br><span class="exigence">${item.exi}</span></div>
             <div class="formation-toggles">
@@ -116,44 +88,8 @@ function construireFormations() {
               <label class="tgl tgl-vert"><input type="checkbox" class="fx-preuve" data-cat="${cat.id}"> Preuve de formation valide</label>
             </div>
           </div>`).join("")}
-        <div class="cat-vide" id="vide-${cat.id}">Aucune formation de cette catégorie pour l'activité sélectionnée.</div>
       </div>
     </div>`).join("");
-}
-
-/* Filtre les formations selon l'activité choisie */
-function filtrerFormations() {
-  const sel = document.getElementById("activite-filtre");
-  const voirTout = document.getElementById("voir-tout");
-  if (!sel) return;
-
-  const activite = sel.value;
-  const tout = !activite || (voirTout && voirTout.checked);
-
-  CATEGORIES_FORMATIONS.forEach(cat => {
-    const carte = document.getElementById("cat-" + cat.id);
-    if (!carte) return;
-    let visibles = 0;
-
-    carte.querySelectorAll(".formation-row").forEach(ligne => {
-      const concerne = tout || (ligne.getAttribute("data-act") || "").split(" ").includes(activite);
-      // Une formation déjà cochée reste toujours visible
-      const cochee = !!ligne.querySelector(".fx-aut:checked, .fx-preuve:checked");
-      const afficher = concerne || cochee;
-      ligne.style.display = afficher ? "" : "none";
-      ligne.classList.toggle("hors-activite", !concerne && cochee);
-      if (afficher) visibles++;
-    });
-
-    const vide = document.getElementById("vide-" + cat.id);
-    if (vide) vide.style.display = visibles === 0 ? "" : "none";
-
-    // On ouvre les catégories qui ont du contenu, on ferme les vides
-    if (voirTout && voirTout.checked) carte.classList.add("open");
-    else if (activite) carte.classList.toggle("open", visibles > 0);
-  });
-
-  majCompteurs();
 }
 
 /* Compteur « x / n autorisées » par catégorie */
@@ -176,8 +112,7 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("change", (e) => {
-  if (e.target.id === "activite-filtre" || e.target.id === "voir-tout") filtrerFormations();
-  else if (e.target.classList && e.target.classList.contains("fx-aut")) majCompteurs();
+  if (e.target.classList && e.target.classList.contains("fx-aut")) majCompteurs();
 });
 
 /* =========================================================
@@ -233,18 +168,8 @@ function redirectToAutorisationPage() {
 
 window.onload = function () {
     loadPageContent();
-    construireActivites();
     construireFormations();
-
-    // Pré-sélection de l'activité d'après la page 1 (si renseignée)
-    const sel = document.getElementById('activite-filtre');
-    if (sel && !sel.value) {
-        const activitePage1 = (localStorage.getItem('activiteCollaborateur') || '').toLowerCase();
-        const trouve = ACTIVITES.find(a => activitePage1 && a.lbl.toLowerCase().includes(activitePage1));
-        if (trouve) sel.value = trouve.id;
-    }
-
-    filtrerFormations();
+    majCompteurs();
 }
 
 window.onbeforeunload = function () {

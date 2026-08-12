@@ -8,12 +8,12 @@
    enregistré avec une ANCIENNE version des pages, on le purge pour
    éviter de restaurer l'ancienne mise en page. À incrémenter à chaque
    évolution de la structure des pages. */
-const FICHE_VERSION = "v4-2026-08";
+const FICHE_VERSION = "v5-2026-08";
 (function () {
   try {
     if (localStorage.getItem("ficheAccueilVersion") !== FICHE_VERSION) {
       ["page1Content", "page2Content", "page3Content", "page4Content",
-       "page5Content", "page6Content", "Nom", "quizzResultat", "activiteCollaborateur"].forEach(k => localStorage.removeItem(k));
+       "page5Content", "page6Content", "Nom", "quizzResultat", "activiteCollaborateur", "posteTravail"].forEach(k => localStorage.removeItem(k));
       localStorage.setItem("ficheAccueilVersion", FICHE_VERSION);
     }
   } catch (e) { console.warn(e); }
@@ -92,45 +92,109 @@ function driveId(url) {
   return m ? m[1] : null;
 }
 
-/* URL de miniature Drive (fichier partagé par lien) */
-function driveThumb(url, largeur) {
+/* Sources possibles pour l'aperçu d'un document Drive.
+   On les essaie dans l'ordre : Google renvoie parfois une erreur sur
+   l'une et pas sur l'autre selon le type de fichier et le partage. */
+function driveThumbs(url, largeur) {
   const id = driveId(url);
-  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w${largeur || 300}` : null;
+  if (!id) return [];
+  const w = largeur || 300;
+  return [
+    `https://lh3.googleusercontent.com/d/${id}=w${w}`,
+    `https://drive.google.com/thumbnail?id=${id}&sz=w${w}`,
+    `https://drive.google.com/thumbnail?authuser=0&sz=w${w}&id=${id}`
+  ];
 }
 
-/* Crée une vignette de document : aperçu + zoom au clic, icône en secours */
+/* Enchaîne les sources d'aperçu, puis l'icône générique en dernier recours */
+function chaineApercu(img, sources, secours) {
+  let i = 0;
+  img.onerror = function () {
+    i++;
+    if (i < sources.length) {
+      this.src = sources[i];
+    } else {
+      this.onerror = null;
+      this.classList.add("apercu-indispo");
+      if (secours) this.src = secours;
+    }
+  };
+  img.src = sources.length ? sources[0] : secours;
+}
+
+/* Crée une vignette de document : aperçu du document + zoom au clic */
 function vignetteDoc(lienDrive, classe) {
-  const thumb = driveThumb(lienDrive, 200);
   const img = document.createElement("img");
   img.className = classe || "doc-vignette";
-  img.alt = "Document";
+  img.alt = "Fiche de risque";
   img.loading = "lazy";
+  img.referrerPolicy = "no-referrer";
   img.setAttribute("data-lien", lienDrive);
-  img.src = thumb || "img/doc.png";
-  img.onerror = function () { this.onerror = null; this.src = "img/doc.png"; };
+  chaineApercu(img, driveThumbs(lienDrive, 300), "img/doc.png");
   return img;
 }
 
-/* Visionneuse plein écran */
+/* Visionneuse plein écran : aperçu réel du document (iframe Drive),
+   avec l'image en secours si l'aperçu est bloqué */
 function ouvrirLightbox(lienDrive) {
   let lb = document.getElementById("lightbox");
   if (!lb) {
     lb = document.createElement("div");
     lb.id = "lightbox";
     lb.className = "lightbox no-print";
-    lb.innerHTML = `<span class="lb-close">&times;</span><img alt="Aperçu du document"><a class="lb-open" target="_blank">📄 Ouvrir le document</a>`;
+    lb.innerHTML = `<span class="lb-close">&times;</span>
+      <div class="lb-cadre">
+        <iframe class="lb-frame" allow="autoplay" referrerpolicy="no-referrer"></iframe>
+        <img class="lb-img" alt="Aperçu de la fiche de risque" referrerpolicy="no-referrer">
+      </div>
+      <a class="lb-open" target="_blank" rel="noopener">📄 Ouvrir dans Drive</a>`;
     lb.addEventListener("click", (e) => {
-      if (e.target === lb || e.target.classList.contains("lb-close")) lb.classList.remove("open");
+      if (e.target === lb || e.target.classList.contains("lb-close")) fermerLightbox();
     });
     document.body.appendChild(lb);
   }
-  const grand = driveThumb(lienDrive, 1200);
-  const img = lb.querySelector("img");
-  img.onerror = function () { this.onerror = null; this.src = "img/doc.png"; };
-  img.src = grand || "img/doc.png";
+
+  const id = driveId(lienDrive);
+  const frame = lb.querySelector(".lb-frame");
+  const img = lb.querySelector(".lb-img");
+
+  // Aperçu intégré du document (rendu réel de la fiche, zoomable)
+  if (id) {
+    frame.style.display = "block";
+    img.style.display = "none";
+    frame.src = `https://drive.google.com/file/d/${id}/preview`;
+  } else {
+    frame.style.display = "none";
+    frame.removeAttribute("src");
+    img.style.display = "block";
+    chaineApercu(img, driveThumbs(lienDrive, 1200), "img/doc.png");
+  }
+
   lb.querySelector(".lb-open").href = lienDrive;
   lb.classList.add("open");
+  document.body.style.overflow = "hidden";
 }
+
+function fermerLightbox() {
+  const lb = document.getElementById("lightbox");
+  if (!lb) return;
+  lb.classList.remove("open");
+  const frame = lb.querySelector(".lb-frame");
+  if (frame) frame.removeAttribute("src"); // stoppe le chargement
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") fermerLightbox();
+});
+
+/* Initialise les vignettes écrites en dur dans le HTML (pages statiques) */
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("img.doc-vignette[data-lien]:not([src])").forEach(img => {
+    img.referrerPolicy = "no-referrer";
+    chaineApercu(img, driveThumbs(img.getAttribute("data-lien"), 300), "img/doc.png");
+  });
+});
 
 /* Délégation : clic sur une vignette → zoom */
 document.addEventListener("click", (e) => {

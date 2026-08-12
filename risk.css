@@ -136,3 +136,173 @@
     .risk-row { border-bottom: none !important; padding: 1px 0 !important; page-break-inside: avoid; }
     .famille-head { margin: 8px 0 2px !important; }
 }
+
+/* =========================================================
+   SCÈNES DE TRAVAIL — risques fléchés sur le visuel (v5)
+   ========================================================= */
+.scene-bloc {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 18px;
+    align-items: start;
+    margin-top: 12px;
+}
+
+.scene-fig {
+    position: relative;
+    line-height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--gris-bord);
+    box-shadow: 0 4px 18px rgba(0,58,110,0.12);
+}
+
+.scene-img { width: 100%; display: block; }
+
+/* Repère numéroté posé sur l'image */
+.scene-pt {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2.5px solid white;
+    background: var(--bleu-marine);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    transition: transform 0.15s, background 0.2s;
+    z-index: 2;
+}
+
+.scene-pt:hover, .scene-pt.survol {
+    background: var(--bleu-accent);
+    transform: translate(-50%, -50%) scale(1.22);
+}
+
+.scene-pt.vise {
+    background: var(--orange);
+    animation: pulsePoint 1.2s ease-out 2;
+}
+
+@keyframes pulsePoint {
+    0%   { box-shadow: 0 0 0 0 rgba(244,160,58,0.75); }
+    100% { box-shadow: 0 0 0 16px rgba(244,160,58,0); }
+}
+
+/* Légende à droite de l'image */
+.scene-legende {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.scene-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.scene-row:hover { background: var(--bleu-pale); }
+
+.scene-row:has(input:checked) {
+    background: var(--vert-pale);
+    border-color: var(--vert);
+}
+
+.scene-row.vise {
+    background: #FFF6E8;
+    border-color: var(--orange);
+}
+
+.scene-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bleu-marine);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.scene-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--vert);
+}
+
+.scene-row .risk-lbl {
+    flex: 1;
+    font-size: 0.87rem;
+    line-height: 1.3;
+}
+
+.scene-row:has(input:checked) .risk-lbl {
+    color: var(--vert-fonce);
+    font-weight: 600;
+}
+
+.poste-titre-scene {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--texte-doux);
+}
+
+@media (max-width: 1000px) {
+    .scene-bloc { grid-template-columns: 1fr; }
+}
+
+@media print {
+    .scene-bloc {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+
+    .scene-fig {
+        box-shadow: none !important;
+        max-width: 60% !important;
+        margin-bottom: 8px;
+    }
+
+    /* Les repères restent visibles à l'impression */
+    .scene-pt {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.7rem !important;
+        background: var(--bleu-marine) !important;
+        color: white !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .scene-legende { display: block !important; }
+    .scene-row { padding: 1px 0 !important; page-break-inside: avoid; }
+
+    .scene-num {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

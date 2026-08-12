@@ -4,6 +4,8 @@ function savePageContent() {
     localStorage.setItem("Nom", document.querySelector("#nom").value + ' ' + document.querySelector("#prenom").value);
     const act = document.querySelector("#activites");
     if (act) localStorage.setItem("activiteCollaborateur", act.value);
+    const poste = document.querySelector("#poste-travail");
+    if (poste) localStorage.setItem("posteTravail", poste.value);
 
     const page = document.querySelector('#page1');
     const inputs = page.querySelectorAll('input, textarea, select');

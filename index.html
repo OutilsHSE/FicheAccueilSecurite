@@ -75,9 +75,27 @@
                     <label for="agence">Entreprise / agence d'intérim <span style="text-transform:none; font-weight:400;">(si intérimaire ou collaborateur externe)</span></label>
                     <input id="agence" class="input-bilan" type="text" placeholder="Nom de l'agence ou de l'entreprise">
                 </div>
-                <div class="field" style="margin-top: 14px;">
-                    <label for="activites">Activités réalisées par le collaborateur</label>
-                    <input id="activites" class="input-bilan" type="text" placeholder="Ex : conduite d'engins, faucardage, mécanique…">
+                <div class="grid-2" style="margin-top: 14px;">
+                    <div class="field">
+                        <label for="poste-travail">Poste de travail</label>
+                        <select id="poste-travail">
+                            <option value="">-- Sélectionner un poste --</option>
+                            <option value="conducteurs_tp">Conducteur d'engins TP</option>
+                            <option value="equipements_fluviaux">Conducteur d'équipements fluviaux / faucardage</option>
+                            <option value="marinier">Marinier / conducteur de bateau</option>
+                            <option value="chauffeur_pl">Chauffeur PL / grue auxiliaire</option>
+                            <option value="mecanicien">Mécanicien</option>
+                            <option value="soudeur">Soudeur</option>
+                            <option value="travaux_forestiers">Travaux forestiers</option>
+                            <option value="operateurs_polyvalents">Opérateur polyvalent</option>
+                            <option value="intervenant_bathy_topo">Intervenant bathymétrie / topographie</option>
+                            <option value="intervenant_tereos">Intervenant TEREOS</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="activites">Activités réalisées par le collaborateur</label>
+                        <input id="activites" class="input-bilan" type="text" placeholder="Ex : conduite d'engins, faucardage, mécanique…">
+                    </div>
                 </div>
             </div>
         </div>

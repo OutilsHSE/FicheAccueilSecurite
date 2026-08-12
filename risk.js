@@ -1,5 +1,152 @@
 renderChrome(4);
 
+/* =========================================================
+   SCÈNES DE TRAVAIL — les risques sont fléchés sur le visuel
+   x / y : position du repère sur l'image, en % (0-100)
+   Le libellé doit correspondre exactement à un risque du poste
+   (postesData) pour récupérer automatiquement le lien de la fiche.
+   ========================================================= */
+const SCENES = {
+  conducteurs_tp: {
+    img: "img/scenes/conducteur_engins_ponton.jpg",
+    titre: "Curage depuis un ponton",
+    points: [
+      { r: "Circulation en engins TP",              x: 45, y: 30 },
+      { r: "Coactivité Engins Piétons",             x: 55, y: 48 },
+      { r: "Port des EPI",                          x: 64, y: 40 },
+      { r: "Risque de chute à l’eau et noyade",     x: 20, y: 78 },
+      { r: "Opérations de levage mécanique",        x: 40, y: 48 },
+      { r: "Produits chimiques",                    x: 69, y: 56 },
+      { r: "Protection de l’environnement",         x: 14, y: 60 },
+      { r: "Manutention manuelle",                  x: 50, y: 57 },
+      { r: "Ordre et propreté sur le chantier",     x: 57, y: 63 },
+      { r: "Risques de chute de plain-pied",        x: 81, y: 72 },
+      { r: "Risque routier",                        x: 13, y: 17 },
+      { r: "Risque électrique",                     x: 87, y: 36 },
+      { r: "Intervention mécanique",                x: 46, y: 72 }
+    ]
+  },
+
+  chauffeur_pl: {
+    img: "img/scenes/chauffeur_pl.jpg",
+    titre: "Déchargement d'une pelle et levage à la grue auxiliaire",
+    points: [
+      { r: "Coactivité Engins Piétons",             x: 7,  y: 55 },
+      { r: "Circulation en engins TP",              x: 35, y: 45 },
+      { r: "Port des EPI",                          x: 6,  y: 48 },
+      { r: "Réfléchir avant d’agir",                x: 2,  y: 72 },
+      { r: "Risques de chute de plain-pied",        x: 30, y: 68 },
+      { r: "Manutention manuelle",                  x: 39, y: 66 },
+      { r: "Risques de chute de hauteur",           x: 37, y: 46 },
+      { r: "Opérations de levage mécanique",        x: 76, y: 42 },
+      { r: "Risque routier",                        x: 90, y: 53 },
+      { r: "Risque de chute à l’eau et noyade",     x: 85, y: 60 },
+      { r: "Protection de l’environnement",         x: 47, y: 57 },
+      { r: "Ordre et propreté sur le chantier",     x: 66, y: 55 }
+    ]
+  },
+
+  intervenant_bathy_topo: {
+    img: "img/scenes/bathymetrie.jpg",
+    titre: "Mise à l'eau et levés bathymétriques",
+    points: [
+      { r: "Port des EPI",                          x: 45, y: 42 },
+      { r: "Risque de chute à l’eau et noyade",     x: 62, y: 66 },
+      { r: "Manutention manuelle",                  x: 30, y: 60 },
+      { r: "Risque routier",                        x: 10, y: 40 },
+      { r: "Protection de l’environnement",         x: 74, y: 55 },
+      { r: "Coactivité Engins Piétons",             x: 45, y: 72 },
+      { r: "Opérations de levage mécanique",        x: 25, y: 55 },
+      { r: "Réfléchir avant d’agir",                x: 48, y: 50 },
+      { r: "Ordre et propreté sur le chantier",     x: 20, y: 30 }
+    ]
+  },
+
+  marinier: {
+    img: "img/scenes/marinier.jpg",
+    titre: "Chargement d'une barge",
+    points: [
+      { r: "Coactivité Engins Piétons",             x: 73, y: 40 },
+      { r: "Port des EPI",                          x: 74, y: 46 },
+      { r: "Risque de chute à l’eau et noyade",     x: 12, y: 55 },
+      { r: "Opérations de levage mécanique",        x: 50, y: 32 },
+      { r: "Manutention manuelle",                  x: 77, y: 57 },
+      { r: "Protection de l’environnement",         x: 60, y: 47 },
+      { r: "Risques de chute de plain-pied",        x: 76, y: 70 },
+      { r: "Risques de chute de hauteur / échelle", x: 66, y: 44 },
+      { r: "Réfléchir avant d’agir",                x: 31, y: 50 },
+      { r: "Ordre et propreté sur le chantier",     x: 38, y: 63 },
+      { r: "Produits chimiques",                    x: 86, y: 72 },
+      { r: "Risque électrique",                     x: 78, y: 87 },
+      { r: "Intervention mécanique",                x: 23, y: 70 }
+    ]
+  },
+
+  mecanicien: {
+    img: "img/scenes/mecanicien.jpg",
+    titre: "Changement d'un vérin hydraulique",
+    points: [
+      { r: "Coactivité Engins Piétons",             x: 17, y: 43 },
+      { r: "Port des EPI Atelier",                  x: 56, y: 19 },
+      { r: "Opérations de levage mécanique",        x: 42, y: 60 },
+      { r: "Intervention mécanique",                x: 68, y: 40 },
+      { r: "Protection de l’environnement",         x: 58, y: 78 },
+      { r: "Produits chimiques",                    x: 57, y: 63 },
+      { r: "Réfléchir avant d’agir",                x: 69, y: 68 },
+      { r: "Manutention manuelle",                  x: 75, y: 55 },
+      { r: "Ordre et propreté sur le chantier",     x: 30, y: 88 },
+      { r: "Risques de chute de plain-pied",        x: 45, y: 92 },
+      { r: "Risque de chute à l’eau et noyade",     x: 4,  y: 33 },
+      { r: "Risque électrique",                     x: 89, y: 45 },
+      { r: "Risque routier",                        x: 66, y: 47 },
+      { r: "Risque de chute de hauteur",            x: 51, y: 42 }
+    ]
+  },
+
+  soudeur: {
+    img: "img/scenes/soudeur.jpg",
+    titre: "Réparation d'un caisson par soudure",
+    points: [
+      { r: "Port des EPI Atelier",                  x: 37, y: 33 },
+      { r: "Intervention mécanique",                x: 42, y: 47 },
+      { r: "Risque électrique",                     x: 4,  y: 66 },
+      { r: "Réfléchir avant d’agir",                x: 12, y: 57 },
+      { r: "Produits chimiques",                    x: 68, y: 73 },
+      { r: "Protection de l’environnement",         x: 64, y: 84 },
+      { r: "Opérations de levage mécanique",        x: 23, y: 22 },
+      { r: "Manutention manuelle",                  x: 55, y: 45 },
+      { r: "Ordre et propreté sur le chantier",     x: 25, y: 88 },
+      { r: "Risques de chute de plain-pied",        x: 45, y: 90 },
+      { r: "Risque de chute à l’eau et noyade",     x: 64, y: 50 },
+      { r: "Coactivité Engins Piétons",             x: 78, y: 43 },
+      { r: "Risque routier",                        x: 94, y: 45 },
+      { r: "Risque de chute de hauteur",            x: 67, y: 28 }
+    ]
+  },
+
+  operateurs_polyvalents: {
+    img: "img/scenes/operateur_polyvalent.jpg",
+    titre: "Plantation d'hélophytes en berge",
+    points: [
+      { r: "Port des EPI",                          x: 47, y: 27 },
+      { r: "Risque de chute à l’eau et noyade",     x: 88, y: 55 },
+      { r: "Manutention manuelle",                  x: 48, y: 52 },
+      { r: "Risques de chute de plain-pied",        x: 35, y: 85 },
+      { r: "Protection de l’environnement",         x: 70, y: 78 },
+      { r: "Réfléchir avant d’agir",                x: 21, y: 45 },
+      { r: "Ordre et propreté sur le chantier",     x: 34, y: 72 },
+      { r: "Coactivité Engins Piétons",             x: 19, y: 40 },
+      { r: "Opérations de levage mécanique",        x: 36, y: 20 },
+      { r: "Produits chimiques",                    x: 61, y: 46 },
+      { r: "Risque routier",                        x: 7,  y: 33 }
+    ]
+  }
+};
+
+/* Postes couverts par une fiche de formation au poste dédiée :
+   pas de scène générique dans la fiche d'accueil */
+const POSTES_FICHE_DEDIEE = ["equipements_fluviaux", "travaux_forestiers", "intervenant_tereos"];
+
 const postesData = {
   conducteurs_tp: {
     risques: [
@@ -319,93 +466,152 @@ const postesData = {
 };
 function getPosteName(key) {
   const map = {
-    conducteurs_tp: "Conducteurs d’engins TP",
-    equipements_fluviaux: "Conducteurs équipements fluviaux / maritime",
-    marinier: "Marinier / Conducteur de Bateaux Freycinet",
-    chauffeur_pl: "Chauffeur PL / Utilisateur de grue auxiliaire",
+    conducteurs_tp: "Conducteur d'engins TP",
+    equipements_fluviaux: "Conducteur d'équipements fluviaux / faucardage",
+    marinier: "Marinier / conducteur de bateau",
+    chauffeur_pl: "Chauffeur PL / grue auxiliaire",
     mecanicien: "Mécanicien",
     soudeur: "Soudeur",
     travaux_forestiers: "Travaux forestiers",
-    operateurs_polyvalents: "Opérateurs polyvalents",
-    intervenant_bathy_topo: "Intervenant Cellule Bathy / Topo",
+    operateurs_polyvalents: "Opérateur polyvalent",
+    intervenant_bathy_topo: "Intervenant bathymétrie / topographie",
     intervenant_tereos: "Intervenant TEREOS",
   };
   return map[key] || key;
 }
 
-/* =========================================================
-   FAMILLES DE RISQUES — regroupement pour aérer la page
-   ========================================================= */
-const FAMILLES_RISQUES = [
-  {
-    id: "circulation", ico: "🚜", titre: "Circulation & engins",
-    risques: ["Circulation en engins TP", "Coactivité Engins Piétons", "Risque routier", "Opérations de levage mécanique"]
-  },
-  {
-    id: "eau_env", ico: "🌊", titre: "Eau & environnement",
-    risques: ["Risque de chute à l’eau et noyade", "Protection de l’environnement", "Produits chimiques"]
-  },
-  {
-    id: "corps", ico: "🦺", titre: "Corps, gestes & déplacements",
-    risques: ["Port des EPI", "Port des EPI Atelier", "Manutention manuelle", "Risques de chute de plain-pied",
-              "Risque de chute de hauteur", "Risques de chute de hauteur", "Risques de chute de hauteur / échelle"]
-  },
-  {
-    id: "energies", ico: "⚡", titre: "Énergies & interventions techniques",
-    risques: ["Risque électrique", "Intervention mécanique"]
-  },
-  {
-    id: "organisation", ico: "🧭", titre: "Organisation & comportement",
-    risques: ["Ordre et propreté sur le chantier", "Réfléchir avant d’agir"]
-  }
-];
+/* Compteur global de repères (pour numéroter sur plusieurs postes) */
+let COMPTEUR_SCENE = 0;
 
-function familleDuRisque(nom) {
-  const f = FAMILLES_RISQUES.find(fam => fam.risques.includes(nom));
-  return f ? f.id : "organisation";
-}
-
-// 🔹 Crée les listes de risques du poste, regroupées par famille
+// 🔹 Affiche la scène de travail du poste + les risques fléchés
 function createTable(posteKey, container) {
   const posteNom = getPosteName(posteKey);
   const poste = postesData[posteKey];
   if (!poste) return;
 
+  const scene = SCENES[posteKey];
+  const idScene = "sc" + (++COMPTEUR_SCENE);
+
+  // Lien de la fiche de risque à partir de son libellé
+  const lienDe = (nom) => {
+    const i = poste.risques.indexOf(nom);
+    return i >= 0 ? poste.liens_risques[i] : null;
+  };
+
   const titre = document.createElement("div");
   titre.className = "poste-titre";
-  titre.innerHTML = `<span class="poste-titre-ico">👷</span> ${posteNom} <span class="poste-titre-nb">${poste.risques.length} fiches de risque</span>`;
+  titre.innerHTML = `<span class="poste-titre-ico">👷</span> ${posteNom}` +
+    (scene ? ` <span class="poste-titre-scene">${scene.titre}</span>` : "") +
+    ` <span class="poste-titre-nb">${poste.risques.length} fiches de risque</span>`;
   container.appendChild(titre);
 
-  // Répartition des risques du poste dans les familles
-  const parFamille = {};
-  poste.risques.forEach((risque, i) => {
-    const fam = familleDuRisque(risque);
-    (parFamille[fam] = parFamille[fam] || []).push({ nom: risque, lien: poste.liens_risques[i] });
-  });
+  // ── Risques illustrés sur la scène ──
+  const placesValides = scene ? scene.points.filter(p => lienDe(p.r)) : [];
 
-  FAMILLES_RISQUES.forEach(fam => {
-    const liste = parFamille[fam.id];
-    if (!liste || !liste.length) return;
+  if (placesValides.length) {
+    const bloc = document.createElement("div");
+    bloc.className = "scene-bloc";
 
+    // Image + repères numérotés
+    const fig = document.createElement("div");
+    fig.className = "scene-fig";
+    fig.innerHTML = `<img class="scene-img" src="${scene.img}" alt="${scene.titre}">`;
+    placesValides.forEach((p, i) => {
+      const pt = document.createElement("button");
+      pt.type = "button";
+      pt.className = "scene-pt";
+      pt.style.left = p.x + "%";
+      pt.style.top = p.y + "%";
+      pt.textContent = i + 1;
+      pt.setAttribute("data-cible", idScene + "-" + i);
+      pt.title = p.r;
+      fig.appendChild(pt);
+    });
+    bloc.appendChild(fig);
+
+    // Légende : une ligne par repère
+    const legende = document.createElement("div");
+    legende.className = "scene-legende";
+    placesValides.forEach((p, i) => {
+      const ligne = document.createElement("label");
+      ligne.className = "scene-row";
+      ligne.id = idScene + "-" + i;
+      ligne.innerHTML = `<span class="scene-num">${i + 1}</span>
+        <input type="checkbox">
+        <span class="risk-lbl">${p.r}</span>`;
+      ligne.appendChild(vignetteDoc(lienDe(p.r), "doc-vignette doc-vignette-mini"));
+      legende.appendChild(ligne);
+    });
+    bloc.appendChild(legende);
+
+    container.appendChild(bloc);
+  }
+
+  // ── Poste couvert par une fiche de formation au poste dédiée ──
+  if (POSTES_FICHE_DEDIEE.includes(posteKey)) {
+    const info = document.createElement("div");
+    info.className = "alert alert-bleu";
+    info.style.marginTop = "12px";
+    info.innerHTML = `<span class="alert-ico">🎓</span>
+      <span>Ce poste fait l'objet d'une <span class="bold">fiche de formation &amp; accompagnement au poste dédiée</span>,
+      qui détaille les situations de travail et les risques associés. Les fiches de risque ci-dessous restent à présenter lors de l'accueil.
+      <a class="no-print" href="https://outilshse.github.io/FORMATIONS-AUTORISATIONS-DE-CONDUITE/" target="_blank" style="font-weight:600;">🔗 Accéder aux fiches de formation au poste</a></span>`;
+    container.appendChild(info);
+  }
+
+  // ── Risques du poste non illustrés sur la scène ──
+  const illustres = placesValides.map(p => p.r);
+  const autres = poste.risques.filter(r => !illustres.includes(r));
+
+  if (autres.length) {
     const entete = document.createElement("div");
     entete.className = "famille-head";
-    entete.innerHTML = `<span class="famille-ico">${fam.ico}</span><span class="famille-t">${fam.titre}</span><span class="famille-line"></span>`;
+    entete.innerHTML = `<span class="famille-ico">📌</span><span class="famille-t">${
+      placesValides.length ? "Autres risques du poste" : "Risques du poste"
+    }</span><span class="famille-line"></span>`;
     container.appendChild(entete);
 
-    const grille = document.createElement("div");
-    grille.className = "risk-list";
-
-    liste.forEach(r => {
+    const liste = document.createElement("div");
+    liste.className = "risk-list";
+    autres.forEach(nom => {
       const ligne = document.createElement("label");
       ligne.className = "risk-row";
-      ligne.innerHTML = `<input type="checkbox"><span class="risk-lbl">${r.nom}</span>`;
-      ligne.appendChild(vignetteDoc(r.lien, "doc-vignette doc-vignette-mini"));
-      grille.appendChild(ligne);
+      ligne.innerHTML = `<input type="checkbox"><span class="risk-lbl">${nom}</span>`;
+      ligne.appendChild(vignetteDoc(lienDe(nom), "doc-vignette doc-vignette-mini"));
+      liste.appendChild(ligne);
     });
-
-    container.appendChild(grille);
-  });
+    container.appendChild(liste);
+  }
 }
+
+/* Clic sur un repère de la scène → met en évidence la ligne correspondante */
+document.addEventListener("click", (e) => {
+  const pt = e.target.closest(".scene-pt");
+  if (!pt) return;
+  e.preventDefault();
+  const ligne = document.getElementById(pt.getAttribute("data-cible"));
+  if (!ligne) return;
+  document.querySelectorAll(".scene-row.vise").forEach(l => l.classList.remove("vise"));
+  document.querySelectorAll(".scene-pt.vise").forEach(p => p.classList.remove("vise"));
+  ligne.classList.add("vise");
+  pt.classList.add("vise");
+  ligne.scrollIntoView({ block: "nearest", behavior: "smooth" });
+});
+
+/* Survol d'une ligne → met en évidence le repère correspondant */
+document.addEventListener("mouseover", (e) => {
+  const row = e.target.closest && e.target.closest(".scene-row");
+  if (!row) return;
+  const pt = document.querySelector(`.scene-pt[data-cible="${row.id}"]`);
+  if (pt) pt.classList.add("survol");
+});
+
+document.addEventListener("mouseout", (e) => {
+  const row = e.target.closest && e.target.closest(".scene-row");
+  if (!row) return;
+  const pt = document.querySelector(`.scene-pt[data-cible="${row.id}"]`);
+  if (pt) pt.classList.remove("survol");
+});
 
 /* =========================================================
    RETEX — retours d'expérience (cartes visuelles)
@@ -590,6 +796,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // RETEX (uniquement si non restaurés)
   construireRetex();
 
+  // Poste pré-sélectionné depuis la page 1
+  const premier = document.querySelector(".poste-select");
+  if (premier && !premier.value) {
+    const poste = localStorage.getItem("posteTravail");
+    if (poste && postesData[poste]) {
+      premier.value = poste;
+      const bloc = premier.closest(".poste-block");
+      const conteneur = bloc.querySelector(".table-container");
+      conteneur.innerHTML = "";
+      createTable(poste, conteneur);
+    }
+  }
+
   // Sélecteurs de poste : délégation d'événement
   // (fonctionne aussi après restauration du brouillon et pour les postes ajoutés)
   document.addEventListener("change", (e) => {
@@ -619,15 +838,15 @@ document.addEventListener("DOMContentLoaded", () => {
           <label>Poste de travail</label>
           <select class="poste-select">
             <option value="">-- Sélectionner un poste --</option>
-            <option value="conducteurs_tp">Conducteurs d'engins TP</option>
-            <option value="equipements_fluviaux">Conducteurs équipements fluviaux / maritime</option>
-            <option value="marinier">Marinier / Conducteur de Bateaux Freycinet</option>
-            <option value="chauffeur_pl">Chauffeur PL / Utilisateur de grue auxiliaire</option>
+            <option value="conducteurs_tp">Conducteur d'engins TP</option>
+            <option value="equipements_fluviaux">Conducteur d'équipements fluviaux / faucardage</option>
+            <option value="marinier">Marinier / conducteur de bateau</option>
+            <option value="chauffeur_pl">Chauffeur PL / grue auxiliaire</option>
             <option value="mecanicien">Mécanicien</option>
             <option value="soudeur">Soudeur</option>
             <option value="travaux_forestiers">Travaux forestiers</option>
-            <option value="operateurs_polyvalents">Opérateurs polyvalents</option>
-            <option value="intervenant_bathy_topo">Intervenant Cellule Bathy / Topo</option>
+            <option value="operateurs_polyvalents">Opérateur polyvalent</option>
+            <option value="intervenant_bathy_topo">Intervenant bathymétrie / topographie</option>
             <option value="intervenant_tereos">Intervenant TEREOS</option>
           </select>
         </div>
