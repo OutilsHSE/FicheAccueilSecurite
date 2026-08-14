@@ -135,6 +135,14 @@ function savePageContent() {
       input.textContent = input.value;
     } else if (input.tagName.toLowerCase() === 'canvas') {
       input.setAttribute('data-image', input.toDataURL('image/png'));
+      // Trace réellement dessinée ? (contrôle des pixels, fiable même
+      // pour un canvas vide dont l'image encodée reste volumineuse)
+      let signe = false;
+      try {
+        const d = input.getContext('2d').getImageData(0, 0, input.width, input.height).data;
+        for (let i = 3; i < d.length; i += 4) { if (d[i] !== 0) { signe = true; break; } }
+      } catch (e) { console.warn(e); }
+      input.setAttribute('data-signe', signe ? '1' : '0');
     } else {
       input.setAttribute('value', input.value);
     }
@@ -189,6 +197,12 @@ function printAllPages() {
   }
 
   savePageContent();
+
+  // Enregistrement dans le registre CDES (n'empêche jamais l'export)
+  try {
+    if (typeof envoyerAuRegistre === "function") envoyerAuRegistre(false);
+    if (typeof afficherAnomalies === "function") afficherAnomalies();
+  } catch (e) { console.warn(e); }
 
   const page1Content = localStorage.getItem('page1Content');
   const page2Content = localStorage.getItem('page2Content');
@@ -277,6 +291,7 @@ window.onload = function () {
   }
 
   majQuizzResultat();
+  if (typeof afficherAnomalies === "function") afficherAnomalies();
 }
 
 window.onbeforeunload = function () {

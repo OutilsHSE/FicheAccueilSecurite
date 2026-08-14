@@ -1810,3 +1810,79 @@ input[type="file"].hidden-file { display: none; }
   padding: 4px;
   background: var(--gris-clair);
 }
+
+/* =========================================================
+   ÉTAT DE LA FICHE (anomalies) + BANDEAU REGISTRE
+   ========================================================= */
+.ano-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 11px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--gris-bord);
+  background: var(--gris-clair);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.ano-box .ano-ico { font-size: 1.4rem; flex-shrink: 0; }
+
+.ano-ok   { border-color: var(--vert);  background: var(--vert-pale); }
+.ano-warn { border-color: var(--orange); background: #FFFBEE; }
+.ano-ko   { border-color: var(--rouge); background: var(--rouge-pale); }
+
+.ano-liste {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ano-liste li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ano-grav {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.ano-grav.g-maj { background: var(--rouge); color: white; }
+.ano-grav.g-min { background: var(--orange); color: #3d2800; }
+
+/* Bandeau d'état de l'enregistrement */
+.etat-registre {
+  position: fixed;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%) translateY(16px);
+  background: white;
+  border: 2px solid var(--gris-bord);
+  border-radius: 24px;
+  padding: 10px 22px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texte);
+  box-shadow: 0 6px 22px rgba(0,58,110,0.18);
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.etat-registre.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media print {
+  .ano-box, .etat-registre, #section-anomalies { display: none !important; }
+}
