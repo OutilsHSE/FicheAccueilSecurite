@@ -64,6 +64,8 @@ async function envoyerAuRegistre(manuel) {
     const j = await r.json();
     if (!j.ok) throw new Error(j.error || "réponse invalide");
 
+    try { localStorage.setItem("registreEmpreinte", empreinteFiche(f, anomalies)); } catch (e) { console.warn(e); }
+
     const nb = anomalies.length;
     etatRegistre(
       nb ? `💾 Fiche enregistrée — ${nb} point(s) à régulariser` : "💾 Fiche enregistrée dans le registre CDES",
@@ -105,4 +107,121 @@ function afficherAnomalies() {
       </ul>
     </div>`;
   return anomalies;
+}
+
+/* =========================================================
+   ENREGISTREMENT AUTOMATIQUE
+   Dès que la fiche est signée (nom + les deux signatures),
+   elle part dans le registre sans attendre l'export PDF.
+   Un envoi n'est refait que si le contenu a changé.
+   ========================================================= */
+
+/* Empreinte du contenu : évite les envois inutiles */
+function empreinteFiche(f, anomalies) {
+  const brut = JSON.stringify([f, anomalies.length]);
+  let h = 0;
+  for (let i = 0; i < brut.length; i++) {
+    h = ((h << 5) - h + brut.charCodeAt(i)) | 0;
+  }
+  return String(h);
+}
+
+/* Conditions minimales pour un enregistrement automatique */
+function ficheSignee(f) {
+  return !!(f.nom && f.prenom && f.signatureResponsable && f.signatureCollaborateur);
+}
+
+let _autoTimer = null;
+
+/* Programme un enregistrement automatique (anti-rafale) */
+function planifierAutoEnregistrement(delai) {
+  clearTimeout(_autoTimer);
+  _autoTimer = setTimeout(autoEnregistrer, delai || 2500);
+}
+
+async function autoEnregistrer() {
+  const url = (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.apiUrl) || "";
+  if (!url) return;
+
+  // On travaille sur le brouillon à jour
+  if (typeof savePageContent === "function") {
+    try { savePageContent(); } catch (e) { return; }
+  }
+
+  const f = collecterFiche();
+  if (!ficheSignee(f)) return;
+
+  const anomalies = detecterAnomalies(f);
+  const empreinte = empreinteFiche(f, anomalies);
+  if (localStorage.getItem("registreEmpreinte") === empreinte) return; // déjà enregistré
+
+  await envoyerAuRegistre(false);
+}
+
+/* Envoi à l'export PDF : on saute si le contenu est déjà enregistré */
+async function enregistrerSiNecessaire() {
+  const url = (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.apiUrl) || "";
+  if (!url) return;
+  const f = collecterFiche();
+  if (!f.nom || !f.prenom) return;
+  const empreinte = empreinteFiche(f, detecterAnomalies(f));
+  if (localStorage.getItem("registreEmpreinte") === empreinte) return; // rien de neuf
+  await envoyerAuRegistre(false);
+}
+
+/* Dernier filet : au moment de quitter la page, envoi non bloquant */
+function envoiDeSecours() {
+  const url = (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.apiUrl) || "";
+  if (!url || !navigator.sendBeacon) return;
+
+  if (typeof savePageContent === "function") {
+    try { savePageContent(); } catch (e) { return; }
+  }
+
+  const f = collecterFiche();
+  if (!ficheSignee(f)) return;
+
+  const anomalies = detecterAnomalies(f);
+  const empreinte = empreinteFiche(f, anomalies);
+  if (localStorage.getItem("registreEmpreinte") === empreinte) return;
+
+  const cle = cleCollaborateur(f);
+  if (!cle) return;
+
+  const payload = {
+    action: "accueil-hse",
+    ficheId: (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.ficheId) || "accueil-hse",
+    version: (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.version) || "",
+    key: cle,
+    fiche: f,
+    anomalies: anomalies,
+    formations: formationsAProgrammer(f),
+    envoyeLe: new Date().toISOString()
+  };
+
+  const ok = navigator.sendBeacon(url, new Blob([JSON.stringify(payload)], { type: "text/plain;charset=utf-8" }));
+  if (ok) localStorage.setItem("registreEmpreinte", empreinte);
+}
+
+/* Surveillance de la page Signatures */
+function activerAutoEnregistrement() {
+  const page = document.getElementById("page6");
+  if (!page) return;
+
+  // Saisies et cases à cocher
+  page.addEventListener("change", () => planifierAutoEnregistrement());
+  page.addEventListener("input", () => planifierAutoEnregistrement(4000));
+
+  // Fin d'un tracé de signature (le canvas n'émet pas d'événement change)
+  ["mouseup", "touchend"].forEach(evt =>
+    page.addEventListener(evt, (e) => {
+      if (e.target && e.target.tagName === "CANVAS") planifierAutoEnregistrement(1500);
+    })
+  );
+
+  // Sortie de page
+  window.addEventListener("pagehide", envoiDeSecours);
+
+  // Fiche déjà complète à l'ouverture (retour sur la page)
+  planifierAutoEnregistrement(3000);
 }

@@ -13,7 +13,7 @@ const FICHE_VERSION = "v5-2026-08";
   try {
     if (localStorage.getItem("ficheAccueilVersion") !== FICHE_VERSION) {
       ["page1Content", "page2Content", "page3Content", "page4Content",
-       "page5Content", "page6Content", "Nom", "quizzResultat", "activiteCollaborateur", "posteTravail"].forEach(k => localStorage.removeItem(k));
+       "page5Content", "page6Content", "Nom", "quizzResultat", "activiteCollaborateur", "posteTravail", "registreEmpreinte"].forEach(k => localStorage.removeItem(k));
       localStorage.setItem("ficheAccueilVersion", FICHE_VERSION);
     }
   } catch (e) { console.warn(e); }

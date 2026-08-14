@@ -200,7 +200,7 @@ function printAllPages() {
 
   // Enregistrement dans le registre CDES (n'empêche jamais l'export)
   try {
-    if (typeof envoyerAuRegistre === "function") envoyerAuRegistre(false);
+    if (typeof enregistrerSiNecessaire === "function") enregistrerSiNecessaire();
     if (typeof afficherAnomalies === "function") afficherAnomalies();
   } catch (e) { console.warn(e); }
 
@@ -292,6 +292,7 @@ window.onload = function () {
 
   majQuizzResultat();
   if (typeof afficherAnomalies === "function") afficherAnomalies();
+  if (typeof activerAutoEnregistrement === "function") activerAutoEnregistrement();
 }
 
 window.onbeforeunload = function () {
