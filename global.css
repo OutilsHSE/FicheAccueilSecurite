@@ -1886,3 +1886,11 @@ input[type="file"].hidden-file { display: none; }
 @media print {
   .ano-box, .etat-registre, #section-anomalies { display: none !important; }
 }
+
+/* Export PDF : la page vivante est masquée, seule la copie figée est
+   imprimée. Les cadres de signature restent donc utilisables après
+   l'export (auparavant ils étaient remplacés par des images). */
+@media print {
+  body.en-impression > main.main { display: none !important; }
+  body.en-impression > .nav-bar { display: none !important; }
+}

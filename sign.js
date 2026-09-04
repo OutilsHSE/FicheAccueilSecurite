@@ -178,24 +178,42 @@ function loadPageContent() {
 }
 
 /* ===== Export / impression de la fiche complète ===== */
-function printAllPages() {
-  function replaceCanvasWithImages(source, targetContainer) {
-    const canvases = source.querySelectorAll('canvas');
-    canvases.forEach((canvas) => {
-      const img = document.createElement('img');
-      img.src = canvas.toDataURL('image/png');
+
+/* Image figée d'un canvas, pour l'impression. On ne remplace JAMAIS le
+   canvas d'origine : il doit rester utilisable après l'export (avant, un
+   clic sur « Exporter » transformait définitivement les cadres de
+   signature en images et il devenait impossible de signer). */
+function imageDepuisCanvas(canvas) {
+  const img = document.createElement('img');
+  try { img.src = canvas.toDataURL('image/png'); } catch (e) { console.warn(e); }
+  img.style.border = '1px solid #000';
+  img.style.width = canvas.style.width || '100%';
+  img.style.height = canvas.style.height || 'auto';
+  img.className = canvas.className;
+  return img;
+}
+
+/* Dans une COPIE de page, remplace chaque canvas par son image.
+   `origine` fournit les tracés réels (le clone d'un canvas est vide). */
+function figerCanvas(copie, origine) {
+  copie.querySelectorAll('canvas').forEach((c) => {
+    const source = (origine && c.id) ? origine.querySelector('#' + c.id) : null;
+    let img;
+    if (source && source.tagName.toLowerCase() === 'canvas') {
+      img = imageDepuisCanvas(source);
+    } else {
+      // page restaurée depuis un brouillon : le tracé est dans data-image
+      img = document.createElement('img');
+      img.src = c.getAttribute('data-image') || '';
       img.style.border = '1px solid #000';
-      img.style.width = canvas.style.width || '100%';
-      img.style.height = canvas.style.height || 'auto';
-      img.className = canvas.className;
+      img.style.width = '100%';
+      img.className = c.className;
+    }
+    c.replaceWith(img);
+  });
+}
 
-      const targetCanvas = targetContainer.querySelector(`#${canvas.id}`);
-      if (targetCanvas) {
-        targetCanvas.replaceWith(img);
-      }
-    });
-  }
-
+function printAllPages() {
   savePageContent();
 
   // Enregistrement dans le registre CDES (n'empêche jamais l'export)
@@ -204,39 +222,16 @@ function printAllPages() {
     if (typeof afficherAnomalies === "function") afficherAnomalies();
   } catch (e) { console.warn(e); }
 
-  const page1Content = localStorage.getItem('page1Content');
-  const page2Content = localStorage.getItem('page2Content');
-  const page3Content = localStorage.getItem('page3Content');
-  const page4Content = localStorage.getItem('page4Content');
-  const page5Content = localStorage.getItem('page5Content');
+  const brouillons = ['page1Content', 'page2Content', 'page3Content', 'page4Content', 'page5Content']
+    .map(k => localStorage.getItem(k));
 
-  const tempContainer1 = document.createElement('div');
-  const tempContainer2 = document.createElement('div');
-  const tempContainer3 = document.createElement('div');
-  const tempContainer4 = document.createElement('div');
-  const tempContainer5 = document.createElement('div');
-
-  if (page1Content) tempContainer1.innerHTML = page1Content;
-  if (page2Content) tempContainer2.innerHTML = page2Content;
-  if (page3Content) tempContainer3.innerHTML = page3Content;
-  if (page4Content) tempContainer4.innerHTML = page4Content;
-  if (page5Content) tempContainer5.innerHTML = page5Content;
-
-  replaceCanvasWithImages(document.body, document.body);
-  replaceCanvasWithImages(document.body, tempContainer1);
-  replaceCanvasWithImages(document.body, tempContainer2);
-  replaceCanvasWithImages(document.body, tempContainer3);
-  replaceCanvasWithImages(document.body, tempContainer4);
-  replaceCanvasWithImages(document.body, tempContainer5);
-
-  // Assemblage final
   const finalContainer = document.createElement('div');
   finalContainer.id = 'print-assembly';
 
   // En-tête de document (1re page uniquement)
   const nomComplet = (localStorage.getItem('Nom') || '').trim();
   const dateAccueil = document.getElementById('visite-date-reponsable')?.value || '';
-  finalContainer.innerHTML += `
+  finalContainer.innerHTML = `
     <div class="print-doc-header">
       <img src="img/CDES_Logo.png" alt="CDES">
       <div>
@@ -245,20 +240,36 @@ function printAllPages() {
       </div>
     </div>`;
 
-  if (page1Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer1.innerHTML + '</div>';
-  if (page2Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer2.innerHTML + '</div>';
-  if (page3Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer3.innerHTML + '</div>';
-  if (page4Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer4.innerHTML + '</div>';
-  if (page5Content) finalContainer.innerHTML += '<div class="page-section page-break">' + tempContainer5.innerHTML + '</div>';
+  brouillons.forEach((contenu) => {
+    if (!contenu) return;
+    const bloc = document.createElement('div');
+    bloc.className = 'page-section page-break';
+    bloc.innerHTML = contenu;
+    figerCanvas(bloc, null);
+    finalContainer.appendChild(bloc);
+  });
+
+  // Page 6 : on imprime une COPIE, l'originale reste intacte et signable
+  const page6 = document.querySelector('#page6');
+  if (page6) {
+    const bloc = document.createElement('div');
+    bloc.className = 'page-section page-break';
+    bloc.appendChild(page6.cloneNode(true));
+    figerCanvas(bloc, page6);
+    bloc.querySelectorAll('#page6').forEach(el => el.removeAttribute('id'));
+    finalContainer.appendChild(bloc);
+  }
 
   document.body.insertBefore(finalContainer, document.body.firstChild);
+  // pendant l'impression, on masque la page vivante : seule la copie sort
+  document.body.classList.add('en-impression');
 
   // Diplôme annexé en fin de document (si quizz validé)
   const diplome = construireDiplome();
   if (diplome) document.body.appendChild(diplome);
 
   // Nom de fichier explicite : AAAA-MM-JJ-Accueil HSE-Nom Prénom
-  const nom = (localStorage.getItem('Nom') || '').trim();
+  const nom = nomComplet;
   const date = document.getElementById('visite-date-reponsable')?.value
     || new Date().toISOString().slice(0, 10);
   const ancienTitre = document.title;
@@ -266,21 +277,56 @@ function printAllPages() {
 
   window.scrollTo(0, 0);
 
+  const nettoyer = function () {
+    const assembly = document.getElementById('print-assembly');
+    if (assembly) assembly.remove();
+    const dip = document.getElementById('diplome-print');
+    if (dip) dip.remove();
+    document.body.classList.remove('en-impression');
+    document.title = ancienTitre;
+  };
+
   setTimeout(() => {
-    window.print();
-    // Nettoyage après impression : retirer l'assemblage temporaire
-    setTimeout(() => {
-      const assembly = document.getElementById('print-assembly');
-      if (assembly) assembly.remove();
-      const dip = document.getElementById('diplome-print');
-      if (dip) dip.remove();
-      document.title = ancienTitre;
-    }, 500);
+    try { window.print(); } catch (e) { console.warn(e); }
+    setTimeout(nettoyer, 800);
   }, 500);
+}
+
+/* ===== Réparation d'une fiche abîmée par un ancien export =====
+   Les versions précédentes remplaçaient les canvas par des images au
+   moment de l'export, et le brouillon enregistré gardait ces images :
+   la fiche devenait définitivement impossible à signer. On remet ici de
+   vrais canvas en récupérant le tracé déjà présent. */
+function reparerSignatures() {
+  const page = document.querySelector('#page6');
+  if (!page) return 0;
+  const images = page.querySelectorAll('img.signature-canvas');
+  let repares = 0;
+  images.forEach((img) => {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'signature-canvas';
+    if (img.id) canvas.id = img.id;
+    const trace = img.getAttribute('src');
+    img.replaceWith(canvas);
+    repares++;
+    if (trace && trace.indexOf('data:image') === 0) {
+      const ancienne = new Image();
+      ancienne.onload = () => {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        canvas.getContext('2d').drawImage(ancienne, 0, 0, canvas.width, canvas.height);
+      };
+      ancienne.src = trace;
+    }
+  });
+  return repares;
 }
 
 auDemarrage(function () {
   const restaure = loadPageContent();
+
+  // fiche abîmée par un ancien export : on rétablit des cadres signables
+  if (reparerSignatures()) console.log('Cadres de signature rétablis');
 
   setupCanvas('drawingCanvasPageSign1');
   setupCanvas('drawingCanvasPageSign2');
