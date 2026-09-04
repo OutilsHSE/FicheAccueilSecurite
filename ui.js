@@ -19,6 +19,35 @@ const FICHE_VERSION = "v5-2026-08";
   } catch (e) { console.warn(e); }
 })();
 
+/* Démarrage : dès que le HTML est prêt, sans attendre images et scripts
+   externes (un CDN filtré par le réseau bloquait l'initialisation). */
+function auDemarrage(fn) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fn);
+  } else {
+    fn();
+  }
+}
+
+/* Écriture d'un brouillon dans le navigateur. L'espace est limité
+   (~5 Mo) : si les pièces jointes le saturent, on prévient clairement
+   au lieu d'échouer en silence et de perdre la saisie. */
+function sauverLocal(cle, valeur) {
+  try {
+    localStorage.setItem(cle, valeur);
+    return true;
+  } catch (e) {
+    console.warn(e);
+    if (!sauverLocal.deja) {
+      sauverLocal.deja = true;
+      alert("La mémoire du navigateur est saturée : la fiche n'a pas pu être "
+        + "enregistrée.\n\nSupprimez quelques pièces jointes (page Autorisations) "
+        + "puis réessayez, ou exportez la fiche en PDF tout de suite pour ne rien perdre.");
+    }
+    return false;
+  }
+}
+
 const ETAPES_ACCUEIL = [
   { titre: "Collaborateur",  url: "index.html" },
   { titre: "Autorisations",  url: "autorisation.html" },
@@ -204,6 +233,30 @@ document.addEventListener("click", (e) => {
   }
 });
 
+/* Réduit une photo (appareil photo de téléphone = 3 à 5 Mo) avant de la
+   stocker : au-delà, le brouillon dépasse la mémoire du navigateur.
+   1400 px de large et une qualité JPEG de 0,72 restent parfaitement
+   lisibles pour un permis, une carte ou une attestation. */
+function alleger(dataURL, retour) {
+  const img = new Image();
+  img.onload = function () {
+    try {
+      const maxi = 1400;
+      const ratio = Math.min(1, maxi / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * ratio);
+      c.height = Math.round(img.height * ratio);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      retour(c.toDataURL("image/jpeg", 0.72));
+    } catch (e) {
+      console.warn(e);
+      retour(dataURL);
+    }
+  };
+  img.onerror = function () { retour(dataURL); };
+  img.src = dataURL;
+}
+
 /* =========================================================
    PIÈCES JOINTES (photos + PDF) — délégation d'événements
    (survit à la restauration du brouillon)
@@ -216,34 +269,56 @@ document.addEventListener("change", (e) => {
   if (!conteneur) return;
 
   Array.from(t.files).forEach((fichier) => {
-    const lecteur = new FileReader();
     const estPdf = fichier.type === "application/pdf" || /\.pdf$/i.test(fichier.name);
 
+    /* Un PDF ne peut pas être allégé : au-delà de 2 Mo il saturerait à lui
+       seul la mémoire du navigateur et ferait perdre la fiche. */
+    if (estPdf && fichier.size > 2 * 1024 * 1024) {
+      alert("Le document « " + fichier.name + " » est trop lourd ("
+        + Math.round(fichier.size / 1024 / 1024 * 10) / 10
+        + " Mo).\n\nMerci de joindre un PDF de moins de 2 Mo, ou une photo du document.");
+      return;
+    }
+
+    const lecteur = new FileReader();
+
     lecteur.onload = function (ev) {
-      const carte = document.createElement("div");
-      carte.className = "photo-thumb";
+      const poser = function (donnees) {
+        const carte = document.createElement("div");
+        carte.className = "photo-thumb";
 
-      if (estPdf) {
-        const lien = document.createElement("a");
-        lien.href = ev.target.result;
-        lien.download = fichier.name;
-        lien.className = "pj-pdf";
-        lien.innerHTML = `<span class="pj-pdf-ico">📄</span><span class="pj-pdf-nom">${fichier.name}</span>`;
-        carte.appendChild(lien);
-      } else {
-        const img = document.createElement("img");
-        img.src = ev.target.result;
-        img.alt = fichier.name;
-        carte.appendChild(img);
-      }
+        if (estPdf) {
+          const lien = document.createElement("a");
+          lien.href = donnees;
+          lien.download = fichier.name;
+          lien.className = "pj-pdf";
+          const ico = document.createElement("span");
+          ico.className = "pj-pdf-ico";
+          ico.textContent = "📄";
+          const nom = document.createElement("span");
+          nom.className = "pj-pdf-nom";
+          nom.textContent = fichier.name;   // textContent : un nom de fichier n'est pas du HTML
+          lien.appendChild(ico);
+          lien.appendChild(nom);
+          carte.appendChild(lien);
+        } else {
+          const img = document.createElement("img");
+          img.src = donnees;
+          img.alt = fichier.name;
+          carte.appendChild(img);
+        }
 
-      const btn = document.createElement("button");
-      btn.textContent = "✕";
-      btn.className = "del-photo no-print";
-      btn.type = "button";
-      carte.appendChild(btn);
+        const btn = document.createElement("button");
+        btn.textContent = "✕";
+        btn.className = "del-photo no-print";
+        btn.type = "button";
+        carte.appendChild(btn);
 
-      conteneur.appendChild(carte);
+        conteneur.appendChild(carte);
+      };
+
+      if (estPdf) poser(ev.target.result);
+      else alleger(ev.target.result, poser);   // photo de téléphone = plusieurs Mo : on redimensionne
     };
 
     lecteur.readAsDataURL(fichier);

@@ -419,3 +419,25 @@ button:disabled { opacity: 0.5; filter: none; transform: none; cursor: default; 
   body.print-diplome #quiz-container { display: none !important; }
   body.print-diplome .diplome { display: block !important; }
 }
+
+/* Marqueurs de clic : juste / faux (questions à repérage sur image) */
+.click-marker.marker-juste {
+  border-color: var(--vert, #2DC653);
+  background-color: rgba(45, 198, 83, 0.28);
+}
+
+.click-marker.marker-faux {
+  border-color: var(--rouge, #E63946);
+  background-color: rgba(230, 57, 70, 0.25);
+}
+
+/* Message affiché quand on valide sans avoir répondu */
+.quizz-alerte {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-left: 4px solid var(--orange, #F4A03A);
+  background: #FFF6E7;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #7A4E00;
+}

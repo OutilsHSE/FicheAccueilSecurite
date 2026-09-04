@@ -105,12 +105,10 @@
   <div class="nav-bar no-print">
     <button class="btn btn-ghost" onclick="navTo('instruction.html')">⬅ Précédent</button>
     <div class="nav-right">
-      <button class="btn btn-vert final-button" onclick="printAllPages()">📄 Exporter la fiche (PDF)</button>
+      <button class="btn btn-ghost" type="button" onclick="printAllPages()">📄 Exporter la fiche (PDF)</button>
+      <button class="btn btn-vert final-button" type="button" id="btn-envoi-hse" onclick="envoyerAuServiceHSE()">📨 Envoyer la fiche au service HSE</button>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script src="config.js"></script>
   <script src="ui.js"></script>

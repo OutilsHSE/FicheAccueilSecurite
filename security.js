@@ -136,7 +136,7 @@ function savePageContent() {
             input.setAttribute('value', input.value);
         }
     });
-    localStorage.setItem('page3Content', document.querySelector('#page3').outerHTML);
+    sauverLocal('page3Content', document.querySelector('#page3').outerHTML);
 }
 
 function loadPageContent() {
@@ -158,12 +158,12 @@ function redirectToAutorisationPage() {
     window.location.href = 'risk.html';
 }
 
-window.onload = function () {
+auDemarrage(function () {
     loadPageContent();
     construireEpi();
     construireEquipements();
     majEpi();
-}
+});
 
 window.onbeforeunload = function () {
     savePageContent();

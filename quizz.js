@@ -25,6 +25,7 @@ document.querySelectorAll(".click-marker, .zone-correcte").forEach(el => el.remo
 // Réinitialise les attributs dataset pour les clics
 if (imageGrande) {
   imageGrande.dataset.clicks = 0;
+  imageGrande.dataset.trouvees = "[]";
   imageGrande.onclick = null;
 }
   propositionsEl.innerHTML = "";
@@ -85,6 +86,13 @@ function validerReponse() {
   const inputs = propositionsEl.querySelectorAll("input");
   let correct = true;
 
+  /* Sans cette garde, une question vrai/faux laissée vide était comptée
+     juste et rapportait ses points. */
+  if (inputs.length && ![].some.call(inputs, i => i.checked)) {
+    explicationEl.innerHTML = '<div class="quizz-alerte">Sélectionnez au moins une réponse avant de valider.</div>';
+    return;
+  }
+
   inputs.forEach((input, i) => {
     const isChecked = input.checked;
     const isCorrect = question.propositions[i].correct;
@@ -115,17 +123,25 @@ function handleImageClick(event, question) {
   const xPercent = ((event.clientX - rect.left) / rect.width) * 100;
   const yPercent = ((event.clientY - rect.top) / rect.height) * 100;
 
-  // Vérification dans les zones
-  const isCorrect = question.bonnesZones.some(zone => {
+  // Vérification dans les zones : on retient LAQUELLE, pour ne pas
+  // compter deux fois la même zone trouvée
+  const indexZone = question.bonnesZones.findIndex(zone => {
     const dx = xPercent - zone.x;
     const dy = yPercent - zone.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance <= zone.rayon;
+    return Math.sqrt(dx * dx + dy * dy) <= zone.rayon;
   });
+
+  const trouvees = JSON.parse(img.dataset.trouvees || "[]");
+  const nouvelle = indexZone >= 0 && trouvees.indexOf(indexZone) === -1;
+  if (nouvelle) {
+    trouvees.push(indexZone);
+    img.dataset.trouvees = JSON.stringify(trouvees);
+  }
 
   // Marqueur
   const marker = document.createElement("div");
   marker.classList.add("click-marker");
+  marker.classList.add(indexZone >= 0 ? "marker-juste" : "marker-faux");
   marker.style.left = `${xPercent}%`;
   marker.style.top = `${yPercent}%`;
   img.parentElement.appendChild(marker);
@@ -136,6 +152,11 @@ function handleImageClick(event, question) {
   if (img.dataset.clicks >= question.bonnesZones.length) {
     img.onclick = null;
     img.style.cursor = "default";
+
+    // Points au prorata des zones réellement trouvées (ils n'étaient
+    // jamais comptés auparavant pour ce type de question)
+    score += Math.round(question.points * trouvees.length / question.bonnesZones.length);
+
     afficherZonesCorrectes(img, question.bonnesZones);
     afficherExplication(question);
     btnValider.disabled = true;
@@ -215,7 +236,11 @@ function afficherPageFinale() {
 
   // 1. Récupération du nom
   let username = localStorage.getItem("Nom");
-  if (!username) username = "Participant";
+  if (!username || !username.trim()) username = "Participant";
+  // Le nom vient d'une saisie libre : on l'échappe avant de l'insérer en HTML
+  username = username.replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[c]);
 
   // 2. Calcul du score
   const totalPoints = quizzData[0].questions.reduce((a, q) => a + q.points, 0);

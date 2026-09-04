@@ -16,7 +16,7 @@ function savePageContent() {
             input.setAttribute('value', input.value);
         }
     });
-    localStorage.setItem('page5Content', document.querySelector('#page5').outerHTML);
+    sauverLocal('page5Content', document.querySelector('#page5').outerHTML);
 }
 
 function loadPageContent() {
@@ -34,9 +34,9 @@ function redirectToSignPage() {
     window.location.href = 'sign.html';
 }
 
-window.onload = function () {
+auDemarrage(function () {
     loadPageContent();
-}
+});
 
 window.onbeforeunload = function () {
     savePageContent();

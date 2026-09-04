@@ -144,7 +144,7 @@ function savePageContent() {
             input.setAttribute('value', input.value);
         }
     });
-    localStorage.setItem('page2Content', document.querySelector('#page2').outerHTML);
+    sauverLocal('page2Content', document.querySelector('#page2').outerHTML);
 }
 
 function loadPageContent() {
@@ -166,11 +166,11 @@ function redirectToAutorisationPage() {
     window.location.href = 'security.html';
 }
 
-window.onload = function () {
+auDemarrage(function () {
     loadPageContent();
     construireFormations();
     majCompteurs();
-}
+});
 
 window.onbeforeunload = function () {
     savePageContent();

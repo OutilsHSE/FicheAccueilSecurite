@@ -30,7 +30,7 @@ function savePageContent() {
             input.setAttribute('value', input.value);
         }
     });
-    localStorage.setItem('page1Content', document.querySelector('#page1').outerHTML);
+    sauverLocal('page1Content', document.querySelector('#page1').outerHTML);
 }
 
 /* Le champ « agence d'intérim » n'apparaît que pour les intérimaires
@@ -63,7 +63,7 @@ function nouvelleFiche() {
     window.location.reload();
 }
 
-window.onload = function () {
+auDemarrage(function () {
     const saved = localStorage.getItem('page1Content');
     if (saved) {
         // Parcours en cours : on restaure la saisie (retour via le fil d'étapes)
@@ -75,7 +75,7 @@ window.onload = function () {
         document.getElementById('visite-date').valueAsDate = new Date();
     }
     majAgenceInterim();
-}
+});
 
 window.onbeforeunload = function () {
     savePageContent();

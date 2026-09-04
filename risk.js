@@ -754,7 +754,7 @@ function savePageContent() {
     }
   });
 
-  localStorage.setItem("page4Content", page.outerHTML);
+  sauverLocal("page4Content", page.outerHTML);
 }
 
 function loadPageContent() {

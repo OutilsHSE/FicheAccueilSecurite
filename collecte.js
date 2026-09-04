@@ -144,7 +144,7 @@ function collecterFiche() {
 
   // Consignes, Vigiminute, fiches de formation au poste
   if (p5) {
-    const vus = p5.querySelectorAll(".consigne-row .vu-ack input");
+    const vus = p5.querySelectorAll(".consigne-row > .vu-ack input");
     f.consignesTotal = vus.length;
     vus.forEach(i => { if (i.hasAttribute("checked")) f.consignesVues++; });
 
@@ -212,15 +212,19 @@ function detecterAnomalies(f) {
   if (f.reglesTotal && f.reglesAcquittees < f.reglesTotal)
     add("Majeure", "Règles majeures", (f.reglesTotal - f.reglesAcquittees) + " règle(s) sur " + f.reglesTotal + " non acquittée(s) par le collaborateur");
 
-  f.epiManquants.forEach(nom => add("Majeure", "EPI", "EPI non fourni : " + nom));
-  f.equipementsManquants.forEach(nom => add("Mineure", "Équipements HSE", "Équipement non fourni : " + nom));
+  // EPI : un seul point de contrôle regroupant tous les manquants
+  if (f.epiManquants.length)
+    add("Majeure", "EPI", f.epiManquants.length + " EPI non fourni(s) : " + f.epiManquants.join(", "));
+
+  // Équipements HSE : un seul point de contrôle également
+  if (f.equipementsManquants.length)
+    add("Mineure", "Équipements HSE", f.equipementsManquants.length + " équipement(s) non fourni(s) : " + f.equipementsManquants.join(", "));
 
   if (!f.postesRisques.length) add("Majeure", "Risques", "Aucun poste de travail sélectionné sur la page Risques");
   else if (f.risquesTotal && f.risquesVus < f.risquesTotal)
     add("Mineure", "Risques", (f.risquesTotal - f.risquesVus) + " fiche(s) de risque sur " + f.risquesTotal + " non présentée(s)");
 
-  if (f.retexTotal && f.retexVus < f.retexTotal)
-    add("Mineure", "RETEX", (f.retexTotal - f.retexVus) + " retour(s) d'expérience sur " + f.retexTotal + " non présenté(s)");
+  // Les RETEX ne sont plus un point de contrôle (présentation libre)
 
   if (!f.referent) add("Mineure", "Consignes", "Référent chantier non renseigné");
   if (f.consignesTotal && f.consignesVues < f.consignesTotal)

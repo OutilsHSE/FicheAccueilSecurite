@@ -147,7 +147,7 @@ function savePageContent() {
       input.setAttribute('value', input.value);
     }
   });
-  localStorage.setItem('page6Content', page.outerHTML);
+  sauverLocal('page6Content', page.outerHTML);
 }
 
 function loadPageContent() {
@@ -279,7 +279,7 @@ function printAllPages() {
   }, 500);
 }
 
-window.onload = function () {
+auDemarrage(function () {
   const restaure = loadPageContent();
 
   setupCanvas('drawingCanvasPageSign1');
@@ -293,7 +293,7 @@ window.onload = function () {
   majQuizzResultat();
   if (typeof afficherAnomalies === "function") afficherAnomalies();
   if (typeof activerAutoEnregistrement === "function") activerAutoEnregistrement();
-}
+});
 
 window.onbeforeunload = function () {
   savePageContent();

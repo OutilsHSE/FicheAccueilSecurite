@@ -75,7 +75,8 @@ async function envoyerAuRegistre(manuel) {
 
   } catch (err) {
     console.error(err);
-    etatRegistre("⚠️ Enregistrement impossible (" + err.message + ") — le PDF reste disponible", "#E63946");
+    etatRegistre("⚠️ Enregistrement impossible — le script Apps Script ne répond pas correctement "
+      + "(action « accueil-hse » branchée ?). Le PDF reste disponible.", "#E63946");
     return { ok: false, raison: err.message };
   }
 }
@@ -84,10 +85,31 @@ async function envoyerAuRegistre(manuel) {
    RÉCAPITULATIF DES ANOMALIES (affiché avant l'export)
    ========================================================= */
 function afficherAnomalies() {
+  // On enregistre d'abord la page en cours, sinon le contrôle porte
+  // sur le brouillon précédent (cases cochées à l'instant ignorées).
+  if (typeof savePageContent === "function") {
+    try { savePageContent(); } catch (e) { console.warn(e); }
+  }
   const f = collecterFiche();
   const anomalies = detecterAnomalies(f);
-  const zone = document.getElementById("bloc-anomalies");
-  if (!zone) return anomalies;
+
+  // Un brouillon enregistré par une version précédente peut ne pas
+  // contenir le bloc : on le recrée alors avant les signatures.
+  let zone = document.getElementById("bloc-anomalies");
+  if (!zone) {
+    const page = document.getElementById("page6");
+    if (!page) return anomalies;
+    const section = document.createElement("div");
+    section.className = "section no-print";
+    section.id = "section-anomalies";
+    section.innerHTML = `<h2 class="section-title"><span class="dot"></span>État de la fiche</h2>
+      <div id="bloc-anomalies" class="ano-box"></div>
+      <button class="btn btn-ghost no-print" type="button" onclick="afficherAnomalies()" style="margin-top:12px;">🔄 Revérifier la fiche</button>`;
+    const sections = page.querySelectorAll(".section");
+    const signatures = sections[sections.length - 1];
+    page.insertBefore(section, signatures);
+    zone = document.getElementById("bloc-anomalies");
+  }
 
   if (!anomalies.length) {
     zone.className = "ano-box ano-ok";
@@ -224,4 +246,89 @@ function activerAutoEnregistrement() {
 
   // Fiche déjà complète à l'ouverture (retour sur la page)
   planifierAutoEnregistrement(3000);
+}
+
+
+/* =========================================================
+   ENVOI DE LA FICHE FINALISÉE AU SERVICE HSE
+   Le script Apps Script envoie un mail récapitulatif
+   (données de la fiche + anomalies + signatures).
+   ========================================================= */
+async function envoyerAuServiceHSE() {
+  const url = (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.apiUrl) || "";
+  const dest = (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.mailTo) || "";
+
+  if (!url || !dest) {
+    etatRegistre("⚙️ Envoi indisponible : URL Apps Script ou destinataire non configuré (config.js)", "#F4A03A");
+    return;
+  }
+
+  if (typeof savePageContent === "function") {
+    try { savePageContent(); } catch (e) { console.warn(e); }
+  }
+
+  const f = collecterFiche();
+  if (!f.nom || !f.prenom) {
+    etatRegistre("👤 Renseignez le nom et le prénom du collaborateur (étape 1) avant l'envoi", "#E63946");
+    return;
+  }
+
+  const anomalies = detecterAnomalies(f);
+  const majeures = anomalies.filter(a => a.gravite === "Majeure").length;
+
+  if (majeures) {
+    const suite = confirm(
+      "La fiche comporte " + majeures + " point(s) majeur(s) à régulariser.\n\n" +
+      "Envoyer quand même la fiche au service HSE ?"
+    );
+    if (!suite) return;
+  }
+
+  const bouton = document.getElementById("btn-envoi-hse");
+  if (bouton) { bouton.disabled = true; bouton.textContent = "⏳ Envoi en cours…"; }
+  etatRegistre("⏳ Envoi de la fiche au service HSE…", "#F4A03A");
+
+  const payload = {
+    action: "mail-accueil",
+    ficheId: (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.ficheId) || "accueil-hse",
+    version: (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.version) || "",
+    key: cleCollaborateur(f),
+    destinataire: dest,
+    fiche: f,
+    anomalies: anomalies,
+    formations: formationsAProgrammer(f),
+    signatures: lireSignatures(),
+    envoyeLe: new Date().toISOString()
+  };
+
+  try {
+    const rep = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    const j = await rep.json();
+    if (!j.ok) throw new Error(j.error || "réponse invalide");
+
+    etatRegistre("📨 Fiche envoyée au service HSE (" + dest + ")", "#2DC653");
+    if (bouton) bouton.textContent = "✅ Fiche envoyée au service HSE";
+  } catch (err) {
+    console.error(err);
+    etatRegistre("⚠️ Envoi impossible — le script Apps Script ne répond pas correctement "
+      + "(action « mail-accueil » branchée ?). L'export PDF reste disponible.", "#E63946");
+    if (bouton) { bouton.disabled = false; bouton.textContent = "📨 Envoyer la fiche au service HSE"; }
+  }
+}
+
+/* Images des deux signatures, pour les joindre au mail */
+function lireSignatures() {
+  const doc = pageDoc(6);
+  const lire = (id) => {
+    const c = doc && doc.querySelector("#" + id);
+    return (c && c.getAttribute("data-signe") === "1") ? (c.getAttribute("data-image") || "") : "";
+  };
+  return {
+    responsable: lire("drawingCanvasPageSign1"),
+    collaborateur: lire("drawingCanvasPageSign2")
+  };
 }
