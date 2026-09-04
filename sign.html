@@ -8,8 +8,8 @@
   <meta name="theme-color" content="#003A6E">
   <link rel="icon" type="image/png" href="img/CDES_Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="global.css?v=13">
-  <link rel="stylesheet" href="sign.css?v=13">
+  <link rel="stylesheet" href="global.css?v=15">
+  <link rel="stylesheet" href="sign.css?v=15">
 </head>
 
 <body>
@@ -85,7 +85,11 @@
             </div>
             <span class="sign-label">Signature :</span>
             <canvas id="drawingCanvasPageSign1" class="signature-canvas"></canvas>
-            <button onclick="clearCanvas('drawingCanvasPageSign1')" class="btn btn-ghost no-print" type="button">🧹 Effacer</button>
+            <div class="sign-outils no-print">
+              <button onclick="clearCanvas('drawingCanvasPageSign1')" class="btn btn-ghost" type="button">🧹 Effacer</button>
+              <button onclick="basculerModeClic('drawingCanvasPageSign1', this)" class="btn btn-ghost" type="button"
+                      title="Pour signer au pavé tactile : un clic pour démarrer le trait, un clic pour l'arrêter">🖐️ Mode clic</button>
+            </div>
           </div>
           <div class="sign">
             <span class="sign-titre">Collaborateur accueilli</span>
@@ -95,7 +99,11 @@
             </div>
             <span class="sign-label">Signature :</span>
             <canvas id="drawingCanvasPageSign2" class="signature-canvas"></canvas>
-            <button onclick="clearCanvas('drawingCanvasPageSign2')" class="btn btn-ghost no-print" type="button">🧹 Effacer</button>
+            <div class="sign-outils no-print">
+              <button onclick="clearCanvas('drawingCanvasPageSign2')" class="btn btn-ghost" type="button">🧹 Effacer</button>
+              <button onclick="basculerModeClic('drawingCanvasPageSign2', this)" class="btn btn-ghost" type="button"
+                      title="Pour signer au pavé tactile : un clic pour démarrer le trait, un clic pour l'arrêter">🖐️ Mode clic</button>
+            </div>
           </div>
         </div>
       </div>
@@ -110,11 +118,11 @@
     </div>
   </div>
 
-  <script src="config.js?v=13"></script>
-  <script src="ui.js?v=13"></script>
-  <script src="collecte.js?v=13"></script>
-  <script src="registre.js?v=13"></script>
-  <script src="sign.js?v=13"></script>
+  <script src="config.js?v=15"></script>
+  <script src="ui.js?v=15"></script>
+  <script src="collecte.js?v=15"></script>
+  <script src="registre.js?v=15"></script>
+  <script src="sign.js?v=15"></script>
 </body>
 
 </html>

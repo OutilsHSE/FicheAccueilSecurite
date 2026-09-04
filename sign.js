@@ -60,60 +60,141 @@ function construireDiplome() {
   return d;
 }
 
-/* ===== Canvas de signature ===== */
+/* ===== Canvas de signature =====
+   Écriture au doigt, au stylet ou à la souris. On utilise les « pointer
+   events » quand le navigateur les gère (ils couvrent les trois d'un coup
+   et fonctionnent même si le doigt sort du cadre), avec repli sur
+   souris + tactile pour les navigateurs plus anciens.
+   Les coordonnées sont remises à l'échelle du canvas : sans cela, un
+   redimensionnement de la fenêtre décalait le tracé, voire l'envoyait
+   hors du cadre visible. */
 function setupCanvas(canvasId) {
   const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
+  if (!canvas || canvas._brancheSignature) return;
+  /* Marqueur posé sur l'objet JavaScript, JAMAIS en attribut HTML : un
+     attribut serait recopié dans le brouillon enregistré, et à la visite
+     suivante le cadre serait considéré comme déjà branché — donc muet. */
+  canvas._brancheSignature = true;
+
+  /* Posé en style direct, sans dépendre de la feuille de style (qui peut
+     être servie en cache par le navigateur) : sans touch-action « none »,
+     un écran tactile interprète le geste comme un défilement de page et
+     le trait n'est jamais dessiné — le cadre paraît bloqué. */
+  canvas.style.touchAction = 'none';
+  canvas.style.cursor = 'crosshair';
+
   const ctx = canvas.getContext('2d');
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
 
-  let painting = false;
-
-  function startPosition(e) {
-    painting = true;
-    draw(e);
-    e.preventDefault();
-  }
-
-  function endPosition(e) {
-    painting = false;
-    ctx.beginPath();
-    e.preventDefault();
-  }
-
-  function draw(e) {
-    if (!painting) return;
-    const rect = canvas.getBoundingClientRect();
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#000';
-
-    let clientX, clientY;
-    if (e.touches && e.touches.length > 0) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
+  function dimensionner() {
+    const l = Math.round(canvas.clientWidth) || 300;
+    const h = Math.round(canvas.clientHeight) || 180;
+    if (canvas.width === l && canvas.height === h) return;
+    // on conserve le tracé existant pendant le redimensionnement
+    let copie = null;
+    try { if (canvas.width && canvas.height) copie = canvas.toDataURL('image/png'); } catch (e) {}
+    canvas.width = l;
+    canvas.height = h;
+    if (copie) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0, l, h);
+      img.src = copie;
     }
+  }
+  dimensionner();
+  window.addEventListener('resize', dimensionner);
 
-    ctx.lineTo(clientX - rect.left, clientY - rect.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(clientX - rect.left, clientY - rect.top);
-    e.preventDefault();
+  let dessine = false;
+
+  function point(e) {
+    const r = canvas.getBoundingClientRect();
+    const cx = (e.touches && e.touches.length) ? e.touches[0].clientX : e.clientX;
+    const cy = (e.touches && e.touches.length) ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (cx - r.left) * (canvas.width / (r.width || 1)),
+      y: (cy - r.top) * (canvas.height / (r.height || 1))
+    };
   }
 
-  canvas.addEventListener('mousedown', startPosition);
-  canvas.addEventListener('mouseup', endPosition);
-  canvas.addEventListener('mouseout', endPosition);
-  canvas.addEventListener('mousemove', draw);
+  function debut(e) {
+    // en mode clic, seul l'événement « click » démarre le trait :
+    // sinon l'appui puis le clic s'annulaient l'un l'autre
+    if (canvas._modeClic && e.type !== 'click') return;
+    dessine = true;
+    const p = point(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    // un simple appui doit laisser un point visible
+    ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#000';
+    ctx.lineTo(p.x + 0.1, p.y + 0.1);
+    ctx.stroke();
+    if (e.pointerId !== undefined && canvas.setPointerCapture) {
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    if (e.cancelable) e.preventDefault();
+  }
 
-  canvas.addEventListener('touchstart', startPosition);
-  canvas.addEventListener('touchend', endPosition);
-  canvas.addEventListener('touchcancel', endPosition);
-  canvas.addEventListener('touchmove', draw);
+  function trace(e) {
+    if (!dessine) return;
+    const p = point(e);
+    ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#000';
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    if (e.cancelable) e.preventDefault();
+  }
+
+  function fin(e) {
+    if (!dessine) return;
+    if (canvas._modeClic) return;   // en mode clic, seul un nouveau clic arrête le trait
+    dessine = false;
+    ctx.beginPath();
+    if (e && e.cancelable) e.preventDefault();
+  }
+
+  /* Mode clic : sur un pavé tactile, maintenir le bouton enfoncé tout en
+     déplaçant le doigt est très difficile — beaucoup de pavés relâchent le
+     clic dès que le second doigt bouge, et rien ne se dessine. Dans ce mode,
+     un clic démarre le trait, un second clic le termine. */
+  canvas.addEventListener('click', function (e) {
+    if (!canvas._modeClic) return;
+    if (dessine) { dessine = false; ctx.beginPath(); }
+    else { debut(e); }
+  });
+
+  // en mode clic, le trait suit le curseur sans qu'aucun bouton soit enfoncé
+  canvas.addEventListener('mousemove', function (e) {
+    if (canvas._modeClic && dessine) trace(e);
+  });
+
+  if (window.PointerEvent) {
+    /* Le déplacement et le relâchement sont écoutés sur la fenêtre : si le
+       doigt ou le stylet sort du cadre, le trait s'arrête proprement au lieu
+       de rester « collé ». On n'écoute PAS pointerleave, qui interrompait le
+       tracé dès la prise de capture du pointeur. */
+    canvas.addEventListener('pointerdown', debut);
+    window.addEventListener('pointermove', trace);
+    window.addEventListener('pointerup', fin);
+    window.addEventListener('pointercancel', fin);
+  } else {
+    canvas.addEventListener('mousedown', debut);
+    window.addEventListener('mousemove', trace);
+    window.addEventListener('mouseup', fin);
+    canvas.addEventListener('touchstart', debut);
+    canvas.addEventListener('touchmove', trace);
+    window.addEventListener('touchend', fin);
+    window.addEventListener('touchcancel', fin);
+  }
+}
+
+/* Bouton « Mode clic » de chaque cadre de signature */
+function basculerModeClic(canvasId, bouton) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  canvas._modeClic = !canvas._modeClic;
+  if (bouton) {
+    bouton.textContent = canvas._modeClic ? '🖐️ Mode clic activé' : '🖐️ Mode clic';
+    bouton.classList.toggle('btn-vert', canvas._modeClic);
+  }
+  canvas.style.cursor = canvas._modeClic ? 'crosshair' : 'crosshair';
 }
 
 function clearCanvas(canvasId) {
@@ -162,15 +243,17 @@ function loadPageContent() {
 
   page.innerHTML = savedPage.innerHTML;
 
-  // Redessiner les signatures sauvegardées
+  // Redessiner les signatures sauvegardées.
+  // On ne touche PAS à canvas.width ici : le faire remettrait le cadre à
+  // zéro et effacerait un tracé en cours si l'image arrivait en retard.
   page.querySelectorAll('canvas[data-image]').forEach(canvas => {
     const url = canvas.getAttribute('data-image');
-    if (!url) return;
+    if (!url || canvas.getAttribute('data-signe') === '0') return;
     const img = new Image();
     img.onload = () => {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
-      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const ctx = canvas.getContext('2d');
+      if (!canvas.width) { canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; }
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
     img.src = url;
   });
@@ -322,18 +405,37 @@ function reparerSignatures() {
   return repares;
 }
 
+/* Branche les deux cadres. Idempotent : on peut l'appeler autant de fois
+   que nécessaire, seuls les cadres non encore branchés sont traités. */
+function brancherLesCadres() {
+  try { setupCanvas('drawingCanvasPageSign1'); } catch (e) { console.warn(e); }
+  try { setupCanvas('drawingCanvasPageSign2'); } catch (e) { console.warn(e); }
+}
+
 auDemarrage(function () {
-  const restaure = loadPageContent();
+  /* Chaque étape est isolée : si l'une échoue (brouillon illisible, mémoire
+     saturée…), le branchement des signatures a lieu quand même. C'est LUI
+     qui ne doit jamais sauter. */
+  let restaure = false;
+  try { restaure = loadPageContent(); } catch (e) { console.warn('brouillon illisible', e); }
+  try { if (reparerSignatures()) console.log('Cadres de signature rétablis'); } catch (e) { console.warn(e); }
 
-  // fiche abîmée par un ancien export : on rétablit des cadres signables
-  if (reparerSignatures()) console.log('Cadres de signature rétablis');
+  brancherLesCadres();
 
-  setupCanvas('drawingCanvasPageSign1');
-  setupCanvas('drawingCanvasPageSign2');
+  /* Filet de sécurité : si quoi que ce soit remplace le contenu de la page
+     (restauration tardive, script tiers…), les nouveaux cadres sont
+     rebranchés automatiquement. */
+  const page6 = document.getElementById('page6');
+  if (page6 && window.MutationObserver) {
+    new MutationObserver(() => brancherLesCadres()).observe(page6, { childList: true, subtree: true });
+  }
+  setTimeout(brancherLesCadres, 1200);
 
   if (!restaure) {
-    document.getElementById('visite-date-reponsable').valueAsDate = new Date();
-    document.getElementById('visite-date-collaborateur').valueAsDate = new Date();
+    try {
+      document.getElementById('visite-date-reponsable').valueAsDate = new Date();
+      document.getElementById('visite-date-collaborateur').valueAsDate = new Date();
+    } catch (e) { console.warn(e); }
   }
 
   majQuizzResultat();
