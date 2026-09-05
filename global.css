@@ -1894,3 +1894,60 @@ input[type="file"].hidden-file { display: none; }
   body.en-impression > main.main { display: none !important; }
   body.en-impression > .nav-bar { display: none !important; }
 }
+
+/* Outils sous chaque cadre de signature */
+.sign-outils { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.sign-outils .btn { padding: 8px 14px; font-size: .88rem; }
+
+/* =========================================================
+   REPRISE D'UNE FICHE ENREGISTRÉE
+   ========================================================= */
+.reprise-fond {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(6, 24, 44, 0.55);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.reprise-fond.visible { display: flex; }
+
+.reprise-cadre {
+  background: #fff; border-radius: 14px; width: min(680px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 32, 64, 0.35);
+}
+
+.reprise-tete {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 16px 20px; background: var(--bleu-marine); color: #fff;
+}
+.reprise-titre { font-family: 'Barlow Condensed', 'Barlow', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: .3px; }
+.reprise-sous { font-size: .84rem; opacity: .85; margin-top: 2px; }
+.reprise-fermer { background: transparent; border: 0; color: #fff; font-size: 1.2rem; cursor: pointer; padding: 2px 6px; }
+
+.reprise-recherche {
+  margin: 14px 20px 6px; padding: 10px 14px; font: inherit;
+  border: 1px solid var(--gris-bord); border-radius: 9px;
+}
+
+.reprise-liste { overflow: auto; padding: 8px 20px 20px; }
+
+.reprise-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 2px 12px;
+  width: 100%; text-align: left; font: inherit; cursor: pointer;
+  background: var(--gris-clair); border: 1px solid var(--gris-bord);
+  border-radius: 10px; padding: 11px 14px; margin-bottom: 8px;
+}
+.reprise-item:hover { background: var(--bleu-pale); border-color: var(--bleu-clair); }
+.reprise-nom { font-weight: 700; color: var(--bleu-marine); }
+.reprise-date { font-size: .82rem; color: #5A7391; grid-row: 1 / span 2; align-self: center; }
+.reprise-infos { font-size: .85rem; color: #43607F; }
+
+.reprise-vide { text-align: center; color: #5A7391; padding: 26px 10px; font-size: .92rem; }
+.reprise-vide.erreur { color: var(--rouge); }
+.reprise-aide { display: block; margin-top: 8px; font-size: .82rem; color: #5A7391; }
+
+/* Note affichée à la place des pièces jointes non reprises */
+.pj-note {
+  font-size: .86rem; color: #5A7391; background: var(--gris-clair);
+  border: 1px dashed var(--gris-bord); border-radius: 8px;
+  padding: 8px 12px; margin-top: 6px;
+}

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnostic signature — Accueil HSE CDES</title>
+  <link rel="icon" type="image/png" href="img/CDES_Logo.png">
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+           background: #F5F7FA; color: #12263F; }
+    header { background: #003A6E; color: #fff; padding: 16px 20px; }
+    header h1 { margin: 0; font-size: 1.15rem; }
+    header p { margin: 4px 0 0; font-size: .85rem; opacity: .85; }
+    main { max-width: 780px; margin: 0 auto; padding: 18px 14px 60px; }
+    .carte { background: #fff; border: 1px solid #D0DAE8; border-radius: 12px;
+             padding: 16px; margin-bottom: 16px; }
+    .carte h2 { margin: 0 0 10px; font-size: 1rem; color: #003A6E; }
+    .ligne { display: flex; justify-content: space-between; gap: 10px;
+             padding: 7px 0; border-bottom: 1px dashed #E3EAF3; font-size: .92rem; }
+    .ligne:last-child { border-bottom: 0; }
+    .ligne b { font-weight: 600; }
+    .ok { color: #1B7A3A; font-weight: 700; }
+    .ko { color: #C4262E; font-weight: 700; }
+    canvas { width: 100%; height: 190px; border: 2px dashed #9FB4CC;
+             border-radius: 10px; background: #fff; touch-action: none; display: block; }
+    .journal { font-family: ui-monospace, Consolas, monospace; font-size: .78rem;
+               background: #0F1E30; color: #B9E4C9; border-radius: 8px; padding: 10px;
+               height: 150px; overflow: auto; margin-top: 10px; white-space: pre-wrap; }
+    button { font: inherit; font-weight: 600; border-radius: 9px; padding: 10px 16px;
+             border: 1px solid #003A6E; background: #fff; color: #003A6E; cursor: pointer; margin: 6px 6px 0 0; }
+    button.plein { background: #003A6E; color: #fff; }
+    .verdict { font-size: 1.02rem; font-weight: 700; padding: 12px 14px; border-radius: 10px;
+               background: #FFF6E7; border-left: 5px solid #F4A03A; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Diagnostic de la signature</h1>
+    <p>Ouvrez cette page sur l'appareil où la signature ne fonctionne pas, essayez de signer dans le cadre, puis envoyez une capture d'écran.</p>
+  </header>
+
+  <main>
+    <div class="carte">
+      <h2>1. Essayez de signer ici</h2>
+      <canvas id="test"></canvas>
+      <div class="journal" id="journal">En attente d'un tracé…</div>
+      <button class="plein" type="button" onclick="effacer()">Effacer</button>
+      <div class="ligne" style="margin-top:10px;"><span>Verdict</span><b id="verdict">—</b></div>
+    </div>
+
+    <div class="carte">
+      <h2>2. Ce que votre navigateur a réellement chargé</h2>
+      <div id="versions"></div>
+    </div>
+
+    <div class="carte">
+      <h2>3. Fiche en cours dans ce navigateur</h2>
+      <div id="brouillon"></div>
+    </div>
+
+    <div class="carte">
+      <h2>4. Appareil</h2>
+      <div id="appareil"></div>
+    </div>
+
+    <div class="carte">
+      <h2>5. En dernier recours</h2>
+      <p style="font-size:.9rem;margin:0 0 6px;">Vide la fiche en cours et force le rechargement complet des fichiers.
+        À n'utiliser que si la fiche affichée est inutilisable.</p>
+      <button type="button" onclick="reinitialiser()">Repartir de zéro</button>
+    </div>
+  </main>
+
+  <script>
+    /* ---------- Affichage ---------- */
+    function ligne(cible, titre, valeur, etat) {
+      const d = document.createElement('div');
+      d.className = 'ligne';
+      d.innerHTML = '<span>' + titre + '</span><b class="' + (etat || '') + '">' + valeur + '</b>';
+      document.getElementById(cible).appendChild(d);
+    }
+    const jrn = document.getElementById('journal');
+    let lignes = 0;
+    function log(t) {
+      if (lignes === 0) jrn.textContent = '';
+      if (lignes++ > 60) return;
+      jrn.textContent += t + '\n';
+      jrn.scrollTop = jrn.scrollHeight;
+    }
+
+    /* ---------- 1. Test de tracé ---------- */
+    const c = document.getElementById('test');
+    const ctx = c.getContext('2d');
+    c.width = c.clientWidth;
+    c.height = c.clientHeight;
+    let trace = false, pixels = 0;
+
+    function pos(e) {
+      const r = c.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+      return { x: x * (c.width / r.width), y: y * (c.height / r.height) };
+    }
+    function debut(e) {
+      trace = true; ctx.beginPath();
+      const p = pos(e); ctx.moveTo(p.x, p.y);
+      log('▶ ' + e.type + ' reçu (' + Math.round(p.x) + ', ' + Math.round(p.y) + ')');
+      e.preventDefault();
+    }
+    function bouge(e) {
+      if (!trace) return;
+      const p = pos(e);
+      ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+      pixels++;
+      e.preventDefault();
+    }
+    function fin(e) {
+      if (!trace) return;
+      trace = false;
+      log('■ ' + e.type + ' — ' + pixels + ' points tracés');
+      verdict();
+    }
+    ['mousedown', 'touchstart', 'pointerdown'].forEach(t => c.addEventListener(t, debut));
+    ['mousemove', 'touchmove', 'pointermove'].forEach(t => c.addEventListener(t, bouge));
+    ['mouseup', 'mouseleave', 'touchend', 'pointerup'].forEach(t => c.addEventListener(t, fin));
+
+    function verdict() {
+      const d = ctx.getImageData(0, 0, c.width, c.height).data;
+      let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] !== 0) n++;
+      const v = document.getElementById('verdict');
+      if (n > 0) { v.textContent = 'Le tracé fonctionne (' + n + ' pixels)'; v.className = 'ok'; }
+      else { v.textContent = 'AUCUN TRACÉ ENREGISTRÉ'; v.className = 'ko'; }
+    }
+    function effacer() { ctx.clearRect(0, 0, c.width, c.height); pixels = 0; verdict(); }
+
+    ligne('appareil', 'Cadre de dessin', c.width + ' × ' + c.height + ' points', c.width > 50 ? 'ok' : 'ko');
+
+    /* ---------- 2. Fichiers réellement chargés ---------- */
+    (async function () {
+      const attendus = {
+        'sign.js': 'reparerSignatures',
+        'ui.js': 'auDemarrage',
+        'registre.js': 'envoyerAuServiceHSE',
+        'config.js': 'v13'
+      };
+      for (const f in attendus) {
+        try {
+          const rep = await fetch(f + '?diag=' + Date.now(), { cache: 'no-store' });
+          const txt = await rep.text();
+          const present = txt.indexOf(attendus[f]) >= 0;
+          ligne('versions', f + ' (sur le serveur)',
+                present ? 'à jour' : 'ANCIENNE VERSION', present ? 'ok' : 'ko');
+        } catch (err) {
+          ligne('versions', f, 'introuvable (' + err.message + ')', 'ko');
+        }
+        try {
+          const cache = await caches.keys();
+          if (cache.length) ligne('versions', 'Caches navigateur', cache.join(', '));
+        } catch (e) {}
+      }
+    })();
+
+    /* ---------- 3. Brouillon ---------- */
+    (function () {
+      let p6 = '';
+      try { p6 = localStorage.getItem('page6Content') || ''; } catch (e) {}
+      if (!p6) { ligne('brouillon', 'Fiche en cours', 'aucune fiche enregistrée'); return; }
+      const canvasOk = /<canvas/i.test(p6);
+      const imgSign = /<img[^>]*signature-canvas/i.test(p6);
+      ligne('brouillon', 'Cadres de signature enregistrés',
+            canvasOk ? 'de vrais cadres (bon)' : 'aucun cadre', canvasOk ? 'ok' : 'ko');
+      ligne('brouillon', 'Cadres transformés en images (ancien bug)',
+            imgSign ? 'OUI — fiche abîmée' : 'non', imgSign ? 'ko' : 'ok');
+      let taille = 0;
+      try { for (const k in localStorage) if (localStorage.hasOwnProperty(k)) taille += (localStorage[k] || '').length; } catch (e) {}
+      ligne('brouillon', 'Place occupée', (taille / 1024 / 1024).toFixed(2) + ' Mo sur ~5 Mo',
+            taille > 4.4 * 1024 * 1024 ? 'ko' : 'ok');
+      try { ligne('brouillon', 'Version de la fiche enregistrée', localStorage.getItem('ficheAccueilVersion') || '—'); } catch (e) {}
+    })();
+
+    /* ---------- 4. Appareil ---------- */
+    ligne('appareil', 'Navigateur', navigator.userAgent);
+    ligne('appareil', 'Écran tactile', ('ontouchstart' in window) ? 'oui' : 'non');
+    ligne('appareil', 'Stylet / souris (pointer events)', window.PointerEvent ? 'gérés' : 'non gérés', window.PointerEvent ? 'ok' : 'ko');
+    ligne('appareil', 'Zoom / densité', window.devicePixelRatio + '×');
+    ligne('appareil', 'Fenêtre', window.innerWidth + ' × ' + window.innerHeight);
+
+    /* ---------- 5. Réinitialisation ---------- */
+    function reinitialiser() {
+      if (!confirm('Effacer la fiche en cours dans ce navigateur ?')) return;
+      try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
+      if (window.caches) caches.keys().then(k => k.forEach(n => caches.delete(n)));
+      alert('Fiche effacée. Rouvrez la fiche d\'accueil.');
+    }
+  </script>
+</body>
+
+</html>

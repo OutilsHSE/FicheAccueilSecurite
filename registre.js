@@ -28,6 +28,12 @@ function cleCollaborateur(f) {
 }
 
 async function envoyerAuRegistre(manuel) {
+  // la page en cours d'abord : sinon on enverrait le brouillon précédent
+  // (les signatures qui viennent d'être tracées seraient absentes)
+  if (typeof savePageContent === "function") {
+    try { savePageContent(); } catch (e) { console.warn(e); }
+  }
+
   const url = (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.apiUrl) || "";
   if (!url) {
     if (manuel) etatRegistre("⚙️ Aucune URL Apps Script configurée (config.js) — enregistrement désactivé", "#F4A03A");
@@ -50,7 +56,9 @@ async function envoyerAuRegistre(manuel) {
     fiche: f,
     anomalies: anomalies,
     formations: formationsAProgrammer(f),
-    envoyeLe: new Date().toISOString()
+    envoyeLe: new Date().toISOString(),
+    // contenu des 6 pages : c'est ce qui permet de rouvrir la fiche plus tard
+    brouillons: (typeof brouillonsPourRegistre === "function") ? brouillonsPourRegistre() : null
   };
 
   etatRegistre("⏳ Enregistrement dans le registre CDES…", "#F4A03A");

@@ -19,5 +19,5 @@ const CONFIG_ACCUEIL = {
   mailTo: "j.hervelin@cdes.eu",
 
   /* Version de la fiche, reportée dans le registre */
-  version: "v13-2026-09"
+  version: "v16-2026-09"
 };

@@ -50,8 +50,21 @@ var ACC_COLONNES_ACCUEILS = [
   'Référent chantier', 'Consignes vues', 'Vigiminute',
   'Parcours sécurité', 'Score quizz',
   'Engagements', 'Signature responsable', 'Signature collaborateur',
-  'Anomalies', 'dont majeures', 'Envoyé au HSE', 'Version', 'Clé'
+  'Anomalies', 'dont majeures', 'Envoyé au HSE', 'Version', 'Clé',
+  /* Contenu des 6 pages, découpé en tranches : c'est ce qui permet de
+     rouvrir une fiche depuis l'application (bouton « Reprendre une fiche »).
+     Colonnes techniques, masquées automatiquement. */
+  'Reprise 1', 'Reprise 2', 'Reprise 3', 'Reprise 4', 'Reprise 5', 'Reprise 6'
 ];
+
+var ACC_TRANCHE  = 45000;   /* une cellule accepte 50 000 caractères */
+var ACC_TRANCHES = 6;
+
+/* Numéros de colonne (1 = A) calculés d'après les libellés : ajouter une
+   colonne ne casse plus la recherche par clé ni la date d'envoi. */
+function colAccueil_(libelle) {
+  return ACC_COLONNES_ACCUEILS.indexOf(libelle) + 1;
+}
 
 var ACC_COLONNES_FORMATIONS = [
   'Enregistré le', 'Date accueil', 'Nom', 'Prénom', 'Agence CDES',
@@ -66,6 +79,12 @@ var ACC_COLONNES_ANOMALIES = [
 /* ═════════════════ 1. ENREGISTREMENT DANS LE REGISTRE ═════════════════ */
 
 function enregistrerAccueilHSE_(p) {
+  /* Trois usages passent par la même action « accueil-hse », pour ne rien
+     avoir à ajouter au doPost du projet : enregistrer (défaut), lister les
+     fiches reprenables, et recharger une fiche. */
+  if (p.mode === 'liste')   return listerAccueilsHSE_();
+  if (p.mode === 'charger') return chargerAccueilHSE_(p);
+
   var f = p.fiche || {};
   var anomalies = p.anomalies || [];
   var formations = p.formations || [];
@@ -80,10 +99,10 @@ function enregistrerAccueilHSE_(p) {
   var fa = ongletAccueil_(classeur, ACC_ONGLET_ACCUEILS, ACC_COLONNES_ACCUEILS);
 
   /* On conserve la date d'envoi au HSE si elle existe déjà */
-  var ligneExistante = trouverLigneAccueil_(fa, ACC_COLONNES_ACCUEILS.length, cle);
+  var ligneExistante = trouverLigneAccueil_(fa, colAccueil_('Clé'), cle);
   var envoiHSE = '';
   if (ligneExistante > 0) {
-    envoiHSE = fa.getRange(ligneExistante, ACC_COLONNES_ACCUEILS.length - 2).getValue();
+    envoiHSE = fa.getRange(ligneExistante, colAccueil_('Envoyé au HSE')).getValue();
   }
   if (p.marquerEnvoi) envoiHSE = maintenant;
 
@@ -124,6 +143,26 @@ function enregistrerAccueilHSE_(p) {
     cle
   ];
 
+  /* Contenu des pages, pour pouvoir rouvrir la fiche plus tard */
+  var reprise = ['', '', '', '', '', ''];
+  if (p.brouillons) {
+    var json = JSON.stringify(p.brouillons);
+    if (json.length <= ACC_TRANCHE * ACC_TRANCHES) {
+      for (var t = 0; t < ACC_TRANCHES; t++) {
+        reprise[t] = json.substring(t * ACC_TRANCHE, (t + 1) * ACC_TRANCHE);
+      }
+    }
+    /* trop volumineux : on n'écrase pas une reprise déjà enregistrée */
+    else if (ligneExistante > 0) {
+      reprise = fa.getRange(ligneExistante, colAccueil_('Reprise 1'),
+                            1, ACC_TRANCHES).getValues()[0];
+    }
+  } else if (ligneExistante > 0) {
+    reprise = fa.getRange(ligneExistante, colAccueil_('Reprise 1'),
+                          1, ACC_TRANCHES).getValues()[0];
+  }
+  ligne = ligne.concat(reprise);
+
   if (ligneExistante > 0) fa.getRange(ligneExistante, 1, 1, ligne.length).setValues([ligne]);
   else fa.appendRow(ligne);
 
@@ -143,6 +182,62 @@ function enregistrerAccueilHSE_(p) {
   });
 
   return reponseAccueil_({ ok: true, anomalies: anomalies.length, majeures: majeures });
+}
+
+/* ═════════════ 1 bis. REPRISE D'UNE FICHE ENREGISTRÉE ═════════════ */
+
+/* Liste des fiches reprenables, la plus récente d'abord */
+function listerAccueilsHSE_() {
+  var classeur = SpreadsheetApp.openById(ACC_ID_CLASSEUR);
+  var fa = ongletAccueil_(classeur, ACC_ONGLET_ACCUEILS, ACC_COLONNES_ACCUEILS);
+  var n = fa.getLastRow();
+  if (n < 2) return reponseAccueil_({ ok: true, fiches: [] });
+
+  var vals = fa.getRange(2, 1, n - 1, ACC_COLONNES_ACCUEILS.length).getValues();
+  var iCle = ACC_COLONNES_ACCUEILS.indexOf('Clé');
+  var fiches = [];
+  for (var r = 0; r < vals.length; r++) {
+    var l = vals[r];
+    if (!l[iCle]) continue;
+    fiches.push({
+      cle: String(l[iCle]),
+      nom: l[4], prenom: l[5], agence: l[7], poste: l[10],
+      date: formaterDate_(l[0]),
+      quand: (l[0] instanceof Date) ? l[0].getTime() : 0
+    });
+  }
+  fiches.sort(function (a, b) { return b.quand - a.quand; });
+  return reponseAccueil_({ ok: true, fiches: fiches });
+}
+
+/* Contenu complet d'une fiche, pour la rouvrir dans l'application */
+function chargerAccueilHSE_(p) {
+  var cle = p.key || '';
+  if (!cle) return reponseAccueil_({ ok: false, error: 'clé manquante' });
+
+  var classeur = SpreadsheetApp.openById(ACC_ID_CLASSEUR);
+  var fa = ongletAccueil_(classeur, ACC_ONGLET_ACCUEILS, ACC_COLONNES_ACCUEILS);
+  var ligne = trouverLigneAccueil_(fa, colAccueil_('Clé'), cle);
+  if (ligne < 1) return reponseAccueil_({ ok: false, error: 'fiche introuvable' });
+
+  var l = fa.getRange(ligne, 1, 1, ACC_COLONNES_ACCUEILS.length).getValues()[0];
+  var tranches = l.slice(colAccueil_('Reprise 1') - 1).join('');
+  if (!tranches) {
+    return reponseAccueil_({ ok: false,
+      error: 'cette fiche a été enregistrée avant la mise en place de la reprise' });
+  }
+
+  var brouillons;
+  try { brouillons = JSON.parse(tranches); }
+  catch (e) { return reponseAccueil_({ ok: false, error: 'contenu illisible : ' + e }); }
+
+  return reponseAccueil_({
+    ok: true,
+    brouillons: brouillons,
+    nom: ((l[5] || '') + ' ' + (l[4] || '')).trim(),
+    poste: l[10] || '',
+    activites: l[11] || ''
+  });
 }
 
 /* ═════════════════ 2. ENVOI DE LA FICHE AU SERVICE HSE ═════════════════ */
@@ -310,21 +405,38 @@ function formaterDate_(iso) {
   return m ? m[3] + '/' + m[2] + '/' + m[1] : String(iso);
 }
 
+/* Les 6 colonnes de reprise contiennent le contenu des pages : illisible
+   à l'œil et très large, on les masque. */
+function masquerColonnesReprise_(f, nom) {
+  if (nom !== ACC_ONGLET_ACCUEILS) return;
+  try { f.hideColumns(colAccueil_('Reprise 1'), ACC_TRANCHES); } catch (e) {}
+}
+
 function ongletAccueil_(classeur, nom, colonnes) {
   var f = classeur.getSheetByName(nom);
+  /* Une feuille neuve n'a que 26 colonnes : on l'élargit avant d'écrire,
+     sinon l'enregistrement échoue dès que le registre dépasse la colonne Z. */
+  if (f && f.getMaxColumns() < colonnes.length) {
+    f.insertColumnsAfter(f.getMaxColumns(), colonnes.length - f.getMaxColumns());
+  }
   if (!f) {
     f = classeur.insertSheet(nom);
+    if (f.getMaxColumns() < colonnes.length) {
+      f.insertColumnsAfter(f.getMaxColumns(), colonnes.length - f.getMaxColumns());
+    }
     f.appendRow(colonnes);
     f.getRange(1, 1, 1, colonnes.length)
       .setFontWeight('bold').setBackground('#003A6E').setFontColor('#FFFFFF')
       .setVerticalAlignment('middle').setWrap(true);
     f.setFrozenRows(1);
     f.setRowHeight(1, 40);
+    masquerColonnesReprise_(f, nom);
   } else if (f.getLastColumn() < colonnes.length) {
     /* Mise à niveau des colonnes si le registre a été créé par une version précédente */
     f.getRange(1, 1, 1, colonnes.length).setValues([colonnes])
       .setFontWeight('bold').setBackground('#003A6E').setFontColor('#FFFFFF')
       .setVerticalAlignment('middle').setWrap(true);
+    masquerColonnesReprise_(f, nom);
   }
   return f;
 }

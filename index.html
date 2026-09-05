@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#003A6E">
     <link rel="icon" type="image/png" href="img/CDES_Logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="global.css?v=13">
+    <link rel="stylesheet" href="global.css?v=16">
 </head>
 
 <body>
@@ -104,6 +104,7 @@
     <div class="nav-bar no-print">
         <button class="btn-aide" id="openModalBtn" title="Dispositif tutorat &amp; formation au poste">?</button>
         <div class="nav-right">
+            <button class="btn btn-ghost" onclick="ouvrirReprise()">📂 Reprendre une fiche</button>
             <button class="btn btn-ghost" onclick="nouvelleFiche()">🗑 Nouvelle fiche</button>
             <button class="btn btn-primary" onclick="redirectToAutorisationPage()">Suivant ➜</button>
         </div>
@@ -127,8 +128,10 @@
         </div>
     </div>
 
-    <script src="ui.js?v=13"></script>
-    <script src="index.js?v=13"></script>
+    <script src="ui.js?v=16"></script>
+    <script src="config.js?v=16"></script>
+    <script src="reprise.js?v=16"></script>
+    <script src="index.js?v=16"></script>
 </body>
 
 </html>
