@@ -1951,3 +1951,32 @@ input[type="file"].hidden-file { display: none; }
   border: 1px dashed var(--gris-bord); border-radius: 8px;
   padding: 8px 12px; margin-top: 6px;
 }
+
+/* =========================================================
+   VERROU DE SIGNATURE (parcours sécurité non validé)
+   ========================================================= */
+.section.sign-bloquee { position: relative; }
+
+.sign-verrou {
+  position: absolute; inset: 0; z-index: 20;
+  background: rgba(245, 247, 250, 0.94);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; padding: 18px;
+}
+
+.sign-verrou .sv-cadre {
+  max-width: 560px; text-align: center;
+  background: #fff; border: 2px solid var(--orange);
+  border-radius: 12px; padding: 20px 24px;
+  box-shadow: 0 10px 30px rgba(0, 32, 64, 0.12);
+}
+.sign-verrou .sv-ico { font-size: 1.9rem; line-height: 1; margin-bottom: 8px; }
+.sign-verrou .sv-titre {
+  font-family: 'Barlow Condensed', 'Barlow', sans-serif;
+  font-size: 1.2rem; font-weight: 700; color: var(--bleu-marine);
+  text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px;
+}
+.sign-verrou .sv-texte { font-size: .92rem; color: #43607F; margin-bottom: 14px; }
+
+/* À l'impression, le voile disparaît : le PDF reste propre */
+@media print { .sign-verrou { display: none !important; } }

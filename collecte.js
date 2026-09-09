@@ -1,3 +1,8 @@
+/* Seuil de validation du parcours sécurité (config.js) */
+function seuilQuizz() {
+  return (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.seuilQuizz) || 70;
+}
+
 /* =========================================================
    COLLECTE DES DONNÉES DE LA FICHE + DÉTECTION DES ANOMALIES
    Relit les 6 pages enregistrées dans le navigateur et en tire
@@ -236,14 +241,16 @@ function detecterAnomalies(f) {
 
   if (!f.quizzKromi && !f.quizzDemat)
     add("Majeure", "Validation des connaissances", "Aucun parcours sécurité validé (ni Kromi, ni quizz de la fiche)");
-  else if (f.quizzDemat && f.quizzReussi === false)
-    add("Majeure", "Validation des connaissances", "Quizz non validé (" + f.quizzScore + " %)");
+  else if (f.quizzDemat && !f.quizzKromi && f.quizzScore != null && f.quizzScore < seuilQuizz())
+    add("Majeure", "Validation des connaissances",
+        "Quizz non validé : " + f.quizzScore + " % (minimum " + seuilQuizz() + " %) — à refaire");
 
   if (f.engagementsTotal && f.engagements < f.engagementsTotal)
     add("Majeure", "Engagements", (f.engagementsTotal - f.engagements) + " engagement(s) sur " + f.engagementsTotal + " non coché(s)");
 
-  if (!f.signatureResponsable) add("Majeure", "Signatures", "Signature du responsable de l'accueil manquante");
-  if (!f.signatureCollaborateur) add("Majeure", "Signatures", "Signature du collaborateur manquante");
+  /* Les signatures ne sont plus un point de contrôle : elles se voient
+     directement dans les cadres, juste en dessous, et le contrôle
+     s'affichait à tort tant que la page n'était pas revérifiée. */
 
   return a;
 }

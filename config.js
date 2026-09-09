@@ -18,6 +18,11 @@ const CONFIG_ACCUEIL = {
   /* Destinataire du bouton « Envoyer au service HSE » */
   mailTo: "j.hervelin@cdes.eu",
 
+  /* Seuil de validation du parcours sécurité, en pourcentage.
+     En dessous, la signature est bloquée et le collaborateur doit refaire
+     le quizz — sauf si le parcours Kromi a été suivi (case cochée). */
+  seuilQuizz: 70,
+
   /* Version de la fiche, reportée dans le registre */
-  version: "v16-2026-09"
+  version: "v18-2026-09"
 };

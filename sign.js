@@ -32,8 +32,12 @@ function majQuizzResultat() {
 }
 
 /* Le quizz s'ouvre dans un autre onglet : on rafraîchit au retour */
-window.addEventListener('focus', majQuizzResultat);
-document.addEventListener('visibilitychange', () => { if (!document.hidden) majQuizzResultat(); });
+function rafraichirApresQuizz() {
+  majQuizzResultat();
+  if (typeof verrouillerSignatures === "function") verrouillerSignatures();
+}
+window.addEventListener('focus', rafraichirApresQuizz);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) rafraichirApresQuizz(); });
 
 /* =========================================================
    DIPLÔME (annexé à l'export PDF)
@@ -59,6 +63,84 @@ function construireDiplome() {
     <div class="dp-date">Fait le ${r.date} — Curages Dragages et Systèmes</div>`;
   return d;
 }
+
+/* =========================================================
+   VERROU DE SIGNATURE
+   Tant que le parcours sécurité n'est pas validé, on ne signe pas :
+   le collaborateur doit refaire le quizz. Le parcours Kromi (case
+   cochée) vaut validation et lève le verrou.
+   ========================================================= */
+function seuilQuizzFiche() {
+  return (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.seuilQuizz) || 70;
+}
+
+/* Renvoie null si la signature est autorisée, sinon le message à afficher */
+function motifBlocageSignature() {
+  const kromi = document.getElementById('quizz-kromi');
+  if (kromi && kromi.checked) return null;          // parcours Kromi suivi
+
+  const r = lireQuizzResultat();
+  const seuil = seuilQuizzFiche();
+
+  if (!r) {
+    return {
+      titre: "Parcours sécurité à valider avant de signer",
+      texte: "Le quizz de la fiche dématérialisée n'a pas encore été passé. "
+        + "Lancez-le et obtenez au moins " + seuil + " % pour débloquer les signatures. "
+        + "Si le collaborateur a suivi le parcours sécurité Kromi, cochez la case correspondante."
+    };
+  }
+  if (r.pourcentage < seuil) {
+    return {
+      titre: "Quizz non validé : " + r.pourcentage + " % (minimum " + seuil + " %)",
+      texte: "Le collaborateur doit refaire le quizz avant de signer. "
+        + "Revoyez avec lui les points perdus, puis relancez le parcours. "
+        + "Si le parcours sécurité Kromi a été suivi, cochez la case correspondante."
+    };
+  }
+  return null;
+}
+
+function sectionSignatures() {
+  const cadre = document.querySelector('#page6 .signature-canvas');
+  return cadre ? cadre.closest('.section') : null;
+}
+
+function verrouillerSignatures() {
+  const section = sectionSignatures();
+  if (!section) return;
+
+  const motif = motifBlocageSignature();
+  let voile = section.querySelector('.sign-verrou');
+
+  if (!motif) {
+    section.classList.remove('sign-bloquee');
+    if (voile) voile.remove();
+    return;
+  }
+
+  section.classList.add('sign-bloquee');
+  if (!voile) {
+    voile = document.createElement('div');
+    voile.className = 'sign-verrou no-print';
+    section.appendChild(voile);
+  }
+  voile.innerHTML = '<div class="sv-cadre">'
+    + '<div class="sv-ico">🔒</div>'
+    + '<div class="sv-titre"></div>'
+    + '<div class="sv-texte"></div>'
+    + '<button class="btn btn-vert" type="button" onclick="redirectToQuizz()">Lancer le quizz ➜</button>'
+    + '</div>';
+  voile.querySelector('.sv-titre').textContent = motif.titre;
+  voile.querySelector('.sv-texte').textContent = motif.texte;
+}
+
+/* Le verrou se réévalue à chaque changement utile */
+document.addEventListener('change', (e) => {
+  if (e.target && (e.target.id === 'quizz-kromi' || e.target.id === 'quizz-demat')) {
+    verrouillerSignatures();
+  }
+});
 
 /* ===== Canvas de signature =====
    Écriture au doigt, au stylet ou à la souris. On utilise les « pointer
@@ -338,6 +420,7 @@ function printAllPages() {
     const bloc = document.createElement('div');
     bloc.className = 'page-section page-break';
     bloc.appendChild(page6.cloneNode(true));
+    bloc.querySelectorAll('.sign-verrou').forEach(v => v.remove());   // pas de voile dans le PDF
     figerCanvas(bloc, page6);
     bloc.querySelectorAll('#page6').forEach(el => el.removeAttribute('id'));
     finalContainer.appendChild(bloc);
@@ -439,7 +522,31 @@ auDemarrage(function () {
   }
 
   majQuizzResultat();
+  verrouillerSignatures();
   if (typeof afficherAnomalies === "function") afficherAnomalies();
+
+  /* L'« État de la fiche » était calculé une seule fois, à l'ouverture :
+     il annonçait donc des manques déjà corrigés (signatures tracées,
+     engagements cochés) tant qu'on ne cliquait pas sur « Revérifier ».
+     Il se remet désormais à jour tout seul. */
+  const page = document.getElementById('page6');
+  if (page) {
+    let minuteur = null;
+    const revoir = () => {
+      clearTimeout(minuteur);
+      minuteur = setTimeout(() => {
+        try { if (typeof afficherAnomalies === "function") afficherAnomalies(); } catch (e) { console.warn(e); }
+        verrouillerSignatures();
+      }, 700);
+    };
+    page.addEventListener('change', revoir);
+    page.addEventListener('input', revoir);
+    ['pointerup', 'mouseup', 'touchend'].forEach(evt =>
+      page.addEventListener(evt, (e) => {
+        if (e.target && e.target.tagName === 'CANVAS') revoir();
+      })
+    );
+  }
   if (typeof activerAutoEnregistrement === "function") activerAutoEnregistrement();
 });
 

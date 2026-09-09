@@ -1,6 +1,12 @@
 let currentQuestionIndex = 0;
 let score = 0;
 
+/* Seuil de validation du parcours sécurité, en pourcentage.
+   Défini dans config.js (seuilQuizz) pour que la fiche et le quizz
+   appliquent forcément la même règle. */
+const SEUIL_REUSSITE =
+  (typeof CONFIG_ACCUEIL !== "undefined" && CONFIG_ACCUEIL.seuilQuizz) || 70;
+
 const themeEl = document.getElementById("theme");
 const situationEl = document.getElementById("situation");
 const enonceEl = document.getElementById("enonce");
@@ -81,10 +87,41 @@ if (imageGrande) {
 }
 
 // === Validation classique (vrai/faux ou qcm) ===
+/* BARÈME
+   Vrai/faux : tout ou rien (1 point).
+   QCM : notation au prorata. Une question à 7 propositions ne peut pas
+   coûter ses 4 points entiers parce qu'une case a été oubliée — c'est ce
+   qui faisait échouer des parcours pourtant maîtrisés (10 QCM = 30 des
+   37 points du quizz, tout ou rien).
+   Points = points × (bonnes cochées − cases cochées à tort) / bonnes attendues,
+   jamais négatif. Cocher tout ne rapporte donc rien de plus. */
+let detailScore = [];
+
+function pointsQuestion(question, inputs) {
+  const props = question.propositions || [];
+  const attendues = props.filter(p => p.correct).length;
+
+  if (question.type !== "qcm") {
+    let juste = true;
+    inputs.forEach((input, i) => {
+      if (input.checked !== !!props[i].correct) juste = false;
+    });
+    return juste ? question.points : 0;
+  }
+
+  let trouvees = 0, fausses = 0;
+  inputs.forEach((input, i) => {
+    if (input.checked && props[i].correct) trouvees++;
+    else if (input.checked && !props[i].correct) fausses++;
+  });
+  if (!attendues) return 0;
+  const net = Math.max(0, trouvees - fausses);
+  return Math.round(question.points * net / attendues);
+}
+
 function validerReponse() {
   const question = quizzData[0].questions[currentQuestionIndex];
   const inputs = propositionsEl.querySelectorAll("input");
-  let correct = true;
 
   /* Sans cette garde, une question vrai/faux laissée vide était comptée
      juste et rapportait ses points. */
@@ -93,23 +130,27 @@ function validerReponse() {
     return;
   }
 
+  const props = question.propositions || [];
   inputs.forEach((input, i) => {
-    const isChecked = input.checked;
-    const isCorrect = question.propositions[i].correct;
-
-    if (isChecked && isCorrect) {
-      input.parentElement.style.background = "#c8f7c5";
-    } else if (isChecked && !isCorrect) {
-      input.parentElement.style.background = "#f7c5c5";
-      correct = false;
-    } else if (!isChecked && isCorrect && question.type === "qcm") {
-      correct = false;
-    }
+    const coche = input.checked;
+    const bonne = !!props[i].correct;
+    const ligne = input.parentElement;
+    ligne.classList.remove("rep-juste", "rep-fausse", "rep-oubliee");
+    if (coche && bonne) ligne.classList.add("rep-juste");
+    else if (coche && !bonne) ligne.classList.add("rep-fausse");
+    else if (!coche && bonne) ligne.classList.add("rep-oubliee");   // réponse manquée, signalée
   });
 
-  if (correct) score += question.points;
+  const gagnes = pointsQuestion(question, inputs);
+  score += gagnes;
+  detailScore.push({
+    numero: question.numero,
+    theme: question.theme,
+    obtenus: gagnes,
+    total: question.points
+  });
 
-  afficherExplication(question);
+  afficherExplication(question, gagnes);
   btnValider.disabled = true;
   btnSuivant.style.display = "inline-block";
 }
@@ -155,10 +196,13 @@ function handleImageClick(event, question) {
 
     // Points au prorata des zones réellement trouvées (ils n'étaient
     // jamais comptés auparavant pour ce type de question)
-    score += Math.round(question.points * trouvees.length / question.bonnesZones.length);
+    const gagnes = Math.round(question.points * trouvees.length / question.bonnesZones.length);
+    score += gagnes;
+    detailScore.push({ numero: question.numero, theme: question.theme,
+                       obtenus: gagnes, total: question.points });
 
     afficherZonesCorrectes(img, question.bonnesZones);
-    afficherExplication(question);
+    afficherExplication(question, gagnes);
     btnValider.disabled = true;
     btnSuivant.style.display = "inline-block";
   }
@@ -189,7 +233,7 @@ function afficherZonesCorrectes(img, zones) {
 }
 
 // === Affichage explication (liste + image à droite) ===
-function afficherExplication(question) {
+function afficherExplication(question, gagnes) {
   const explicationTexte = question.explication.texte
     .split(/\n+/)
     .map(ligne => ligne.trim())
@@ -198,7 +242,15 @@ function afficherExplication(question) {
   const explicationContainer = document.createElement("div");
   explicationContainer.classList.add("explication-flex");
 
-  let explicationHTML = "<h3>Explications :</h3><ul>";
+  let bandeau = "";
+  if (typeof gagnes === "number") {
+    const plein = gagnes === question.points;
+    const zero = gagnes === 0;
+    bandeau = `<div class="quizz-points ${plein ? "pts-plein" : (zero ? "pts-zero" : "pts-partiel")}">`
+      + `${plein ? "✅" : (zero ? "❌" : "◐")} ${gagnes} / ${question.points} point${question.points > 1 ? "s" : ""}`
+      + `${plein || zero ? "" : " — réponses manquées signalées en vert"}</div>`;
+  }
+  let explicationHTML = bandeau + "<h3>Explications :</h3><ul>";
   explicationTexte.forEach(point => {
     explicationHTML += `<li>${point}</li>`;
   });
@@ -247,7 +299,7 @@ function afficherPageFinale() {
   const pourcentage = Math.min(100, Math.round((score / totalPoints) * 100));
 
   // 3. Enregistrement du résultat (repris sur la page Signatures + diplôme)
-  const reussite = pourcentage >= 80;
+  const reussite = pourcentage >= SEUIL_REUSSITE;
   const dateResultat = new Date().toLocaleDateString('fr-FR');
   try {
     localStorage.setItem('quizzResultat', JSON.stringify({
@@ -255,18 +307,32 @@ function afficherPageFinale() {
       total: totalPoints,
       pourcentage: pourcentage,
       date: dateResultat,
-      reussite: reussite
+      reussite: reussite,
+      perdus: detailScore.filter(d => d.obtenus < d.total)
+        .map(d => ({ q: d.numero, theme: d.theme, obtenus: d.obtenus, total: d.total }))
     }));
   } catch (e) { console.warn(e); }
 
-  // 4. Affichage final
+  // 4. Récapitulatif par question (là où les points ont été perdus)
+  const perdus = detailScore.filter(d => d.obtenus < d.total);
+  const recap = perdus.length ? `
+    <div class="recap-points">
+      <div class="recap-titre">Points perdus (${perdus.reduce((a, d) => a + (d.total - d.obtenus), 0)} sur ${totalPoints})</div>
+      <ul>${perdus.map(d => `<li><span class="recap-num">Q${d.numero}</span>
+        <span class="recap-theme">${d.theme}</span>
+        <span class="recap-pts">${d.obtenus} / ${d.total}</span></li>`).join("")}</ul>
+    </div>` : '<div class="recap-points recap-parfait">🎯 Aucune erreur — toutes les questions sont acquises.</div>';
+
+  // 5. Affichage final
   quizContainer.innerHTML = `
     <div class="result-container">
       ${reussite ? '<img src="img/laurier.png" class="laurier-img" alt="Bravo">' : ''}
       <div class="result-name">${username}</div>
       <h2>${reussite ? 'Parcours sécurité validé !' : 'Parcours à retravailler'}</h2>
       <div class="score-circle ${reussite ? '' : 'insuffisant'}">${pourcentage}%</div>
-      <p class="result-detail">Score : ${score} / ${totalPoints} points — le résultat est reporté sur la page Signatures de la fiche d'accueil.</p>
+      <p class="result-detail">Score : ${score} / ${totalPoints} points — seuil de validation : ${SEUIL_REUSSITE} % (${Math.ceil(totalPoints * SEUIL_REUSSITE / 100)} points).
+        Le résultat est reporté sur la page Signatures de la fiche d'accueil.</p>
+      ${recap}
       ${reussite ? '<button id="imprimer-diplome">🎓 Imprimer mon diplôme</button>' : '<p class="result-detail">Revoyez les consignes avec votre animateur HSE avant de relancer le quizz.</p>'}
       <button id="quitter">Quitter</button>
     </div>
