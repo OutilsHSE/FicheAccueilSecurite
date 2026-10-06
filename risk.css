@@ -1,0 +1,308 @@
+/* ===== Page Risques professionnels — spécifique ===== */
+
+.poste-block {
+    margin-bottom: 18px;
+    padding-bottom: 4px;
+}
+
+.poste-block + .poste-block {
+    border-top: 1px dashed var(--gris-bord);
+    padding-top: 16px;
+}
+
+.poste-select-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.poste-select-row .field {
+    flex: 1;
+    min-width: 260px;
+    max-width: 480px;
+}
+
+.table-container {
+    margin-top: 8px;
+}
+
+.poste-titre {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bleu-marine);
+}
+
+.poste-titre-ico { font-size: 1.2rem; }
+
+.poste-titre-nb {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--texte-doux);
+    background: var(--gris-clair);
+    border: 1px solid var(--gris-bord);
+    border-radius: 20px;
+    padding: 3px 11px;
+}
+
+@media (max-width: 600px) {
+    .poste-select-row .field {
+        max-width: 100%;
+    }
+}
+
+/* ===== Familles de risques (v4) ===== */
+.famille-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 18px 2px 6px;
+}
+
+.famille-ico { font-size: 1.15rem; flex-shrink: 0; }
+
+.famille-t {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--bleu-marine);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+}
+
+.famille-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--bleu-pale), transparent);
+    border-radius: 2px;
+}
+
+/* Liste légère : 2 colonnes, lignes fines, sans cadres colorés */
+.risk-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 0 22px;
+}
+
+.risk-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 4px;
+    border-bottom: 1px solid var(--gris-bord);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.risk-row:hover { background: var(--bleu-pale); }
+
+.risk-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--vert);
+}
+
+.risk-row .risk-lbl {
+    flex: 1;
+    font-size: 0.88rem;
+    color: var(--texte);
+    line-height: 1.35;
+}
+
+.risk-row:has(input:checked) .risk-lbl {
+    color: var(--vert-fonce);
+    font-weight: 600;
+}
+
+.doc-vignette-mini {
+    width: 30px;
+    height: 38px;
+    border-radius: 4px;
+}
+
+@media print {
+    .risk-list { display: block !important; }
+    .risk-row { border-bottom: none !important; padding: 1px 0 !important; page-break-inside: avoid; }
+    .famille-head { margin: 8px 0 2px !important; }
+}
+
+/* =========================================================
+   SCÈNES DE TRAVAIL — risques fléchés sur le visuel (v5)
+   ========================================================= */
+.scene-bloc {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 18px;
+    align-items: start;
+    margin-top: 12px;
+}
+
+.scene-fig {
+    position: relative;
+    line-height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--gris-bord);
+    box-shadow: 0 4px 18px rgba(0,58,110,0.12);
+}
+
+.scene-img { width: 100%; display: block; }
+
+/* Repère numéroté posé sur l'image */
+.scene-pt {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2.5px solid white;
+    background: var(--bleu-marine);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    transition: transform 0.15s, background 0.2s;
+    z-index: 2;
+}
+
+.scene-pt:hover, .scene-pt.survol {
+    background: var(--bleu-accent);
+    transform: translate(-50%, -50%) scale(1.22);
+}
+
+.scene-pt.vise {
+    background: var(--orange);
+    animation: pulsePoint 1.2s ease-out 2;
+}
+
+@keyframes pulsePoint {
+    0%   { box-shadow: 0 0 0 0 rgba(244,160,58,0.75); }
+    100% { box-shadow: 0 0 0 16px rgba(244,160,58,0); }
+}
+
+/* Légende à droite de l'image */
+.scene-legende {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.scene-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.scene-row:hover { background: var(--bleu-pale); }
+
+.scene-row:has(input:checked) {
+    background: var(--vert-pale);
+    border-color: var(--vert);
+}
+
+.scene-row.vise {
+    background: #FFF6E8;
+    border-color: var(--orange);
+}
+
+.scene-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bleu-marine);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.scene-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--vert);
+}
+
+.scene-row .risk-lbl {
+    flex: 1;
+    font-size: 0.87rem;
+    line-height: 1.3;
+}
+
+.scene-row:has(input:checked) .risk-lbl {
+    color: var(--vert-fonce);
+    font-weight: 600;
+}
+
+.poste-titre-scene {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--texte-doux);
+}
+
+@media (max-width: 1000px) {
+    .scene-bloc { grid-template-columns: 1fr; }
+}
+
+@media print {
+    .scene-bloc {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+
+    .scene-fig {
+        box-shadow: none !important;
+        max-width: 60% !important;
+        margin-bottom: 8px;
+    }
+
+    /* Les repères restent visibles à l'impression */
+    .scene-pt {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.7rem !important;
+        background: var(--bleu-marine) !important;
+        color: white !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .scene-legende { display: block !important; }
+    .scene-row { padding: 1px 0 !important; page-break-inside: avoid; }
+
+    .scene-num {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}

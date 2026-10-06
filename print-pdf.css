@@ -1,0 +1,343 @@
+/* =========================================================
+   MISE EN PAGE DU PDF JOINT AU MAIL
+   Généré automatiquement à partir des blocs @media print des
+   feuilles de style : le PDF envoyé au service HSE est donc mis
+   en page comme l'export PDF (impression).
+   NE PAS MODIFIER À LA MAIN — régénérer après un changement
+   d'une règle @media print.
+   ========================================================= */
+
+/* Le document rendu hors écran */
+#pdf-rendu { background: #fff; }
+#pdf-rendu .no-print { display: none !important; }
+
+#pdf-rendu {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    font-size: 11pt !important;
+    background: white !important;
+  }
+
+#pdf-rendu .app-header,
+#pdf-rendu .stepper,
+#pdf-rendu .nav-bar,
+#pdf-rendu .no-print,
+#pdf-rendu .btn-aide,
+#pdf-rendu .photo-zone {
+    display: none !important;
+  }
+
+#pdf-rendu .print-doc-header {
+    display: flex !important;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--bleu-marine);
+    border-radius: 4px;
+    background: #dfe8f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+#pdf-rendu .print-doc-header img {
+    height: 42px !important;
+    width: auto !important;
+    display: inline-block !important;
+  }
+
+#pdf-rendu .print-doc-header .pdh-titre {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15pt;
+    font-weight: 700;
+    color: var(--bleu-marine);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+#pdf-rendu .print-doc-header .pdh-sous {
+    font-size: 10pt;
+    color: var(--texte);
+  }
+
+#pdf-rendu .main { padding: 0 !important; max-width: 100% !important; }
+
+#pdf-rendu .section {
+    box-shadow: none !important;
+    border: 1px solid #bbb !important;
+    border-radius: 4px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 10px !important;
+  }
+
+#pdf-rendu img,
+#pdf-rendu canvas {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+#pdf-rendu .signature-canvas {
+    max-width: 400px !important;
+    height: 300px !important;
+  }
+
+#pdf-rendu .nage-img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+#pdf-rendu textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 100px !important;
+    box-sizing: border-box !important;
+  }
+
+#pdf-rendu table {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: auto !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+#pdf-rendu th,
+#pdf-rendu td {
+    white-space: normal !important;
+    word-break: break-word !important;
+    padding: 4px !important;
+    font-size: 10pt !important;
+    border: 1px solid #999 !important;
+  }
+
+#pdf-rendu .tbl th {
+    background: #dfe8f0 !important;
+    color: var(--bleu-marine) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+#pdf-rendu .photo-thumb img {
+    width: 220px !important;
+    height: 165px !important;
+    object-fit: cover !important;
+  }
+
+#pdf-rendu .pill {
+    border: 1px solid #999 !important;
+    padding: 2px 8px !important;
+  }
+
+#pdf-rendu .pill:has(input:checked) {
+    background: #dfe8f0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+#pdf-rendu table.attestation {
+    width: auto !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    text-align: left !important;
+    page-break-inside: avoid !important;
+  }
+
+#pdf-rendu table.attestation th,
+#pdf-rendu table.attestation td {
+    text-align: left !important;
+    padding-left: 10px !important;
+  }
+
+#pdf-rendu .attestation .texte,
+#pdf-rendu .attestation .sign,
+#pdf-rendu .attestation .sign span,
+#pdf-rendu .attestation .sign canvas {
+    text-align: left !important;
+    margin-left: 0 !important;
+    display: block !important;
+  }
+
+#pdf-rendu .other-equipments,
+#pdf-rendu .other-equipments-hse {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+#pdf-rendu .large-print-page {
+    transform: none !important;
+    width: 100% !important;
+  }
+
+#pdf-rendu .large-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 2px !important;
+  }
+
+#pdf-rendu .large-row label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+  }
+
+#pdf-rendu .large-row input[type="checkbox"] {
+    margin: 0 !important;
+  }
+
+#pdf-rendu .print-block,
+#pdf-rendu .no-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+#pdf-rendu .diplome { display: block !important; }
+
+#pdf-rendu .rbanner { background: #fdf3f2 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+#pdf-rendu .cat-body { display: block !important; }
+
+#pdf-rendu .cat-chev { display: none !important; }
+
+#pdf-rendu .epi-fig { aspect-ratio: auto !important; display: flex !important; flex-direction: column !important; gap: 4px !important; }
+
+#pdf-rendu .epi-perso { position: static !important; transform: none !important; max-width: 45% !important; margin: 0 auto !important; order: 99; }
+
+#pdf-rendu .epi-lines { display: none !important; }
+
+#pdf-rendu .epi-chip { position: static !important; width: 100% !important; flex-direction: row !important; align-items: center !important; }
+
+#pdf-rendu .doc-vignette { display: none !important; }
+
+#pdf-rendu .risk-grid { display: block !important; }
+
+#pdf-rendu .risk-card { border: none !important; padding: 2px 0 !important; background: white !important; page-break-inside: avoid; }
+
+#pdf-rendu .retex-grid { display: block !important; }
+
+#pdf-rendu .retex-card { margin-bottom: 8px !important; page-break-inside: avoid; }
+
+#pdf-rendu .referent-card { background: #dfe8f0 !important; color: var(--bleu-marine) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+#pdf-rendu .referent-fields .field > label { color: var(--bleu-marine) !important; }
+
+#pdf-rendu .lightbox { display: none !important; }
+
+#pdf-rendu .lined-field textarea { background: none !important; }
+
+#pdf-rendu .numero-urgence { background: white !important; color: var(--rouge) !important; border: 2px solid var(--rouge) !important; }
+
+#pdf-rendu .filtre-activite { display: none !important; }
+
+#pdf-rendu .cat-vide { display: none !important; }
+
+#pdf-rendu .retex-card .retex-body { display: block !important; }
+
+#pdf-rendu .retex-toggle { display: none !important; }
+
+#pdf-rendu .vigi-apercu { box-shadow: none !important; page-break-inside: avoid; }
+
+#pdf-rendu .vigi-image img { max-height: 180px !important; object-fit: cover !important; object-position: top !important; }
+
+#pdf-rendu .vigi-barre { background: #dfe8f0 !important; color: var(--bleu-marine) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+#pdf-rendu .vigi-row { padding: 4px 6px !important; page-break-inside: avoid; }
+
+#pdf-rendu .validation-bandeau {
+    background: #dfe8f0 !important;
+    color: var(--bleu-marine) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    page-break-inside: avoid;
+  }
+
+#pdf-rendu .validation-bandeau .vb-ico { border-color: var(--bleu-marine) !important; }
+
+#pdf-rendu .ano-box,
+#pdf-rendu .etat-registre,
+#pdf-rendu #section-anomalies { display: none !important; }
+
+#pdf-rendu.en-impression > main.main { display: none !important; }
+
+#pdf-rendu.en-impression > .nav-bar { display: none !important; }
+
+#pdf-rendu .sign-verrou { display: none !important; }
+
+#pdf-rendu .risk-list { display: block !important; }
+
+#pdf-rendu .risk-row { border-bottom: none !important; padding: 1px 0 !important; page-break-inside: avoid; }
+
+#pdf-rendu .famille-head { margin: 8px 0 2px !important; }
+
+#pdf-rendu .scene-bloc {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+
+#pdf-rendu .scene-fig {
+        box-shadow: none !important;
+        max-width: 60% !important;
+        margin-bottom: 8px;
+    }
+
+#pdf-rendu .scene-pt {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.7rem !important;
+        background: var(--bleu-marine) !important;
+        color: white !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+#pdf-rendu .scene-legende { display: block !important; }
+
+#pdf-rendu .scene-row { padding: 1px 0 !important; page-break-inside: avoid; }
+
+#pdf-rendu .scene-num {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+#pdf-rendu .print-block,
+#pdf-rendu .no-break {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+#pdf-rendu .other-equipments {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+    }
+
+#pdf-rendu .other-equipments-textarea {
+        height: auto !important;
+        min-height: 100px !important;
+        max-height: none !important;
+    }
+
+#pdf-rendu .print-block,
+#pdf-rendu .no-break {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+#pdf-rendu .cat-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }

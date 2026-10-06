@@ -1,0 +1,23 @@
+/* ===== Page Équipements de travail — spécifique ===== */
+
+.other-equipments-textarea {
+    min-height: 128px;
+}
+
+@media print {
+    .print-block, .no-break {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    .other-equipments {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+    }
+
+    .other-equipments-textarea {
+        height: auto !important;
+        min-height: 100px !important;
+        max-height: none !important;
+    }
+}

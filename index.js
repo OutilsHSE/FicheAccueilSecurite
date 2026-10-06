@@ -1,0 +1,104 @@
+renderChrome(1);
+
+function savePageContent() {
+    localStorage.setItem("Nom", document.querySelector("#nom").value + ' ' + document.querySelector("#prenom").value);
+    const act = document.querySelector("#activites");
+    if (act) localStorage.setItem("activiteCollaborateur", act.value);
+    const poste = document.querySelector("#poste-travail");
+    if (poste) localStorage.setItem("posteTravail", poste.value);
+
+    const page = document.querySelector('#page1');
+    const inputs = page.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            if (input.checked) {
+                input.setAttribute('checked', 'checked');
+            } else {
+                input.removeAttribute('checked');
+            }
+        } else if (input.tagName.toLowerCase() === 'textarea') {
+            input.textContent = input.value;
+        } else if (input.tagName.toLowerCase() === 'select') {
+            input.querySelectorAll('option').forEach(opt => {
+                if (opt.value === input.value) {
+                    opt.setAttribute('selected', 'selected');
+                } else {
+                    opt.removeAttribute('selected');
+                }
+            });
+        } else {
+            input.setAttribute('value', input.value);
+        }
+    });
+    sauverLocal('page1Content', document.querySelector('#page1').outerHTML);
+}
+
+/* Le champ « agence d'intérim » n'apparaît que pour les intérimaires
+   et collaborateurs externes */
+function majAgenceInterim() {
+    const statut = document.getElementById('statut');
+    const bloc = document.getElementById('bloc-agence-interim');
+    if (!statut || !bloc) return;
+    const concerne = statut.value === 'Intérimaire' || statut.value === 'Collaborateur externe';
+    bloc.style.display = concerne ? '' : 'none';
+}
+
+document.addEventListener('change', (e) => {
+    if (e.target.id === 'statut') majAgenceInterim();
+});
+
+function redirectToAutorisationPage() {
+    savePageContent();
+    window.location.href = 'autorisation.html';
+}
+
+/* Réinitialise entièrement le parcours pour un nouvel accueil */
+function nouvelleFiche() {
+    if (!confirm("Commencer une nouvelle fiche d'accueil ? Les données saisies seront effacées.")) return;
+    window.onbeforeunload = null;
+    /* V2 : on n'efface QUE les données de la fiche d'accueil. localStorage.clear()
+       effaçait aussi celles des autres outils HSE (même site outilshse.github.io) :
+       brouillons de CR, branchements, analyses en cours… */
+    ["page1Content", "page2Content", "page3Content", "page4Content", "page5Content", "page6Content",
+     "Nom", "quizzResultat", "activiteCollaborateur", "posteTravail", "registreEmpreinte"]
+      .forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    sessionStorage.clear();
+    window.location.reload();
+}
+
+auDemarrage(function () {
+    const saved = localStorage.getItem('page1Content');
+    if (saved) {
+        // Parcours en cours : on restaure la saisie (retour via le fil d'étapes)
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(saved, 'text/html');
+        const newPage = doc.querySelector('#page1');
+        if (newPage) document.querySelector('#page1').innerHTML = newPage.innerHTML;
+    } else {
+        document.getElementById('visite-date').valueAsDate = new Date();
+    }
+    majAgenceInterim();
+});
+
+window.onbeforeunload = function () {
+    savePageContent();
+}
+
+/* ===== Modale ===== */
+function openModal() {
+    document.getElementById('imageModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('imageModal').style.display = 'none';
+}
+
+document.getElementById('openModalBtn').onclick = openModal;
+document.getElementsByClassName('close')[0].onclick = closeModal;
+
+window.onclick = function (event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+};
