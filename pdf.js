@@ -11,7 +11,9 @@
 const PDF_A4_MM = { l: 210, h: 297 };
 const PDF_MARGE_MM = 8;
 const PDF_LARGEUR_PX = 780;          // largeur de rendu du document
-const PDF_QUALITE = 0.86;            // JPEG : bon compromis netteté / poids
+const PDF_QUALITE = 0.75;            // JPEG (09/10/2026 : 0.86 → 0.75, −40 % de poids, texte toujours net)
+const PDF_ECHELLE = 1.6;             // rendu html2canvas (09/10/2026 : 2 → 1.6, ≈ 150 dpi, rendu plus rapide)
+const PDF_DELAI_IMAGE_MS = 2500;     // au-delà, une vignette externe est remplacée par sa légende
 
 function pdfDisponible() {
   return !!(window.html2canvas && window.jspdf && window.jspdf.jsPDF);
@@ -35,18 +37,23 @@ function attendreImages(racine, delaiMax) {
    canvas et empêchent la génération. On les rapatrie en données locales
    quand c'est possible, sinon on les remplace par leur légende. */
 async function neutraliserImagesExternes(racine) {
-  const images = [...racine.querySelectorAll('img')];
-  for (const img of images) {
+  /* 09/10/2026 — avant, chaque vignette était rapatriée l'une APRÈS l'autre, sans
+     limite de temps : avec 20 à 30 vignettes Drive (qui refusent souvent le partage
+     inter-sites), l'envoi attendait 20 à 60 s pour finir par les remplacer par leur
+     légende. Désormais : toutes EN PARALLÈLE, 2,5 s maximum chacune. */
+  const images = [...racine.querySelectorAll('img')].filter(img => {
     const src = img.getAttribute('src') || '';
-    if (!src || src.indexOf('data:') === 0) continue;
-
-    let absolu;
-    try { absolu = new URL(src, location.href); } catch (e) { absolu = null; }
-    if (absolu && absolu.origin === location.origin) continue;   // même site : sans risque
-
+    if (!src || src.indexOf('data:') === 0) return false;
+    let absolu; try { absolu = new URL(src, location.href); } catch (e) { absolu = null; }
+    return !(absolu && absolu.origin === location.origin);   // même site : sans risque
+  });
+  await Promise.all(images.map(async img => {
+    const src = img.getAttribute('src');
     let remplacee = false;
+    const ctrl = ('AbortController' in window) ? new AbortController() : null;
+    const minuteur = ctrl ? setTimeout(() => ctrl.abort(), PDF_DELAI_IMAGE_MS) : null;
     try {
-      const rep = await fetch(src, { mode: 'cors', credentials: 'omit' });
+      const rep = await fetch(src, { mode: 'cors', credentials: 'omit', signal: ctrl ? ctrl.signal : undefined });
       if (rep.ok) {
         const blob = await rep.blob();
         img.src = await new Promise((ok, ko) => {
@@ -57,15 +64,15 @@ async function neutraliserImagesExternes(racine) {
         });
         remplacee = true;
       }
-    } catch (e) { /* domaine qui refuse le partage : on retire l'image */ }
-
+    } catch (e) { /* domaine qui refuse le partage, ou trop lent : on retire l'image */ }
+    if (minuteur) clearTimeout(minuteur);
     if (!remplacee) {
       const legende = document.createElement('span');
       legende.className = 'pdf-image-absente';
       legende.textContent = img.getAttribute('alt') || 'document consultable dans l\'application';
       img.replaceWith(legende);
     }
-  }
+  }));
 }
 
 /* Construit le PDF et le renvoie en base64 (sans l'en-tête data:) */
@@ -86,6 +93,9 @@ async function genererPdfFiche(avancement) {
   if (diplome) { diplome.style.display = 'block'; hote.appendChild(diplome); }
 
   document.body.appendChild(hote);
+  /* les vignettes sont « lazy » dans la page : hors écran, elles ne se chargeraient
+     jamais et l'attente irait au bout de ses 4 s pour rien */
+  hote.querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
 
   try {
     await attendreImages(hote);
@@ -121,7 +131,7 @@ async function genererPdfFiche(avancement) {
       }
 
       const toile = await html2canvas(cible, {
-        scale: 2,
+        scale: PDF_ECHELLE,
         useCORS: true,
         backgroundColor: '#ffffff',
         logging: false,
